@@ -331,7 +331,8 @@ public class MainActivity extends AppCompatActivity
             if (id == R.id.nav_home) {
                 // Handle the camera action
             } else if (id == R.id.nav_competitions) {
-
+                Intent intent = new Intent(MainActivity.this, AllCompetitionsActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_settings) {
 
             } else if (id == R.id.nav_about) {
@@ -344,6 +345,8 @@ public class MainActivity extends AppCompatActivity
             if (id == R.id.nav_home) {
                 // Handle the camera action
             } else if (id == R.id.nav_competitions) {
+                Intent intent = new Intent(MainActivity.this, AllCompetitionsActivity.class);
+                startActivity(intent);
 
             } else if (id == R.id.nav_fav_competitions) {
 

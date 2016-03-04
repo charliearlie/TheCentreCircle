@@ -40,7 +40,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="uk.ac.prco.plymouth.thecentrecircle.MainActivity" />
         </activity>
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".RegisterActivity" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -49,7 +49,14 @@
 
         <service
             android:name=".MatchNotificationService"
-            android:exported="false"></service>
+            android:exported="false" />
+
+        <activity
+            android:name=".AllCompetitionsActivity"
+            android:label="Nations"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
     </application>
 
 </manifest>
