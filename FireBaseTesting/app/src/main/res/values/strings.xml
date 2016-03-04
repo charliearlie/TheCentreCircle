@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">FireBaseTesting</string>
+    <string name="view_pl">View PL teams</string>
+    <string name="view_pl_recycle">View PL teams in recycle view</string>
+    <string name="next">Next</string>
+</resources>
