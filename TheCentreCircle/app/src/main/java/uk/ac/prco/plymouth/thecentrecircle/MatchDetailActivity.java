@@ -5,9 +5,9 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
+
+import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 
 public class MatchDetailActivity extends AppCompatActivity {
 
@@ -18,8 +18,8 @@ public class MatchDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_detail);
-        ArrayList<Match> matches = (ArrayList<Match>) getIntent().getSerializableExtra("matches");
-        int position = (Integer) getIntent().getExtras().get("matchId");
+//        ArrayList<Match> matches = (ArrayList<Match>) getIntent().getSerializableExtra("matches");
+//        int position = (Integer) getIntent().getExtras().get("matchId");
 
         Match match = (Match) getIntent().getSerializableExtra("match");
 

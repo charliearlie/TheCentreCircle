@@ -31,7 +31,11 @@
         </activity>
         <activity
             android:name=".MatchDetailActivity"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uk.ac.prco.plymouth.thecentrecircle.MainActivity" />
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
@@ -54,9 +58,9 @@
         <activity
             android:name=".AllCompetitionsActivity"
             android:label="Nations"
-            android:parentActivityName=".MainActivity">
-
-        </activity>
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".CompetitionDetailActivity" />
+        <activity android:name=".MyBetsActivity"></activity>
     </application>
 
 </manifest>

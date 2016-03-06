@@ -8,7 +8,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.TaskStackBuilder;
 
-import java.util.ArrayList;
+import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 
 
 /**
@@ -61,7 +61,7 @@ public class MatchNotificationService extends IntentService {
         Intent intent = new Intent(this, MatchDetailActivity.class);
         intent.putExtra("match", match);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addParentStack(MatchDetailActivity.class);
         stackBuilder.addNextIntent(intent);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 

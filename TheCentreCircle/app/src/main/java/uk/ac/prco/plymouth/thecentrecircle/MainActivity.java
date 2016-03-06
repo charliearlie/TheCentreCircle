@@ -1,9 +1,6 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -12,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,8 +19,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,14 +35,12 @@ import com.firebase.client.ValueEventListener;
 
 
 import java.io.InputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.recyclerview.animators.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.adapters.SlideInRightAnimationAdapter;
+import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -153,7 +145,8 @@ public class MainActivity extends AppCompatActivity
         final SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
         alphaAdapter.setDuration(1000);
         alphaAdapter.setInterpolator(new OvershootInterpolator());
-        mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
+        //mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
+        mRecyclerView.setAdapter(alphaAdapter);
 
 
         /*
@@ -184,8 +177,6 @@ public class MainActivity extends AppCompatActivity
                     public void onClick(int position) {
                         Match detailedMatch = matches.get(position);
                         Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-                        intent.putExtra("matchId", position);
-                        intent.putExtra("matches", matches);
                         intent.putExtra("match", detailedMatch);
                         startActivity(intent);
                     }
@@ -353,6 +344,8 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_my_team) {
 
             } else if (id == R.id.nav_my_bets) {
+                Intent intent = new Intent(MainActivity.this, MyBetsActivity.class);
+                startActivity(intent);
 
             } else if (id == R.id.nav_settings) {
 
