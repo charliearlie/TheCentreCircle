@@ -20,8 +20,16 @@ public class CompetitionDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_competition_detail);
+        Competition competition = new Competition();
+        if (getIntent().getSerializableExtra("competition") != null) {
+            competition = (Competition) getIntent().getSerializableExtra("competition");
+        }
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("competition", competition);
 
 
+        setupActionBar();
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
@@ -33,7 +41,7 @@ public class CompetitionDetailActivity extends AppCompatActivity {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.competition_pager);
-        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), bundle);
 
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -62,6 +70,17 @@ public class CompetitionDetailActivity extends AppCompatActivity {
 //
 //        compName.setText(competition.getName());
 //        compRegion.setText(competition.getRegion());
+    }
+
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            // Show the Up button in the action bar.
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 //
 //    @Override

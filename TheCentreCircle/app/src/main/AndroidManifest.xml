@@ -59,7 +59,9 @@
             android:name=".AllCompetitionsActivity"
             android:label="Nations"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".CompetitionDetailActivity" />
+        <activity
+            android:name=".CompetitionDetailActivity"
+            android:parentActivityName=".AllCompetitionsActivity"/>
         <activity android:name=".MyBetsActivity"></activity>
     </application>
 
