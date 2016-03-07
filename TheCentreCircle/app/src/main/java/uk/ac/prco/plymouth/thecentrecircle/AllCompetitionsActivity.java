@@ -45,7 +45,7 @@ public class AllCompetitionsActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Competition competition = competitions.get(position);
                 System.out.println(competition);
-                Intent intent = new Intent(AllCompetitionsActivity.this, CompetitionDetailActivity.class);
+                Intent intent = new Intent(AllCompetitionsActivity.this, CompetitionTabbedActivity.class);
                 intent.putExtra("competition", competition);
                 Toast.makeText(AllCompetitionsActivity.this, "my id " + id,
                         Toast.LENGTH_LONG).show();

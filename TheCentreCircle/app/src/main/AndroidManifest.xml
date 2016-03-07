@@ -59,10 +59,13 @@
             android:name=".AllCompetitionsActivity"
             android:label="Nations"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".MyBetsActivity" />
         <activity
-            android:name=".CompetitionDetailActivity"
-            android:parentActivityName=".AllCompetitionsActivity"/>
-        <activity android:name=".MyBetsActivity"></activity>
+            android:name=".CompetitionTabbedActivity"
+            android:label="@string/title_activity_competition_tabbed"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".AllCompetitionsActivity">
+        </activity>
     </application>
 
 </manifest>
