@@ -1,15 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="uk.ac.prco.plymouth.thecentrecircle.CompetitionTabbedActivity">
 
-    <TextView
-        android:id="@+id/textTabView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Tab 2"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3.0"
+        android:layout_marginTop="3dp">
 
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Pos"
+            android:textAlignment="textStart"
+            android:textStyle="bold"
+            android:layout_weight="0.2"
+            android:id="@+id/league_position"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="0dp"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="1dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Team"
+            android:textAlignment="textStart"
+            android:layout_weight="1.4"
+            android:id="@+id/league_team_name"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="0dp"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="1dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="GP"
+            android:id="@+id/league_games_played"
+            android:layout_weight="0.2"
+            android:layout_marginTop="3dp"
+            android:textSize="12sp"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="1dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="W"
+            android:id="@+id/league_games_won"
+            android:layout_weight="0.2"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="1dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="D"
+            android:id="@+id/league_games_drawn"
+            android:layout_weight="0.2"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="1dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="L"
+            android:id="@+id/league_games_lost"
+            android:layout_weight="0.2"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="1dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="GF"
+            android:id="@+id/league_goals_for"
+            android:layout_weight="0.2"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="1dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="GA"
+            android:id="@+id/league_goals_against"
+            android:layout_weight="0.2"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="1dp"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="PTS"
+            android:id="@+id/league_points"
+            android:layout_weight="0.2"
+            android:textSize="12sp"
+            android:layout_marginTop="3dp"
+            android:textAlignment="textStart"
+            android:layout_marginBottom="1dp"/>
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/league_recycler_view"
+        android:scrollbars="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/activity_vertical_margin"/>
 </RelativeLayout>

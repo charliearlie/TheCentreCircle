@@ -10,15 +10,17 @@ public class Competition implements Serializable {
     private String id;
     private String name;
     private String region;
+    private String fdId;
 
     public Competition() {
 
     }
 
-    public Competition(String id, String name, String region) {
+    public Competition(String id, String name, String region, String fdId) {
         this.id = id;
         this.name = name;
         this.region = region;
+        this.fdId = fdId;
     }
 
     public String getId() {
@@ -31,5 +33,9 @@ public class Competition implements Serializable {
 
     public String getRegion() {
         return region;
+    }
+
+    public String getFdId() {
+        return fdId;
     }
 }
