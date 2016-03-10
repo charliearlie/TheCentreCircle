@@ -61,7 +61,7 @@ public class AllCompetitionsActivity extends AppCompatActivity {
             }
         });
 
-        Firebase ref = new Firebase(constants.getFirebaseUrl());
+        Firebase ref = new Firebase(constants.getFirebaseUrl() + "/competitions");
         //Order competitions by region
         //TODO: Order this some other way, maybe UEFA coefficients?
         Query queryRef = ref.orderByChild("region");

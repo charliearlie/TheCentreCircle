@@ -35,7 +35,7 @@ public class FavouriteCompetitionsActivity extends AppCompatActivity {
         Constants constants = new Constants();
 
 
-        ListView listView = (ListView) findViewById(R.id.countryListView);
+        ListView listView = (ListView) findViewById(R.id.competitionsListView);
 
         setupActionBar();
 

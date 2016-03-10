@@ -1,4 +1,4 @@
-package uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.adapters;
+package uk.ac.prco.plymouth.thecentrecircle.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.json.JSONArray;
-import org.w3c.dom.Text;
 
 import uk.ac.prco.plymouth.thecentrecircle.R;
 
