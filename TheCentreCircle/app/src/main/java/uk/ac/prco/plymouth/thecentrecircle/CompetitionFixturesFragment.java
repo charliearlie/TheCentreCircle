@@ -1,6 +1,8 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
 
+
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,10 +25,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.adapters.LeagueTableAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.keys.APIKeys;
+import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 
 /**
@@ -35,9 +35,7 @@ import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.u
  */
 public class CompetitionFixturesFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
+    private ProgressDialog progressDialog;
 
     public CompetitionFixturesFragment() {
         // Required empty public constructor
@@ -53,15 +51,18 @@ public class CompetitionFixturesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        APIKeys apiKeys = new APIKeys();
+        Constants constants = new Constants();
         final Bundle args = getArguments();
         Competition competition = (Competition) args.getSerializable("competition");
+
+        //URL to retrieve data from external API - Currently hardcoded to a specific date
         String url = "http://football-api.com/api/?Action=fixtures" +
-                "&APIKey=" + apiKeys.getFootballAPIKey() +
+                "&APIKey=" + constants.getFootballAPIKey() +
                 "&comp_id=" + competition.getId() + "&match_date=12.03.2016" +
                 "&IP=81.156.123.17";
 
         try {
+            //Retrieve the fixtures from the URL in the background
             new retrieveFixtures().execute(url);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -78,6 +79,10 @@ public class CompetitionFixturesFragment extends Fragment {
 
     }
 
+    /**
+     * A class which allows the retrieval of the competition's fixtures on a different thread
+     * from the main thread
+     */
     public class retrieveFixtures extends AsyncTask<String, Void, JSONArray> {
 
         @Override
@@ -85,6 +90,7 @@ public class CompetitionFixturesFragment extends Fragment {
             JSONObject jsonObject;
             JSONArray jsonArray = new JSONArray();
             try {
+                //URL passed to class is stored in 0th element of params
                 String param = params[0];
                 URL url = new URL(param);
                 URLConnection urlConnection = url.openConnection();
@@ -93,10 +99,12 @@ public class CompetitionFixturesFragment extends Fragment {
                 InputStream inputStream = urlConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
+                //Convert the byte code retrieved in to it's String representation
                 String returned = readAll(bufferedReader);
 
                 jsonObject = new JSONObject(returned);
 
+                //Retrieve all the matches from the returned object
                 jsonArray = jsonObject.getJSONArray("matches");
 
                 return jsonArray;
@@ -107,6 +115,19 @@ public class CompetitionFixturesFragment extends Fragment {
             return jsonArray;
         }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //While the fixtures are loading, display a progress dialog
+            progressDialog = ProgressDialog.show(getContext(), "The Centre Circle", "Loading...", true);
+
+        }
+
+        /**
+         * What we do with the JSON array after it is fully populated
+         * @param jsonArray the returned array of matches from the API
+         */
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             View view = getView();
@@ -119,6 +140,7 @@ public class CompetitionFixturesFragment extends Fragment {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     int homeScore = 0;
                     int awayScore = 0;
+                    //Retrieve the specific details from each match
                     String homeTeam = String.valueOf(jsonArray.getJSONObject(i).get("match_localteam_name"));
                     String awayTeam = String.valueOf(jsonArray.getJSONObject(i).get("match_visitorteam_name"));
                     String homeScoreString = String.valueOf(jsonArray.getJSONObject(i).get("match_localteam_score"));
@@ -130,62 +152,32 @@ public class CompetitionFixturesFragment extends Fragment {
                         awayScore = -1;
                     }
 
+                    //Create a new Match object with the retrieved details
                     Match match = new Match(homeTeam, awayTeam, homeScore, awayScore, matchId, R.drawable.arsenal,
                             R.drawable.barcelona);
 
                     matches.add(match);
                 }
+                //Retrieve the recycler view and populate it with the matches through the ScoreCardAdapter
                 mRecyclerView = (RecyclerView) view.findViewById(R.id.fixture_recycler);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 ScoreCardAdapter scoreCardAdapter = new ScoreCardAdapter(matches);
                 mRecyclerView.setAdapter(scoreCardAdapter);
-                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-//                TextView position1 = (TextView)view.findViewById(R.id.leaguePosition1TextView);
-//                position1.setText((String) jsonArray.getJSONObject(0).get("teamName"));
-//                TextView position2 = (TextView)view.findViewById(R.id.leaguePosition2TextView);
-//                position2.setText((String) jsonArray.getJSONObject(1).get("teamName"));
-//                TextView position3 = (TextView)view.findViewById(R.id.leaguePosition3TextView);
-//                position3.setText((String) jsonArray.getJSONObject(2).get("teamName"));
-//                TextView position4 = (TextView)view.findViewById(R.id.leaguePosition4TextView);
-//                position4.setText((String) jsonArray.getJSONObject(3).get("teamName"));
-//                TextView position5 = (TextView)view.findViewById(R.id.leaguePosition5TextView);
-//                position5.setText((String) jsonArray.getJSONObject(4).get("teamName"));
-//                TextView position6 = (TextView)view.findViewById(R.id.leaguePosition6TextView);
-//                position6.setText((String) jsonArray.getJSONObject(5).get("teamName"));
-//                TextView position7 = (TextView)view.findViewById(R.id.leaguePosition7TextView);
-//                position7.setText((String) jsonArray.getJSONObject(6).get("teamName"));
-//                TextView position8 = (TextView)view.findViewById(R.id.leaguePosition8TextView);
-//                position8.setText((String) jsonArray.getJSONObject(7).get("teamName"));
-//                TextView position9 = (TextView)view.findViewById(R.id.leaguePosition9TextView);
-//                position9.setText((String) jsonArray.getJSONObject(8).get("teamName"));
-//                TextView position10 = (TextView)view.findViewById(R.id.leaguePosition10TextView);
-//                position10.setText((String) jsonArray.getJSONObject(9).get("teamName"));
-//                TextView position11 = (TextView)view.findViewById(R.id.leaguePosition11TextView);
-//                position11.setText((String) jsonArray.getJSONObject(10).get("teamName"));
-//                TextView position12 = (TextView)view.findViewById(R.id.leaguePosition12TextView);
-//                position12.setText((String) jsonArray.getJSONObject(11).get("teamName"));
-//                TextView position13 = (TextView)view.findViewById(R.id.leaguePosition13TextView);
-//                position13.setText((String) jsonArray.getJSONObject(12).get("teamName"));
-//                TextView position14 = (TextView)view.findViewById(R.id.leaguePosition14TextView);
-//                position14.setText((String) jsonArray.getJSONObject(13).get("teamName"));
-//                TextView position15 = (TextView)view.findViewById(R.id.leaguePosition15TextView);
-//                position15.setText((String) jsonArray.getJSONObject(14).get("teamName"));
-//                TextView position16 = (TextView)view.findViewById(R.id.leaguePosition16TextView);
-//                position16.setText((String) jsonArray.getJSONObject(15).get("teamName"));
-//                TextView position17 = (TextView)view.findViewById(R.id.leaguePosition17TextView);
-//                position17.setText((String) jsonArray.getJSONObject(16).get("teamName"));
-//                TextView position18 = (TextView)view.findViewById(R.id.leaguePosition18TextView);
-//                position18.setText((String) jsonArray.getJSONObject(17).get("teamName"));
-//                TextView position19 = (TextView)view.findViewById(R.id.leaguePosition19TextView);
-//                position19.setText((String) jsonArray.getJSONObject(18).get("teamName"));
-//                TextView position20 = (TextView)view.findViewById(R.id.leaguePosition20TextView);
-//                position20.setText((String) jsonArray.getJSONObject(19).get("teamName"));
+                //Set default animation on recycler view
+                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                progressDialog.dismiss();
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
 
+        /**
+         * Convert JSON from it's byte representation to String
+         * @param rd
+         * @return
+         * @throws IOException
+         */
         private String readAll(Reader rd) throws IOException {
             StringBuilder sb = new StringBuilder();
 

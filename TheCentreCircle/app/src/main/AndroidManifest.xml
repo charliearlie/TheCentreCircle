@@ -66,6 +66,11 @@
             android:parentActivityName=".AllCompetitionsActivity"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity android:name=".FavouriteCompetitionsActivity"
+            android:label="Favourite Competitions"
+            android:parentActivityName=".MainActivity">
+
+        </activity>
     </application>
 
 </manifest>

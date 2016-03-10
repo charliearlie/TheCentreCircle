@@ -206,6 +206,9 @@ public class MainActivity extends AppCompatActivity
                 if (authData != null) {
                     navigationView.getMenu().clear();
                     navigationView.inflateMenu(R.menu.activity_main_drawer_auth);
+                    Toast.makeText(MainActivity.this, authData.getUid(), Toast.LENGTH_LONG).show();
+                    updateNavHeader(aData);
+
                 }
                 //If the user is not logged in, display the default menu containing a 'login' item
                 else {
@@ -340,6 +343,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
             } else if (id == R.id.nav_fav_competitions) {
+                Intent intent = new Intent(MainActivity.this, FavouriteCompetitionsActivity.class);
+                startActivity(intent);
 
             } else if (id == R.id.nav_my_team) {
 
@@ -356,6 +361,8 @@ public class MainActivity extends AppCompatActivity
                 Firebase logRef = new Firebase(FIREBASE_URL);
                 LoginManager.getInstance().logOut();
                 logRef.unauth();
+                finish();
+                startActivity(getIntent());
             }
         }
 
@@ -379,6 +386,21 @@ public class MainActivity extends AppCompatActivity
             }
         }
         return index;
+    }
+
+    private void updateNavHeader(AuthData authData) {
+        View header = navigationView.getHeaderView(0);
+        if(authData.getProvider().equals("facebook")) {
+            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
+            navHeaderTextView.setText((String) authData.getProviderData().get("displayName"));
+            new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
+                    .execute((String) authData.getProviderData().get("profileImageURL"));
+        } else {
+            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
+            navHeaderTextView.setText((String) authData.getProviderData().get("email"));
+            new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
+                    .execute((String) authData.getProviderData().get("profileImageURL"));
+        }
     }
 
     /**

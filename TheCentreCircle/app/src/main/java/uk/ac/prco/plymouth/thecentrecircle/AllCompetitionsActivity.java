@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -21,25 +22,32 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 
 import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
+import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 public class AllCompetitionsActivity extends AppCompatActivity {
 
+    Constants constants = new Constants();
     private ArrayList<Competition> competitions = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_competitions);
 
-
-
-        ListView listView = (ListView) findViewById(R.id.countryListView);
+        //Retrieve the list view to display all the competitions available
+        ListView listView = (ListView) findViewById(R.id.competitionsListView);
 
         setupActionBar();
+        setTitle("All competitions");
 
+        //Create an adapter fot the competition names
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1);
-
+        //Set the adapter for the list view to populate it
         listView.setAdapter(adapter);
+
+        /**
+         * On item click listener to take the user to a competitions details
+         */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -53,9 +61,9 @@ public class AllCompetitionsActivity extends AppCompatActivity {
             }
         });
 
-        //Firebase.setAndroidContext(this);
-
-        Firebase ref = new Firebase("https://cwprco304.firebaseio.com/competitions");
+        Firebase ref = new Firebase(constants.getFirebaseUrl());
+        //Order competitions by region
+        //TODO: Order this some other way, maybe UEFA coefficients?
         Query queryRef = ref.orderByChild("region");
 
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -65,6 +73,10 @@ public class AllCompetitionsActivity extends AppCompatActivity {
                     adapter.add((String) childSnapshot.child("name").getValue());
                     competitions.add(childSnapshot.getValue(Competition.class));
                     System.out.println(competitions);
+                }
+                if (competitions == null) {
+                    TextView noComps = (TextView) findViewById(R.id.no_fav_comps_textView);
+                    noComps.setVisibility(View.VISIBLE);
                 }
 
             }

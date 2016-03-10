@@ -9,10 +9,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="uk.ac.prco.plymouth.thecentrecircle.AllCompetitionsActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/no_fav_comps_textView"
+        android:layout_centerHorizontal="true"
+        android:text="You do not have any favourite competitions"
+        android:visibility="invisible"/>
+
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/countryListView"
+        android:id="@+id/competitionsListView"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

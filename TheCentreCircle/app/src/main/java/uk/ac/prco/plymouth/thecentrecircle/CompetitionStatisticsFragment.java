@@ -13,6 +13,9 @@ import android.view.ViewGroup;
  */
 public class CompetitionStatisticsFragment extends Fragment {
 
+    /**
+     * TODO: Decide on a layout for this tab
+     */
 
     public CompetitionStatisticsFragment() {
         // Required empty public constructor

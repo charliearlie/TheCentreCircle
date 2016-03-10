@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 /**
  * Created by charliewaite on 05/03/2016.
+ * Competition class responsible for storing competitions retrieved by Firebase or API
  */
 public class Competition implements Serializable {
 
     private String id;
     private String name;
     private String region;
-    private String fdId;
+    private String fdId; //Football data ID for statistics from a second API if needed
 
     public Competition() {
 
