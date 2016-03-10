@@ -17,6 +17,7 @@
     <string name="title_activity_login">Sign in</string>
     <string name="nav_logout">Log out</string>
     <string name="nav_title">The Centre Circle</string>
+    <string name="nav_football_videos">Football videos</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

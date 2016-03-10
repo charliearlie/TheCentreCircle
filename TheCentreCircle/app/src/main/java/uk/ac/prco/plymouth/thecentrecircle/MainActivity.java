@@ -352,6 +352,9 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this, MyBetsActivity.class);
                 startActivity(intent);
 
+            } else if (id == R.id.nav_football_videos) {
+                Intent intent = new Intent(MainActivity.this, MyBetsActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_settings) {
 
             } else if (id == R.id.nav_about) {

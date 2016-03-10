@@ -1,8 +1,10 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
@@ -12,6 +14,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
+import java.net.URI;
+
 public class MyBetsActivity extends AppCompatActivity {
 
     Query queryRef;
@@ -19,6 +23,12 @@ public class MyBetsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_bets);
+        String videoUrl = "https://cdn.streamable.com/video/mp4/c2u1.mp4";
+
+        VideoView videoView  = (VideoView) findViewById(R.id.videoView);
+        Uri uri = Uri.parse(videoUrl);
+        videoView.setVideoURI(uri);
+        videoView.start();
 
         //Firebase.setAndroidContext(this);
         Firebase ref = new Firebase("https://cwprco304.firebaseio.com");
