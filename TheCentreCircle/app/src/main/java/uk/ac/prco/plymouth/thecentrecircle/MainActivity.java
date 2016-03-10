@@ -327,6 +327,9 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_competitions) {
                 Intent intent = new Intent(MainActivity.this, AllCompetitionsActivity.class);
                 startActivity(intent);
+            } else if (id == R.id.nav_football_videos) {
+                Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
+                startActivity(intent);
             } else if (id == R.id.nav_settings) {
 
             } else if (id == R.id.nav_about) {
@@ -349,11 +352,11 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_my_team) {
 
             } else if (id == R.id.nav_my_bets) {
-                Intent intent = new Intent(MainActivity.this, MyBetsActivity.class);
+                Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
                 startActivity(intent);
 
             } else if (id == R.id.nav_football_videos) {
-                Intent intent = new Intent(MainActivity.this, MyBetsActivity.class);
+                Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_settings) {
 
