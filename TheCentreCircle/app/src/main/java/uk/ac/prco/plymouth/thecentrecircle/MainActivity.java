@@ -9,6 +9,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -241,8 +242,8 @@ public class MainActivity extends AppCompatActivity
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 int matchId = dataSnapshot.child("matchId").getValue(int.class);
                 int index = findMatchById(matchId);
-                matches.get(index).setHomeScore(dataSnapshot.child("homeScore").getValue(int.class));
-                matches.get(index).setAwayScore(dataSnapshot.child("awayScore").getValue(int.class));
+                matches.get(index).setHomeScore(dataSnapshot.child("homeScore").getValue(String.class));
+                matches.get(index).setAwayScore(dataSnapshot.child("awayScore").getValue(String.class));
                 Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
                 intent.putExtra("match", matches.get(index));
                 adapter = new ScoreCardAdapter(matches);

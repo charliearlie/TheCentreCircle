@@ -254,7 +254,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity {
                     ref.child("users").child(authData.getUid()).child("favcompetitions").child(compId).setValue(true);
                     Snackbar.make(view, "You have favourited this competition", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
-                    fab.setVisibility(View.GONE);
+                    fab.hide();
                 }
             });
         } else {

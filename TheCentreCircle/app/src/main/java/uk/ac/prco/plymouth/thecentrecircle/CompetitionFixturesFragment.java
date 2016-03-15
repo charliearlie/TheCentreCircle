@@ -9,9 +9,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,10 +58,9 @@ public class CompetitionFixturesFragment extends Fragment {
         Competition competition = (Competition) args.getSerializable("competition");
 
         //URL to retrieve data from external API - Currently hardcoded to a specific date
-        String url = "http://football-api.com/api/?Action=fixtures" +
+        String url = "http://football-api.com/api/?Action=today" +
                 "&APIKey=" + constants.getFootballAPIKey() +
-                "&comp_id=" + competition.getId() + "&match_date=12.03.2016" +
-                "&IP=81.156.123.17";
+                "&comp_id=" + competition.getId() + "&IP=81.156.123.17";
 
         try {
             //Retrieve the fixtures from the URL in the background
@@ -69,14 +70,6 @@ public class CompetitionFixturesFragment extends Fragment {
         }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_competition_fixtures, container, false);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
-
     }
 
     /**
@@ -103,9 +96,13 @@ public class CompetitionFixturesFragment extends Fragment {
                 String returned = readAll(bufferedReader);
 
                 jsonObject = new JSONObject(returned);
-
-                //Retrieve all the matches from the returned object
-                jsonArray = jsonObject.getJSONArray("matches");
+                String errorMessage = jsonObject.getString("ERROR");
+                if (errorMessage.equals("OK")) {
+                    //Retrieve all the matches from the returned object
+                    jsonArray = jsonObject.getJSONArray("matches");
+                } else {
+                    jsonArray = null;
+                }
 
                 return jsonArray;
             } catch (Exception ex) {
@@ -132,44 +129,55 @@ public class CompetitionFixturesFragment extends Fragment {
         protected void onPostExecute(JSONArray jsonArray) {
             View view = getView();
             final Bundle args = getArguments();
+
             Competition competition = (Competition) args.getSerializable("competition");
             ArrayList<Match> matches = new ArrayList<>();
 
+            if(jsonArray != null) {
+                try {
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        //Retrieve the specific details from each match
+                        System.out.println(jsonArray.getJSONObject(i));
+                        String homeTeam = String.valueOf(jsonArray.getJSONObject(i).get("match_localteam_name"));
+                        String awayTeam = String.valueOf(jsonArray.getJSONObject(i).get("match_visitorteam_name"));
+                        String homeScore = String.valueOf(jsonArray.getJSONObject(i).get("match_localteam_score"));
+                        String awayScore = String.valueOf(jsonArray.getJSONObject(i).get("match_visitorteam_score"));
+                        int matchId = Integer.parseInt(String.valueOf(jsonArray.getJSONObject(i).get("match_id")));
+                        String matchStatus = String.valueOf(jsonArray.getJSONObject(i).get("match_status"));
 
-            try {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    int homeScore = 0;
-                    int awayScore = 0;
-                    //Retrieve the specific details from each match
-                    String homeTeam = String.valueOf(jsonArray.getJSONObject(i).get("match_localteam_name"));
-                    String awayTeam = String.valueOf(jsonArray.getJSONObject(i).get("match_visitorteam_name"));
-                    String homeScoreString = String.valueOf(jsonArray.getJSONObject(i).get("match_localteam_score"));
-                    String awayScoreString = String.valueOf(jsonArray.getJSONObject(i).get("match_visitorteam_name"));
-                    int matchId = Integer.parseInt(String.valueOf(jsonArray.getJSONObject(i).get("match_id")));
+                        if(homeScore.equals("?") && awayScore.equals("?")) {
+                            homeScore = "-";
+                            awayScore = "-";
+                        }
 
-                    if (homeScoreString.equals("?") && awayScoreString.equals("?")) {
-                        homeScore = -1;
-                        awayScore = -1;
+
+                        //Create a new Match object with the retrieved details
+                        Match match = new Match(homeTeam, awayTeam, homeScore, awayScore, matchId, R.drawable.arsenal,
+                                R.drawable.barcelona, matchStatus);
+
+                        matches.add(match);
+
+                        //Retrieve the recycler view and populate it with the matches through the ScoreCardAdapter
+
                     }
+                    mRecyclerView = (RecyclerView) view.findViewById(R.id.fixture_recycler);
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    ScoreCardAdapter scoreCardAdapter = new ScoreCardAdapter(matches);
+                    mRecyclerView.setAdapter(scoreCardAdapter);
 
-                    //Create a new Match object with the retrieved details
-                    Match match = new Match(homeTeam, awayTeam, homeScore, awayScore, matchId, R.drawable.arsenal,
-                            R.drawable.barcelona);
+                    //Set default animation on recycler view
+                    mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                    progressDialog.dismiss();
 
-                    matches.add(match);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-                //Retrieve the recycler view and populate it with the matches through the ScoreCardAdapter
-                mRecyclerView = (RecyclerView) view.findViewById(R.id.fixture_recycler);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                ScoreCardAdapter scoreCardAdapter = new ScoreCardAdapter(matches);
-                mRecyclerView.setAdapter(scoreCardAdapter);
-
-                //Set default animation on recycler view
-                mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+            } else {
                 progressDialog.dismiss();
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                TextView noFix = (TextView) view.findViewById(R.id.no_fixtures_today);
+                noFix.setVisibility(View.VISIBLE);
             }
+
         }
 
         /**

@@ -1,0 +1,186 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'uninstall',
+1 verbose cli   'firebase' ]
+2 info using npm@3.6.0
+3 info using node@v5.7.0
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly install normalizeTree
+8 silly loadCurrentTree Finishing
+9 silly loadIdealTree Starting
+10 silly install loadIdealTree
+11 silly cloneCurrentTree Starting
+12 silly install cloneCurrentTreeToIdealTree
+13 silly cloneCurrentTree Finishing
+14 silly loadShrinkwrap Starting
+15 silly install loadShrinkwrap
+16 silly loadShrinkwrap Finishing
+17 silly loadAllDepsIntoIdealTree Starting
+18 silly uninstall loadAllDepsIntoIdealtree
+19 silly loadAllDepsIntoIdealTree Finishing
+20 silly idealTree:prePrune node
+20 silly idealTree:prePrune ├── accepts@1.2.13
+20 silly idealTree:prePrune ├── array-flatten@1.1.1
+20 silly idealTree:prePrune ├── content-disposition@0.5.1
+20 silly idealTree:prePrune ├── content-type@1.0.1
+20 silly idealTree:prePrune ├── cookie-signature@1.0.6
+20 silly idealTree:prePrune ├── cookie@0.1.5
+20 silly idealTree:prePrune ├── debug@2.2.0
+20 silly idealTree:prePrune ├── depd@1.1.0
+20 silly idealTree:prePrune ├── destroy@1.0.4
+20 silly idealTree:prePrune ├── ee-first@1.1.1
+20 silly idealTree:prePrune ├── escape-html@1.0.3
+20 silly idealTree:prePrune ├── etag@1.7.0
+20 silly idealTree:prePrune ├── express@4.13.4
+20 silly idealTree:prePrune ├── finalhandler@0.4.1
+20 silly idealTree:prePrune ├── forwarded@0.1.0
+20 silly idealTree:prePrune ├── fresh@0.3.0
+20 silly idealTree:prePrune ├── http-errors@1.3.1
+20 silly idealTree:prePrune ├── inherits@2.0.1
+20 silly idealTree:prePrune ├── ipaddr.js@1.0.5
+20 silly idealTree:prePrune ├── media-typer@0.3.0
+20 silly idealTree:prePrune ├── merge-descriptors@1.0.1
+20 silly idealTree:prePrune ├── methods@1.1.2
+20 silly idealTree:prePrune ├── mime-db@1.22.0
+20 silly idealTree:prePrune ├── mime-types@2.1.10
+20 silly idealTree:prePrune ├── mime@1.3.4
+20 silly idealTree:prePrune ├── ms@0.7.1
+20 silly idealTree:prePrune ├── negotiator@0.5.3
+20 silly idealTree:prePrune ├── on-finished@2.3.0
+20 silly idealTree:prePrune ├── parseurl@1.3.1
+20 silly idealTree:prePrune ├── path-to-regexp@0.1.7
+20 silly idealTree:prePrune ├── proxy-addr@1.0.10
+20 silly idealTree:prePrune ├── qs@4.0.0
+20 silly idealTree:prePrune ├── range-parser@1.0.3
+20 silly idealTree:prePrune ├── send@0.13.1
+20 silly idealTree:prePrune ├── serve-static@1.10.2
+20 silly idealTree:prePrune ├── statuses@1.2.1
+20 silly idealTree:prePrune ├── type-is@1.6.12
+20 silly idealTree:prePrune ├── unpipe@1.0.0
+20 silly idealTree:prePrune ├── utils-merge@1.0.0
+20 silly idealTree:prePrune └── vary@1.0.1
+21 silly loadIdealTree Finishing
+22 silly currentTree node
+22 silly currentTree ├── accepts@1.2.13
+22 silly currentTree ├── array-flatten@1.1.1
+22 silly currentTree ├── content-disposition@0.5.1
+22 silly currentTree ├── content-type@1.0.1
+22 silly currentTree ├── cookie-signature@1.0.6
+22 silly currentTree ├── cookie@0.1.5
+22 silly currentTree ├── debug@2.2.0
+22 silly currentTree ├── depd@1.1.0
+22 silly currentTree ├── destroy@1.0.4
+22 silly currentTree ├── ee-first@1.1.1
+22 silly currentTree ├── escape-html@1.0.3
+22 silly currentTree ├── etag@1.7.0
+22 silly currentTree ├── express@4.13.4
+22 silly currentTree ├── finalhandler@0.4.1
+22 silly currentTree ├─┬ firebase@2.4.1
+22 silly currentTree │ └─┬ faye-websocket@0.9.3
+22 silly currentTree │   └─┬ websocket-driver@0.5.2
+22 silly currentTree │     └── websocket-extensions@0.1.1
+22 silly currentTree ├── forwarded@0.1.0
+22 silly currentTree ├── fresh@0.3.0
+22 silly currentTree ├── http-errors@1.3.1
+22 silly currentTree ├── inherits@2.0.1
+22 silly currentTree ├── ipaddr.js@1.0.5
+22 silly currentTree ├── media-typer@0.3.0
+22 silly currentTree ├── merge-descriptors@1.0.1
+22 silly currentTree ├── methods@1.1.2
+22 silly currentTree ├── mime-db@1.22.0
+22 silly currentTree ├── mime-types@2.1.10
+22 silly currentTree ├── mime@1.3.4
+22 silly currentTree ├── ms@0.7.1
+22 silly currentTree ├── negotiator@0.5.3
+22 silly currentTree ├── on-finished@2.3.0
+22 silly currentTree ├── parseurl@1.3.1
+22 silly currentTree ├── path-to-regexp@0.1.7
+22 silly currentTree ├── proxy-addr@1.0.10
+22 silly currentTree ├── qs@4.0.0
+22 silly currentTree ├── range-parser@1.0.3
+22 silly currentTree ├── send@0.13.1
+22 silly currentTree ├── serve-static@1.10.2
+22 silly currentTree ├── statuses@1.2.1
+22 silly currentTree ├── type-is@1.6.12
+22 silly currentTree ├── unpipe@1.0.0
+22 silly currentTree ├── utils-merge@1.0.0
+22 silly currentTree └── vary@1.0.1
+23 silly idealTree node
+23 silly idealTree ├── accepts@1.2.13
+23 silly idealTree ├── array-flatten@1.1.1
+23 silly idealTree ├── content-disposition@0.5.1
+23 silly idealTree ├── content-type@1.0.1
+23 silly idealTree ├── cookie-signature@1.0.6
+23 silly idealTree ├── cookie@0.1.5
+23 silly idealTree ├── debug@2.2.0
+23 silly idealTree ├── depd@1.1.0
+23 silly idealTree ├── destroy@1.0.4
+23 silly idealTree ├── ee-first@1.1.1
+23 silly idealTree ├── escape-html@1.0.3
+23 silly idealTree ├── etag@1.7.0
+23 silly idealTree ├── express@4.13.4
+23 silly idealTree ├── finalhandler@0.4.1
+23 silly idealTree ├── forwarded@0.1.0
+23 silly idealTree ├── fresh@0.3.0
+23 silly idealTree ├── http-errors@1.3.1
+23 silly idealTree ├── inherits@2.0.1
+23 silly idealTree ├── ipaddr.js@1.0.5
+23 silly idealTree ├── media-typer@0.3.0
+23 silly idealTree ├── merge-descriptors@1.0.1
+23 silly idealTree ├── methods@1.1.2
+23 silly idealTree ├── mime-db@1.22.0
+23 silly idealTree ├── mime-types@2.1.10
+23 silly idealTree ├── mime@1.3.4
+23 silly idealTree ├── ms@0.7.1
+23 silly idealTree ├── negotiator@0.5.3
+23 silly idealTree ├── on-finished@2.3.0
+23 silly idealTree ├── parseurl@1.3.1
+23 silly idealTree ├── path-to-regexp@0.1.7
+23 silly idealTree ├── proxy-addr@1.0.10
+23 silly idealTree ├── qs@4.0.0
+23 silly idealTree ├── range-parser@1.0.3
+23 silly idealTree ├── send@0.13.1
+23 silly idealTree ├── serve-static@1.10.2
+23 silly idealTree ├── statuses@1.2.1
+23 silly idealTree ├── type-is@1.6.12
+23 silly idealTree ├── unpipe@1.0.0
+23 silly idealTree ├── utils-merge@1.0.0
+23 silly idealTree └── vary@1.0.1
+24 silly generateActionsToTake Starting
+25 silly install generateActionsToTake
+26 warn checkPermissions Missing write access to /Users/charliewaite/Documents/SoftwareDevelopment/node/node_modules/firebase/node_modules/faye-websocket/node_modules
+27 warn checkPermissions Missing write access to /Users/charliewaite/Documents/SoftwareDevelopment/node/node_modules/firebase/node_modules/faye-websocket/node_modules/websocket-driver/node_modules
+28 warn checkPermissions Missing write access to /Users/charliewaite/Documents/SoftwareDevelopment/node/node_modules/firebase/node_modules
+29 silly rollbackFailedOptional Starting
+30 silly rollbackFailedOptional Finishing
+31 silly runTopLevelLifecycles Starting
+32 silly runTopLevelLifecycles Finishing
+33 silly install printInstalled
+34 warn enoent ENOENT: no such file or directory, open '/Users/charliewaite/Documents/SoftwareDevelopment/node/package.json'
+35 warn node No description
+36 warn node No repository field.
+37 warn node No README data
+38 warn node No license field.
+39 verbose stack Error: EACCES: permission denied, access '/Users/charliewaite/Documents/SoftwareDevelopment/node/node_modules/firebase/node_modules/faye-websocket/node_modules'
+39 verbose stack     at Error (native)
+40 verbose cwd /Users/charliewaite/Documents/SoftwareDevelopment/node
+41 error Darwin 15.3.0
+42 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "uninstall" "firebase"
+43 error node v5.7.0
+44 error npm  v3.6.0
+45 error path /Users/charliewaite/Documents/SoftwareDevelopment/node/node_modules/firebase/node_modules/faye-websocket/node_modules
+46 error code EACCES
+47 error errno -13
+48 error syscall access
+49 error Error: EACCES: permission denied, access '/Users/charliewaite/Documents/SoftwareDevelopment/node/node_modules/firebase/node_modules/faye-websocket/node_modules'
+49 error     at Error (native)
+49 error  { [Error: EACCES: permission denied, access '/Users/charliewaite/Documents/SoftwareDevelopment/node/node_modules/firebase/node_modules/faye-websocket/node_modules']
+49 error   errno: -13,
+49 error   code: 'EACCES',
+49 error   syscall: 'access',
+49 error   path: '/Users/charliewaite/Documents/SoftwareDevelopment/node/node_modules/firebase/node_modules/faye-websocket/node_modules' }
+50 error Please try running this command again as root/Administrator.
+51 verbose exit [ -13, true ]

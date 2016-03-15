@@ -8,22 +8,25 @@ import java.io.Serializable;
 public class Match implements Serializable{
     private String homeTeam;
     private String awayTeam;
-    private int homeScore;
-    private int awayScore;
+    private String homeScore;
+    private String awayScore;
     private int matchId;
     private int homeBadge;
     private int awayBadge;
+    private String matchStatus;
 
-
-    //A lot more will be added to this
+    public String getMatchStatus() {
+        return matchStatus;
+    }
+//A lot more will be added to this
 
 
     public Match() {
 
     }
 
-    public Match(String homeTeam, String awayTeam, int homeScore, int awayScore, int matchId,
-                 int homeBadge, int awayBadge) {
+    public Match(String homeTeam, String awayTeam, String homeScore, String awayScore, int matchId,
+                 int homeBadge, int awayBadge, String matchStatus) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeScore = homeScore;
@@ -31,6 +34,7 @@ public class Match implements Serializable{
         this.matchId = matchId;
         this.homeBadge = homeBadge;
         this.awayBadge = awayBadge;
+        this.matchStatus = matchStatus;
     }
 
     public String getHomeTeam() {
@@ -45,7 +49,7 @@ public class Match implements Serializable{
         return awayTeam;
     }
 
-    public int getHomeScore() {
+    public String getHomeScore() {
         return homeScore;
     }
 
@@ -57,15 +61,15 @@ public class Match implements Serializable{
         this.awayTeam = awayTeam;
     }
 
-    public void setHomeScore(int homeScore) {
+    public void setHomeScore(String homeScore) {
         this.homeScore = homeScore;
     }
 
-    public void setAwayScore(int awayScore) {
+    public void setAwayScore(String awayScore) {
         this.awayScore = awayScore;
     }
 
-    public int getAwayScore() {
+    public String getAwayScore() {
 
         return awayScore;
     }

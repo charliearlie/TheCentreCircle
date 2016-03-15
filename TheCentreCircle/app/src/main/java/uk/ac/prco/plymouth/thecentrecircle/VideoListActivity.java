@@ -81,7 +81,7 @@ public class VideoListActivity extends AppCompatActivity {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i).getJSONObject("data");
                     String domain = (String) jsonObject.get("domain");
-                    if(domain.equals("streamable.com")) {
+                    if(domain.equals("streamable.com") || domain.equals("gfycat.com")) {
                         String title = jsonObject.getString("title");
                         String videoUrl = (String) jsonObject.get("url");
                         String permalink = "https://reddit.com" +  (String) jsonObject.get("permalink");

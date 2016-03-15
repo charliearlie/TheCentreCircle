@@ -45,15 +45,29 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
 
     @Override
     public void onBindViewHolder(ScoreCardAdapter.ViewHolder holder, final int position) {
+
         CardView cardView = holder.cardView;
         TextView homeTeam = (TextView) cardView.findViewById(R.id.home_team);
         homeTeam.setText(matches.get(position).getHomeTeam());
         TextView awayTeam = (TextView) cardView.findViewById(R.id.away_team);
         awayTeam.setText(matches.get(position).getAwayTeam());
+        if(matches.get(position).getHomeScore().equals("?")) {
+            TextView homeScore = (TextView) cardView.findViewById(R.id.home_score);
+            homeScore.setText(" - ");
+            TextView awayScore = (TextView) cardView.findViewById(R.id.away_score);
+            awayScore.setText(" - ");
+        } else {
+            TextView homeScore = (TextView) cardView.findViewById(R.id.home_score);
+            homeScore.setText(matches.get(position).getHomeScore());
+            TextView awayScore = (TextView) cardView.findViewById(R.id.away_score);
+            awayScore.setText(matches.get(position).getAwayScore());
+        }
         TextView homeScore = (TextView) cardView.findViewById(R.id.home_score);
-        homeScore.setText(Integer.toString(matches.get(position).getHomeScore()));
+        homeScore.setText(matches.get(position).getHomeScore());
         TextView awayScore = (TextView) cardView.findViewById(R.id.away_score);
-        awayScore.setText(Integer.toString(matches.get(position).getAwayScore()));
+        awayScore.setText(matches.get(position).getAwayScore());
+        TextView matchStatus = (TextView) cardView.findViewById(R.id.match_status);
+        matchStatus.setText(matches.get(position).getMatchStatus());
 
         ImageView im = (ImageView) cardView.findViewById(R.id.home_badge);
         im.setImageResource(matches.get(position).getHomeBadge());

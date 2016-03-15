@@ -33,8 +33,8 @@ public class MatchDetailActivity extends AppCompatActivity {
        // homeScore.setText(Integer.toString(position));
         homeTeam.setText(match.getHomeTeam());
         awayTeam.setText(match.getAwayTeam());
-        homeScore.setText(Integer.toString(match.getHomeScore()));
-        awayScore.setText(Integer.toString(match.getAwayScore()));
+        homeScore.setText(match.getHomeScore());
+        awayScore.setText(match.getAwayScore());
         homeBadge.setImageResource(match.getHomeBadge());
         awayBadge.setImageResource(match.getAwayBadge());
 
