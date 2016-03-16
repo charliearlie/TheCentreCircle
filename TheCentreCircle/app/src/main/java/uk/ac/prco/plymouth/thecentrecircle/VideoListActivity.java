@@ -26,8 +26,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.keys.RedditEndPoints;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
+import uk.ac.prco.plymouth.thecentrecircle.keys.RedditEndPoints;
 
 public class VideoListActivity extends AppCompatActivity {
 

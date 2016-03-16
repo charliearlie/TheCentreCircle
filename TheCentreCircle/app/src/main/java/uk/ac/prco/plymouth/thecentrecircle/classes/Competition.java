@@ -1,4 +1,4 @@
-package uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes;
+package uk.ac.prco.plymouth.thecentrecircle.classes;
 
 import java.io.Serializable;
 

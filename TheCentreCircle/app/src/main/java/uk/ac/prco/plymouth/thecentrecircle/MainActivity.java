@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.adapters.SlideInRightAnimationAdapter;
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -242,34 +242,71 @@ public class MainActivity extends AppCompatActivity
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 int matchId = dataSnapshot.child("matchId").getValue(int.class);
                 int index = findMatchById(matchId);
-                matches.get(index).setHomeScore(dataSnapshot.child("homeScore").getValue(String.class));
-                matches.get(index).setAwayScore(dataSnapshot.child("awayScore").getValue(String.class));
-                Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
-                intent.putExtra("match", matches.get(index));
-                adapter = new ScoreCardAdapter(matches);
-                adapter.setListener(new ScoreCardAdapter.Listener() {
+                String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
+                String awayScore = dataSnapshot.child("awayScore").getValue(String.class);
+                System.out.println(homeScore);
+                System.out.println(awayScore);
+                System.out.println(dataSnapshot.child("homeScore").getValue(String.class));
+                System.out.println(s);
+                if (!matches.get(index).getHomeScore().equals(homeScore)
+                        || !matches.get(index).getAwayScore().equals(awayScore)) {
 
-                    /**
-                     * Main reason I want to somehow change this. This method appears twice. Not DRY
-                     * @param position
-                     */
-                    @Override
-                    public void onClick(int position) {
-                        Match detailMatch = matches.get(position);
-                        Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-                        intent.putExtra("match", detailMatch);
-                        intent.putExtra("matchId", position);
-                        intent.putExtra("matches", matches);
-                        startActivity(intent);
-                    }
-                });
-                //Set new recycler animations. Will try to have a reusable version of this
-                SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
-                alphaAdapter.setDuration(1000);
-                alphaAdapter.setInterpolator(new OvershootInterpolator());
-                mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
+                    matches.get(index).setHomeScore(dataSnapshot.child("homeScore").getValue(String.class));
+                    matches.get(index).setAwayScore(dataSnapshot.child("awayScore").getValue(String.class));
+                    matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
+                    Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
+                    intent.putExtra("match", matches.get(index));
+                    adapter = new ScoreCardAdapter(matches);
+                    adapter.setListener(new ScoreCardAdapter.Listener() {
 
-                startService(intent);
+                        /**
+                         * Main reason I want to somehow change this. This method appears twice. Not DRY
+                         * @param position
+                         */
+                        @Override
+                        public void onClick(int position) {
+                            Match detailMatch = matches.get(position);
+                            Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
+                            intent.putExtra("match", detailMatch);
+                            intent.putExtra("matchId", position);
+                            intent.putExtra("matches", matches);
+                            startActivity(intent);
+                        }
+                    });
+                    //Set new recycler animations. Will try to have a reusable version of this
+                    SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
+                    alphaAdapter.setDuration(1000);
+                    alphaAdapter.setInterpolator(new OvershootInterpolator());
+                    mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
+
+                    startService(intent);
+
+                } else {
+                    matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
+                    adapter = new ScoreCardAdapter(matches);
+                    adapter.setListener(new ScoreCardAdapter.Listener() {
+
+                        /**
+                         * Main reason I want to somehow change this. This method appears twice. Not DRY
+                         * @param position
+                         */
+                        @Override
+                        public void onClick(int position) {
+                            Match detailMatch = matches.get(position);
+                            Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
+                            intent.putExtra("match", detailMatch);
+                            intent.putExtra("matchId", position);
+                            intent.putExtra("matches", matches);
+                            startActivity(intent);
+                        }
+                    });
+                    //Set new recycler animations. Will try to have a reusable version of this
+                    SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
+                    alphaAdapter.setDuration(1000);
+                    alphaAdapter.setInterpolator(new OvershootInterpolator());
+                    mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
+                }
+
             }
 
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {

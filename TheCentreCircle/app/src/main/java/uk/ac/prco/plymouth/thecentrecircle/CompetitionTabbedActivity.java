@@ -33,8 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
+import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 public class CompetitionTabbedActivity extends AppCompatActivity {
     Constants constants = new Constants();

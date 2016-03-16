@@ -1,4 +1,4 @@
-package uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.keys;
+package uk.ac.prco.plymouth.thecentrecircle.keys;
 
 /**
  * Created by charliewaite on 08/03/2016.

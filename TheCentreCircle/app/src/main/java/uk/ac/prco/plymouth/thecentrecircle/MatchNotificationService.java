@@ -8,7 +8,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.TaskStackBuilder;
 
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 
 
 /**

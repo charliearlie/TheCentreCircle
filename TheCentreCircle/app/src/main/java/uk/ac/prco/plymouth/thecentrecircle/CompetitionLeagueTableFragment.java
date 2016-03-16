@@ -23,8 +23,8 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import uk.ac.prco.plymouth.thecentrecircle.adapters.LeagueTableAdapter;
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
+import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 
 /**

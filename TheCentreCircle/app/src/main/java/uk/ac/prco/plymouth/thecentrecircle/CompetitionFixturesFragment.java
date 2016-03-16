@@ -27,9 +27,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
+import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 
 /**

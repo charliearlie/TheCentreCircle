@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 
 public class MatchDetailActivity extends AppCompatActivity {
 

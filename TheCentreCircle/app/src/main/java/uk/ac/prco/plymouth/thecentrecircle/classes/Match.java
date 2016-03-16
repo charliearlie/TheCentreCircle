@@ -1,11 +1,11 @@
-package uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes;
+package uk.ac.prco.plymouth.thecentrecircle.classes;
 
 import java.io.Serializable;
 
 /**
  * Created by Charles Waite on 18/02/2016.
  */
-public class Match implements Serializable{
+public class Match implements Serializable {
     private String homeTeam;
     private String awayTeam;
     private String homeScore;
@@ -80,5 +80,9 @@ public class Match implements Serializable{
 
     public int getAwayBadge() {
         return awayBadge;
+    }
+
+    public void setMatchStatus(String matchStatus) {
+        this.matchStatus = matchStatus;
     }
 }

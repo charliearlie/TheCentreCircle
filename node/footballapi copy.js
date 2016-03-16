@@ -1,16 +1,8 @@
-/*
-    Work of Charles Waite
-    Plymouth University
-*/
 var https = require('https');
 var firebase = require('firebase')
 
 var ref = new Firebase('https://cwprco304.firebaseio.com');
 var matchRef = ref.child("premierleague/matches");
-
-console.log("The Centre Circle server side Node application\n");
-console.log("Application is to poll the API every 30 seconds");
-
 
 setInterval(function () {
 
@@ -33,10 +25,7 @@ setInterval(function () {
         response.on('end', function() {
             var data = JSON.parse(content);
             for (var i = 0; i < data.matches.length; i++) {
-                console.log(data.matches[i].match_localteam_name + " " +
-                    data.matches[i].match_localteam_score + " - " +
-                    data.matches[i].match_visitorteam_score + " " + data.matches[i].match_visitorteam_name +
-                    "  match status: " + data.matches[i].match_status);
+                console.log(data.matches[i].match_id);
                 matchRef.child(data.matches[i].match_id).set({
                         awayBadge : 2130837638,
                         awayScore : data.matches[i].match_visitorteam_score,
@@ -47,6 +36,7 @@ setInterval(function () {
                         matchId : data.matches[i].match_id,
                         matchStatus : data.matches[i].match_status
                 });
+                console.log(data.matches[i]);
             }
             
 

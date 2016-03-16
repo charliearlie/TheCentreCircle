@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import uk.ac.prco.plymouth.thecentrecircle.uk.ac.prco.plymouth.thecentrecircle.classes.Match;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 
 /**
  * Created by charliewaite on 19/02/2016.
@@ -75,6 +75,41 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
         ImageView im2 = (ImageView) cardView.findViewById(R.id.away_badge);
         im2.setImageResource(matches.get(position).getAwayBadge());
 
+        switch (matches.get(position).getHomeTeam()) {
+            case "Hull City" :
+                im.setImageResource(R.drawable.zhull);
+                break;
+            case "Atl. Madrid" :
+                im.setImageResource(R.drawable.atletico);
+                break;
+            case "Manchester City" :
+                im.setImageResource(R.drawable.mancity);
+                break;
+            case "Ipswich" :
+                im.setImageResource(R.drawable.zipswich);
+                break;
+            case "Brighton" :
+                im.setImageResource(R.drawable.zbrighton);
+                break;
+        }
+
+        switch (matches.get(position).getAwayTeam()) {
+            case "PSV" :
+                im2.setImageResource(R.drawable.zpsv);
+                break;
+            case "Dyn. Kiev" :
+                im2.setImageResource(R.drawable.zdynamo);
+                break;
+            case "Reading" :
+                im2.setImageResource(R.drawable.zreading);
+                break;
+            case "Nottingham" :
+                im2.setImageResource(R.drawable.znottingham);
+                break;
+            case "Blackburn" :
+                im2.setImageResource(R.drawable.zblackburn);
+                break;
+        }
 
         cardView.setOnClickListener(new View.OnClickListener() {
 
