@@ -8,6 +8,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v4.app.TaskStackBuilder;
 
+import java.util.Random;
+
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 
 
@@ -19,7 +21,7 @@ import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
  */
 public class MatchNotificationService extends IntentService {
 
-    public static final int NOTIFICATION_ID = 5790;
+    public int notificationId = 5790;
 
     public MatchNotificationService() {
         super("MatchNotificationService");
@@ -76,8 +78,10 @@ public class MatchNotificationService extends IntentService {
                 " : " + match.getAwayScore() + " " + match.getAwayTeam())
                 .build();
 
+        Random random = new Random();
+        int m = random.nextInt(9999 - 1000) + 1000;
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, notification);
+        notificationManager.notify(m, notification);
     }
 }

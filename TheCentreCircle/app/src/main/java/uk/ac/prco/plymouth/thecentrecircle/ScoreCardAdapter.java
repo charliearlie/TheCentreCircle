@@ -62,10 +62,6 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
             TextView awayScore = (TextView) cardView.findViewById(R.id.away_score);
             awayScore.setText(matches.get(position).getAwayScore());
         }
-        TextView homeScore = (TextView) cardView.findViewById(R.id.home_score);
-        homeScore.setText(matches.get(position).getHomeScore());
-        TextView awayScore = (TextView) cardView.findViewById(R.id.away_score);
-        awayScore.setText(matches.get(position).getAwayScore());
         TextView matchStatus = (TextView) cardView.findViewById(R.id.match_status);
         matchStatus.setText(matches.get(position).getMatchStatus());
 
@@ -74,42 +70,6 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
 
         ImageView im2 = (ImageView) cardView.findViewById(R.id.away_badge);
         im2.setImageResource(matches.get(position).getAwayBadge());
-
-        switch (matches.get(position).getHomeTeam()) {
-            case "Hull City" :
-                im.setImageResource(R.drawable.zhull);
-                break;
-            case "Atl. Madrid" :
-                im.setImageResource(R.drawable.atletico);
-                break;
-            case "Manchester City" :
-                im.setImageResource(R.drawable.mancity);
-                break;
-            case "Ipswich" :
-                im.setImageResource(R.drawable.zipswich);
-                break;
-            case "Brighton" :
-                im.setImageResource(R.drawable.zbrighton);
-                break;
-        }
-
-        switch (matches.get(position).getAwayTeam()) {
-            case "PSV" :
-                im2.setImageResource(R.drawable.zpsv);
-                break;
-            case "Dyn. Kiev" :
-                im2.setImageResource(R.drawable.zdynamo);
-                break;
-            case "Reading" :
-                im2.setImageResource(R.drawable.zreading);
-                break;
-            case "Nottingham" :
-                im2.setImageResource(R.drawable.znottingham);
-                break;
-            case "Blackburn" :
-                im2.setImageResource(R.drawable.zblackburn);
-                break;
-        }
 
         cardView.setOnClickListener(new View.OnClickListener() {
 

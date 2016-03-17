@@ -28,6 +28,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
@@ -153,7 +154,7 @@ public class CompetitionFixturesFragment extends Fragment {
 
                         //Create a new Match object with the retrieved details
                         Match match = new Match(homeTeam, awayTeam, homeScore, awayScore, matchId, R.drawable.arsenal,
-                                R.drawable.barcelona, matchStatus);
+                                R.drawable.barcelona, matchStatus, new ArrayList<Event>());
 
                         matches.add(match);
 

@@ -1,11 +1,13 @@
 package uk.ac.prco.plymouth.thecentrecircle.classes;
 
+import java.io.Serializable;
+
 /**
  * Created by charliewaite on 15/03/2016.
  */
-public class Event {
-    private String eventId;
-    private String eventMatchId;
+public class Event implements Serializable{
+    private int eventId;
+    private int eventMatchId;
     private String eventType;
     private String eventMinute;
     private String eventTeam;
@@ -13,7 +15,10 @@ public class Event {
     private String eventPlayerId;
     private String eventResult;
 
-    public Event(String eventId, String eventMatchId, String eventType, String eventMinute,
+    public Event() {
+
+    }
+    public Event(int eventId, int eventMatchId, String eventType, String eventMinute,
                  String eventTeam, String eventPlayer, String eventPlayerId, String eventResult) {
         this.eventId = eventId;
         this.eventMatchId = eventMatchId;
@@ -25,19 +30,19 @@ public class Event {
         this.eventResult = eventResult;
     }
 
-    public String getEventId() {
+    public int getEventId() {
         return eventId;
     }
 
-    public void setEventId(String eventId) {
+    public void setEventId(int eventId) {
         this.eventId = eventId;
     }
 
-    public String getEventMatchId() {
+    public int getEventMatchId() {
         return eventMatchId;
     }
 
-    public void setEventMatchId(String eventMatchId) {
+    public void setEventMatchId(int eventMatchId) {
         this.eventMatchId = eventMatchId;
     }
 

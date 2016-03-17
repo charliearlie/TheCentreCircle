@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Explode;
@@ -14,7 +15,6 @@ import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,31 +32,35 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
 import jp.wasabeef.recyclerview.animators.adapters.SlideInRightAnimationAdapter;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
+import uk.ac.prco.plymouth.thecentrecircle.classes.MatchTest;
+import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-
-
-    //URL of Firebase database
-    final String FIREBASE_URL = "https://cwprco304.firebaseio.com";
 
     //Variables needed for the list to be displayed
     private RecyclerView mRecyclerView;
     private ArrayList<Match> matches = new ArrayList<>();
     private ScoreCardAdapter adapter;
 
-    private AuthData aData;
+
+    private Constants cons = new Constants(); //Constants such as URLs and API keys
+
+    private AuthData aData; //Authorisation date if user is logged in
 
     private NavigationView navigationView;
 
@@ -65,8 +69,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Set action bar title
-        setTitle(R.string.football);
+        String date = getStringDate(); //Get date in string format to get todays matches
+
+        setTitle("Todays matches"); //Set action bar title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -77,40 +82,22 @@ public class MainActivity extends AppCompatActivity
         Firebase.setAndroidContext(this);
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        //Firebase reference to main application URL and what will be 'today's' matches
-        Firebase mainRef = new Firebase(FIREBASE_URL);
-        Firebase matchRef = new Firebase(FIREBASE_URL + "/premierleague/matches");
+        //Firebase reference to main application URL and 'today's' matches
+        Firebase mainRef = new Firebase(cons.getFirebaseUrl());
+        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
 
-
-        Intent intent = getIntent();
+        Intent intent = getIntent(); //Get the intent from user logging in
         if (intent.hasExtra("userLogged")) {
             Snackbar.make(findViewById(R.id.content_main), "User logged in", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
         }
 
-
-        /**
-         * TO COMPLETE:
-         * Floating action button for user to view their message inbox or 'liked' matches
-         * I haven't decided which one yet
-         */
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
         //DrawerLayout settings for the navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
-
 
         //Retrieve the navigation drawer and set it's listener for menu item presses
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -150,11 +137,8 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setAdapter(alphaAdapter);
 
 
-        /*
-            Listener for Single Value Event to initially fill the recycler view
-            ******I might be able to get all this in the child event listener******
-         */
-        matchRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        Query queryRef = todaysMatchesRef.orderByChild("matchTime");
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             /**
              * Fills the matches ArrayList with all of 'todays' matches from matchRef URL
              * @param dataSnapshot
@@ -162,11 +146,37 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                    Match match = postSnapShot.getValue(Match.class);
+                    final ArrayList<Event> events = new ArrayList<Event>();
+                    String homeTeam = postSnapShot.child("homeTeam").getValue(String.class);
+                    String awayTeam = postSnapShot.child("awayTeam").getValue(String.class);
+                    String homeScore = postSnapShot.child("homeScore").getValue(String.class);
+                    String awayScore = postSnapShot.child("awayScore").getValue(String.class);
+                    int matchId = postSnapShot.child("matchId").getValue(int.class);
+                    int homeBadge = postSnapShot.child("homeBadge").getValue(int.class);
+                    int awayBadge = postSnapShot.child("awayBadge").getValue(int.class);
+                    String matchStatus = postSnapShot.child("matchStatus").getValue(String.class);
+                    Firebase eventRef = todaysMatchesRef.child("/" + postSnapShot.getKey() + "/events");
+                    eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+                                Event event = eventSnapshot.getValue(Event.class);
+                                events.add(event);
+                                System.out.println(event.getEventPlayer());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+
+                    Match match = new Match(homeTeam, awayTeam, homeScore, awayScore,
+                            matchId, homeBadge, R.drawable.manutd, matchStatus, events);
+                    System.out.println(match);
                     matches.add(match);
                 }
-
-                //Set listener for recycler view to detect presses on a certain match
                 adapter.setListener(new ScoreCardAdapter.Listener() {
 
                     /**
@@ -182,6 +192,7 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                     }
                 });
+
                 //Alert the alphaAdapter that there is new data to be displayed
                 alphaAdapter.notifyDataSetChanged();
 
@@ -225,7 +236,7 @@ public class MainActivity extends AppCompatActivity
             Not used to initially fill recycler view because that would mean
             creating the recycler 'number of matches' times
          */
-        matchRef.addChildEventListener(new ChildEventListener() {
+        queryRef.addChildEventListener(new ChildEventListener() {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
             }
 
@@ -254,8 +265,8 @@ public class MainActivity extends AppCompatActivity
                     matches.get(index).setHomeScore(dataSnapshot.child("homeScore").getValue(String.class));
                     matches.get(index).setAwayScore(dataSnapshot.child("awayScore").getValue(String.class));
                     matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
-                    Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
-                    intent.putExtra("match", matches.get(index));
+
+
                     adapter = new ScoreCardAdapter(matches);
                     adapter.setListener(new ScoreCardAdapter.Listener() {
 
@@ -274,12 +285,16 @@ public class MainActivity extends AppCompatActivity
                         }
                     });
                     //Set new recycler animations. Will try to have a reusable version of this
-                    SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
-                    alphaAdapter.setDuration(1000);
-                    alphaAdapter.setInterpolator(new OvershootInterpolator());
-                    mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
+                    setupRecyclerAnimations();
 
-                    startService(intent);
+                    if(!homeScore.equals("0") || !awayScore.equals("0")) {
+                        Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
+                        intent.putExtra("match", matches.get(index));
+                        System.out.println("Notification sent WOOO");
+                        startService(intent);
+                    }
+
+
 
                 } else {
                     matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
@@ -301,10 +316,7 @@ public class MainActivity extends AppCompatActivity
                         }
                     });
                     //Set new recycler animations. Will try to have a reusable version of this
-                    SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
-                    alphaAdapter.setDuration(1000);
-                    alphaAdapter.setInterpolator(new OvershootInterpolator());
-                    mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
+                    setupRecyclerAnimations();
                 }
 
             }
@@ -318,6 +330,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    private void setupRecyclerAnimations() {
+        SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
+        alphaAdapter.setDuration(1000);
+        alphaAdapter.setInterpolator(new OvershootInterpolator());
+        mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
+    }
     /**
      * If the nav drawer is open, the back button will make it slide in
      */
@@ -402,7 +420,7 @@ public class MainActivity extends AppCompatActivity
 
             } else if (id == R.id.nav_logout) {
                 Toast.makeText(MainActivity.this, "Log out button pressed", Toast.LENGTH_LONG).show();
-                Firebase logRef = new Firebase(FIREBASE_URL);
+                Firebase logRef = new Firebase(cons.getFirebaseUrl());
                 LoginManager.getInstance().logOut();
                 logRef.unauth();
                 finish();
@@ -474,6 +492,14 @@ public class MainActivity extends AppCompatActivity
         protected void onPostExecute(Bitmap result){
             bmImage.setImageBitmap(result);
         }
+    }
+
+    private String getStringDate() {
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+        String[] dateArray = date.split("-");
+        date = dateArray[0] + dateArray[1] + dateArray[2];
+
+        return date;
     }
 
 }
