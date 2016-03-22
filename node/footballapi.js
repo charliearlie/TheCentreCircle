@@ -17,7 +17,7 @@ setInterval(function () {
     var rest_options = {
         host: 'football-api.com',
         port: 443,
-        path: '/api/?Action=today&APIKey=f49090a4-ef6b-a743-dd5c3dbf5711&IP=81.156.123.17',
+        path: '/api/?Action=today&APIKey=' + getAPIKey() + '&IP=81.156.123.17',
         method: 'GET'
     };
 
@@ -38,13 +38,19 @@ setInterval(function () {
           var matchRef = ref.child("matches/" + dateString);
           var data = JSON.parse(content);
 
-            for (var i = 0; i < data.matches.length; i++) {
-                console.log(data.matches[i].match_localteam_name + " " +
-                    data.matches[i].match_localteam_score + " - " +
-                    data.matches[i].match_visitorteam_score + " " + data.matches[i].match_visitorteam_name +
-                    "  match status: " + data.matches[i].match_status);
 
-                    console.log(dateString);
+
+            for (var i = 0; i < data.matches.length; i++) {
+                if(data.matches[i].match_status !== "FT" || data.matches[i].match_status !== "HT") {
+                    if (parseInt(data.matches[i].match_timer) > 0 && parseInt(data.matches[i].match_timer) <= 120) {
+                        console.log(data.matches[i].match_localteam_name + " " + data.matches[i].match_localteam_score
+                        + " - " + data.matches[i].match_visitorteam_score + " "  + data.matches[i].match_visitorteam_name + "   '" + data.matches[i].match_timer);
+                        console.log();
+                }
+                
+            }
+
+                
 
                 matchRef.child(data.matches[i].match_id).set({
                         matchCompId : data.matches[i].match_comp_id,
@@ -62,15 +68,30 @@ setInterval(function () {
                         halfTimeScore : data.matches[i].match_ht_score,
                         fullTimeScore : data.matches[i].match_ft_score,
                         extraTimeScore : data.matches[i].match_et_score,
-                        matchTime : data.matches[i].match_time
+                        matchTime : data.matches[i].match_time,
                 });
                 var events = data.matches[i].match_events;
                 var eventRef = matchRef.child(data.matches[i].match_id +
                 "/events");
-                console.log(events);
+
                 if (events != null) {
                   for(var j =0; j < events.length; j++) {
-                    console.log(events[j].event_player);
+                    if ((events[j].event_minute === data.matches[i].match_status) 
+                        && events[j].event_type === "goal") {
+                        if(events[j].event_team === 'localteam') {
+                            
+                            console.log("GOAL " + data.matches[i].match_localteam_name + ". Scored by " + events[j].event_player);
+                            console.log();
+
+                        } else if (events[j].event_team === 'visitorteam') {
+                            
+                            console.log("GOAL " + data.matches[i].match_visitorteam_name + ". Scored by " + events[j].event_player);
+                            console.log();
+                        }
+                        
+
+                    }
+                    var queryRef = eventRef.child(events[j].event_id);
                     eventRef.child(events[j].event_id).set({
                       eventId : events[j].event_id,
                       eventMatchId : events[j].event_match_id,
@@ -86,7 +107,12 @@ setInterval(function () {
                   }
                 }
 
+
+
             }
+
+            console.log("Fetching data....")
+                console.log();
 
 
             //TODO: Do something with `data`.
@@ -118,4 +144,8 @@ function getTodayDate() {
     var dateString = dayString.concat(monthString, yearString);
 
     return dateString;
+}
+
+function getAPIKey() {
+    return "f49090a4-ef6b-a743-dd5c3dbf5711";
 }

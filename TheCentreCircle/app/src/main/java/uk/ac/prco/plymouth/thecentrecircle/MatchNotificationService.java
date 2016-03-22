@@ -61,14 +61,14 @@ public class MatchNotificationService extends IntentService {
 
     private void showNotification(final Match match) {
         Intent intent = new Intent(this, MatchDetailActivity.class);
-        intent.putExtra("match", match);
+        intent.putExtra("matchId", match.getMatchId());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MatchDetailActivity.class);
         stackBuilder.addNextIntent(intent);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.zfb)
                 .setContentTitle(getString(R.string.app_name))
                 .setAutoCancel(true)
                 .setPriority(Notification.PRIORITY_HIGH)

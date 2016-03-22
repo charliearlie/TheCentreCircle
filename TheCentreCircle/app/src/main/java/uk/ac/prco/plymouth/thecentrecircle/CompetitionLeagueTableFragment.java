@@ -25,6 +25,7 @@ import java.net.URLConnection;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.LeagueTableAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.JSONReader;
 
 
 /**
@@ -68,22 +69,6 @@ public class CompetitionLeagueTableFragment extends Fragment {
 
     }
 
-    /**
-     * TODO: Put this method in it's own class as it is repeated across activites and fragments
-     * @param rd
-     * @return
-     * @throws IOException
-     */
-    private String readAll(Reader rd) throws IOException {
-        StringBuilder sb = new StringBuilder();
-
-        int cp;
-        while ((cp = rd.read()) != -1) {
-            sb.append((char) cp);
-        }
-        return sb.toString();
-    }
-
     public class retrieveTable extends AsyncTask<String, Void, JSONArray> {
 
         @Override
@@ -101,11 +86,13 @@ public class CompetitionLeagueTableFragment extends Fragment {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
                 //Convert the byte code retrieved in to it's String representation
-                String returned = readAll(bufferedReader);
+                String returned = new JSONReader().readAll(bufferedReader);
 
                 jsonObject = new JSONObject(returned);
+                System.out.println("JSONOBJECT: " + jsonObject);
                 //Retrieve all the matches from the returned object
                 jsonArray = jsonObject.getJSONArray("teams");
+                System.out.println("JSONARRAY: " + jsonArray);
 
 
                 return jsonArray;

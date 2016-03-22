@@ -5,9 +5,9 @@ import java.io.Serializable;
 /**
  * Created by charliewaite on 15/03/2016.
  */
-public class Event implements Serializable{
-    private int eventId;
-    private int eventMatchId;
+public class Event implements Serializable {
+    private String eventId;
+    private String eventMatchId;
     private String eventType;
     private String eventMinute;
     private String eventTeam;
@@ -18,7 +18,8 @@ public class Event implements Serializable{
     public Event() {
 
     }
-    public Event(int eventId, int eventMatchId, String eventType, String eventMinute,
+
+    public Event(String eventId, String eventMatchId, String eventType, String eventMinute,
                  String eventTeam, String eventPlayer, String eventPlayerId, String eventResult) {
         this.eventId = eventId;
         this.eventMatchId = eventMatchId;
@@ -30,19 +31,19 @@ public class Event implements Serializable{
         this.eventResult = eventResult;
     }
 
-    public int getEventId() {
+    public String getEventId() {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public void setEventId(String eventId) {
         this.eventId = eventId;
     }
 
-    public int getEventMatchId() {
+    public String getEventMatchId() {
         return eventMatchId;
     }
 
-    public void setEventMatchId(int eventMatchId) {
+    public void setEventMatchId(String eventMatchId) {
         this.eventMatchId = eventMatchId;
     }
 

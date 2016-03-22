@@ -31,6 +31,7 @@ import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.JSONReader;
 
 
 /**
@@ -94,7 +95,7 @@ public class CompetitionFixturesFragment extends Fragment {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
                 //Convert the byte code retrieved in to it's String representation
-                String returned = readAll(bufferedReader);
+                String returned = new JSONReader().readAll(bufferedReader);
 
                 jsonObject = new JSONObject(returned);
                 String errorMessage = jsonObject.getString("ERROR");
@@ -179,22 +180,6 @@ public class CompetitionFixturesFragment extends Fragment {
                 noFix.setVisibility(View.VISIBLE);
             }
 
-        }
-
-        /**
-         * Convert JSON from it's byte representation to String
-         * @param rd
-         * @return
-         * @throws IOException
-         */
-        private String readAll(Reader rd) throws IOException {
-            StringBuilder sb = new StringBuilder();
-
-            int cp;
-            while ((cp = rd.read()) != -1) {
-                sb.append((char) cp);
-            }
-            return sb.toString();
         }
 
     }

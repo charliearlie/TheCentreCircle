@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //drawer.addDrawerListener(toggle);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity
              * @param dataSnapshot
              */
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
                     final ArrayList<Event> events = new ArrayList<Event>();
                     String homeTeam = postSnapShot.child("homeTeam").getValue(String.class);
@@ -188,7 +189,8 @@ public class MainActivity extends AppCompatActivity
                     public void onClick(int position) {
                         Match detailedMatch = matches.get(position);
                         Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-                        intent.putExtra("match", detailedMatch);
+                        intent.putExtra("matchId", detailedMatch.getMatchId());
+                        intent.putExtra("firebaseurl", String.valueOf(dataSnapshot.getRef()));
                         startActivity(intent);
                     }
                 });
@@ -251,14 +253,12 @@ public class MainActivity extends AppCompatActivity
              * @param s String of the item changed
              */
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                final DataSnapshot ds = dataSnapshot;
+                //System.out.println("DATA CHANGED" + dataSnapshot);
                 int matchId = dataSnapshot.child("matchId").getValue(int.class);
                 int index = findMatchById(matchId);
                 String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
                 String awayScore = dataSnapshot.child("awayScore").getValue(String.class);
-                System.out.println(homeScore);
-                System.out.println(awayScore);
-                System.out.println(dataSnapshot.child("homeScore").getValue(String.class));
-                System.out.println(s);
                 if (!matches.get(index).getHomeScore().equals(homeScore)
                         || !matches.get(index).getAwayScore().equals(awayScore)) {
 
@@ -276,11 +276,10 @@ public class MainActivity extends AppCompatActivity
                          */
                         @Override
                         public void onClick(int position) {
-                            Match detailMatch = matches.get(position);
+                            Match detailedMatch = matches.get(position);
                             Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-                            intent.putExtra("match", detailMatch);
-                            intent.putExtra("matchId", position);
-                            intent.putExtra("matches", matches);
+                            intent.putExtra("matchId", detailedMatch.getMatchId());
+                            intent.putExtra("firebaseurl", String.valueOf(ds.getRef()));
                             startActivity(intent);
                         }
                     });
@@ -288,10 +287,13 @@ public class MainActivity extends AppCompatActivity
                     setupRecyclerAnimations();
 
                     if(!homeScore.equals("0") || !awayScore.equals("0")) {
-                        Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
-                        intent.putExtra("match", matches.get(index));
-                        System.out.println("Notification sent WOOO");
-                        startService(intent);
+                        if (!homeScore.equals("?") || !awayScore.equals("?")) {
+                            Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
+                            intent.putExtra("match", matches.get(index));
+                            System.out.println("Notification sent WOOO");
+                            startService(intent);
+                        }
+
                     }
 
 
@@ -307,11 +309,10 @@ public class MainActivity extends AppCompatActivity
                          */
                         @Override
                         public void onClick(int position) {
-                            Match detailMatch = matches.get(position);
+                            Match detailedMatch = matches.get(position);
                             Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-                            intent.putExtra("match", detailMatch);
-                            intent.putExtra("matchId", position);
-                            intent.putExtra("matches", matches);
+                            intent.putExtra("matchId", detailedMatch.getMatchId());
+                            intent.putExtra("firebaseurl", String.valueOf(ds.getRef()));
                             startActivity(intent);
                         }
                     });
@@ -379,7 +380,7 @@ public class MainActivity extends AppCompatActivity
 
         if (aData == null) {
             if (id == R.id.nav_home) {
-                // Handle the camera action
+
             } else if (id == R.id.nav_competitions) {
                 Intent intent = new Intent(MainActivity.this, AllCompetitionsActivity.class);
                 startActivity(intent);

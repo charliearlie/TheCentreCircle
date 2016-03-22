@@ -17,6 +17,8 @@ public class CompetitionStatisticsFragment extends Fragment {
      * TODO: Decide on a layout for this tab
      */
 
+    //TODO: Sort out all stats from API
+
     public CompetitionStatisticsFragment() {
         // Required empty public constructor
     }

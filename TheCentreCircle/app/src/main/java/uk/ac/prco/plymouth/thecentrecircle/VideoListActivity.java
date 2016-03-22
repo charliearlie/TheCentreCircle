@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.keys.RedditEndPoints;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.JSONReader;
 
 public class VideoListActivity extends AppCompatActivity {
 
@@ -65,7 +66,7 @@ public class VideoListActivity extends AppCompatActivity {
                 InputStream inputStream = urlConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-                String returnedJson = readAll(bufferedReader);
+                String returnedJson = new JSONReader().readAll(bufferedReader);
                 jsonObject = new JSONObject(returnedJson);
                 System.out.println(jsonObject);
                 jsonArray = jsonObject.getJSONObject("data").getJSONArray("children");
@@ -129,22 +130,6 @@ public class VideoListActivity extends AppCompatActivity {
 
 
 
-        }
-
-        /**
-         * Convert JSON from it's byte representation to String
-         * @param rd
-         * @return
-         * @throws IOException
-         */
-        private String readAll(Reader rd) throws IOException {
-            StringBuilder sb = new StringBuilder();
-
-            int cp;
-            while ((cp = rd.read()) != -1) {
-                sb.append((char) cp);
-            }
-            return sb.toString();
         }
     }
 }

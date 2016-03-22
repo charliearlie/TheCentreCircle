@@ -17,9 +17,10 @@
         android:layout_height="wrap_content"
         android:text="FT"
         android:id="@+id/match_status"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="9sp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="3dp"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -36,7 +37,7 @@
             android:textAlignment="textEnd"
             android:layout_weight="1.2"
             android:id="@+id/home_team"
-            android:layout_marginStart="25dp"
+            android:layout_marginStart="20dp"
             android:layout_marginEnd="0dp"
             android:textSize="12sp"
             android:layout_marginTop="8dp"
@@ -94,7 +95,7 @@
             android:layout_height="wrap_content"
             android:text="Away Team"
             android:id="@+id/away_team"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="20dp"
             android:textSize="12sp"
             android:layout_marginStart="0dp"
             android:layout_weight="1.2"

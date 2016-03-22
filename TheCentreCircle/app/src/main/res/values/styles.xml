@@ -21,4 +21,10 @@
         <item name="colorAccent">#3b5998</item>
     </style>
 
+    <style name="LoginTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">#ffffff</item>
+    </style>
+
 </resources>
