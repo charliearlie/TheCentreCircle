@@ -43,7 +43,7 @@ public class VideoListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video_list);
         RedditEndPoints rep = new RedditEndPoints();
         try {
-            new RetrieveRedditVideos().execute(rep.getSoccerHot());
+            new RetrieveRedditVideos().execute(rep.getSoccerTopMonth());
         } catch (Exception ex) {
             ex.printStackTrace();
         }

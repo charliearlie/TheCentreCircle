@@ -64,12 +64,16 @@
             android:name=".CompetitionTabbedActivity"
             android:label="@string/title_activity_competition_tabbed"
             android:parentActivityName=".AllCompetitionsActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".FavouriteCompetitionsActivity"
             android:label="Favourite Competitions"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".ViewVideoActivity"></activity>
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".ViewVideoActivity" />
+        <activity
+            android:name=".TeamDetailActivity"
+            android:label="@string/title_activity_team_detail"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

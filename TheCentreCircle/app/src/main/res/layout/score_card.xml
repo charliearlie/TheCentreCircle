@@ -43,11 +43,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="7dp"/>
 
-        <ImageView
+        <TextView
             android:layout_height="25dp"
-            android:layout_width="25dp"
+            android:layout_width="0dp"
             android:layout_weight="0.1"
-            android:src="@drawable/arsenal"
             android:layout_marginBottom="7dp"
             android:layout_marginTop="6dp"
             android:id="@+id/home_badge"/>
@@ -81,11 +80,10 @@
             android:textAlignment="center"
             android:layout_marginBottom="7dp"/>
 
-        <ImageView
+        <TextView
             android:layout_height="25dp"
-            android:layout_width="25dp"
+            android:layout_width="0dp"
             android:layout_weight="0.1"
-            android:src="@drawable/leicester"
             android:layout_marginBottom="7dp"
             android:layout_marginTop="6dp"
             android:id="@+id/away_badge"/>

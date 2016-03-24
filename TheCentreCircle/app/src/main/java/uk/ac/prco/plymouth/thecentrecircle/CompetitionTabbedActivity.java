@@ -36,7 +36,8 @@ import java.util.Map;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
-public class CompetitionTabbedActivity extends AppCompatActivity {
+public class CompetitionTabbedActivity extends AppCompatActivity
+                                implements CompetitionTeamListFragment.CompetitionTeamListListener{
     Constants constants = new Constants();
     Bundle bundle = new Bundle();
     String compId;
@@ -65,6 +66,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_competition_tabbed);
 
 
+        Firebase.setAndroidContext(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -145,6 +147,11 @@ public class CompetitionTabbedActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void itemClicked(long id) {
+        //Intent intent = new Intent(CompetitionTabbedActivity.this, TeamDetailActivity.class);
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -206,6 +213,10 @@ public class CompetitionTabbedActivity extends AppCompatActivity {
                     return tab2;
                 case 2:
                     return new CompetitionStatisticsFragment();
+                case 3:
+                    CompetitionTeamListFragment tab3 = new CompetitionTeamListFragment();
+                    tab3.setArguments(bundle);
+                    return tab3;
             }
             return PlaceholderFragment.newInstance(position + 1);
         }

@@ -34,6 +34,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 
 import java.io.InputStream;
@@ -84,7 +85,8 @@ public class MainActivity extends AppCompatActivity
 
         //Firebase reference to main application URL and 'today's' matches
         Firebase mainRef = new Firebase(cons.getFirebaseUrl());
-        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
+        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
+        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/19032016");
 
         Intent intent = getIntent(); //Get the intent from user logging in
         if (intent.hasExtra("userLogged")) {
@@ -111,16 +113,16 @@ public class MainActivity extends AppCompatActivity
          */
         View header = navigationView.getHeaderView(0);
 
-        if (intent.hasExtra("userName") && intent.hasExtra("profileImage")) {
-            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
-            navHeaderTextView.setText(intent.getStringExtra("userName"));
-            CircleImageView profileImage = (CircleImageView)header.findViewById(R.id.nav_profile_image);
-            new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
-                    .execute(intent.getStringExtra("profileImage"));
-        } else if (intent.hasExtra("userName")) {
-            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
-            navHeaderTextView.setText(intent.getStringExtra("userName"));
-        }
+//        if (intent.hasExtra("userName") && intent.hasExtra("profileImage")) {
+//            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
+//            navHeaderTextView.setText(intent.getStringExtra("userName"));
+//            CircleImageView profileImage = (CircleImageView)header.findViewById(R.id.nav_profile_image);
+//            new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
+//                    .execute(intent.getStringExtra("profileImage"));
+//        } else if (intent.hasExtra("userName")) {
+//            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
+//            navHeaderTextView.setText(intent.getStringExtra("userName"));
+//        }
 
         mRecyclerView = (RecyclerView)findViewById(R.id.score_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -163,7 +165,6 @@ public class MainActivity extends AppCompatActivity
                             for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
                                 Event event = eventSnapshot.getValue(Event.class);
                                 events.add(event);
-                                System.out.println(event.getEventPlayer());
                             }
                         }
 
@@ -175,7 +176,6 @@ public class MainActivity extends AppCompatActivity
 
                     Match match = new Match(homeTeam, awayTeam, homeScore, awayScore,
                             matchId, homeBadge, R.drawable.manutd, matchStatus, events);
-                    System.out.println(match);
                     matches.add(match);
                 }
                 adapter.setListener(new ScoreCardAdapter.Listener() {
@@ -456,8 +456,11 @@ public class MainActivity extends AppCompatActivity
         if(authData.getProvider().equals("facebook")) {
             TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
             navHeaderTextView.setText((String) authData.getProviderData().get("displayName"));
-            new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
-                    .execute((String) authData.getProviderData().get("profileImageURL"));
+            CircleImageView profilePicture = (CircleImageView) header.findViewById(R.id.nav_profile_image);
+            Picasso.with(getApplicationContext()).load((String)authData.getProviderData()
+                    .get("profileImageURL")).into(profilePicture);
+            //new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
+                    //.execute((String) authData.getProviderData().get("profileImageURL"));
         } else {
             TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
             navHeaderTextView.setText((String) authData.getProviderData().get("email"));

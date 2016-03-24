@@ -56,7 +56,7 @@ public class Event implements Serializable {
     }
 
     public String getEventMinute() {
-        return eventMinute;
+        return eventMinute + "'";
     }
 
     public void setEventMinute(String eventMinute) {

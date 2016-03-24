@@ -5,7 +5,9 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="3.0"
-    android:layout_marginTop="3dp">
+    android:layout_marginTop="3dp"
+    android:background="#ffffff"
+    android:layout_marginBottom="2dp">
 
     <TextView
         android:layout_width="0dp"
@@ -17,7 +19,7 @@
         android:id="@+id/league_position"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="0dp"
-        android:textSize="12sp"
+        android:textSize="16sp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="1dp"/>
 
@@ -30,7 +32,7 @@
         android:id="@+id/league_team_name"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="0dp"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:layout_marginBottom="1dp"/>
     <TextView
@@ -40,7 +42,7 @@
         android:id="@+id/league_games_played"
         android:layout_weight="0.2"
         android:layout_marginTop="3dp"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:textAlignment="textStart"
         android:layout_marginBottom="1dp"/>
     <TextView
@@ -49,7 +51,7 @@
         android:text="29"
         android:id="@+id/league_games_won"
         android:layout_weight="0.2"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
         android:layout_marginBottom="1dp"/>
@@ -59,7 +61,7 @@
         android:text="29"
         android:id="@+id/league_games_drawn"
         android:layout_weight="0.2"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
         android:layout_marginBottom="1dp"/>
@@ -69,7 +71,7 @@
         android:text="29"
         android:id="@+id/league_games_lost"
         android:layout_weight="0.2"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
         android:layout_marginBottom="1dp"/>
@@ -80,7 +82,7 @@
         android:text="29"
         android:id="@+id/league_goals_for"
         android:layout_weight="0.2"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
         android:layout_marginBottom="1dp"/>
@@ -91,7 +93,7 @@
         android:text="29"
         android:id="@+id/league_goals_against"
         android:layout_weight="0.2"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
         android:layout_marginBottom="1dp"/>
@@ -102,7 +104,7 @@
         android:text="60"
         android:id="@+id/league_points"
         android:layout_weight="0.2"
-        android:textSize="12sp"
+        android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
         android:layout_marginBottom="1dp"/>

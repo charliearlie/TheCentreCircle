@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
@@ -65,11 +67,11 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
         TextView matchStatus = (TextView) cardView.findViewById(R.id.match_status);
         matchStatus.setText(matches.get(position).getMatchStatus());
 
-        ImageView im = (ImageView) cardView.findViewById(R.id.home_badge);
-        im.setImageResource(matches.get(position).getHomeBadge());
-
-        ImageView im2 = (ImageView) cardView.findViewById(R.id.away_badge);
-        im2.setImageResource(matches.get(position).getAwayBadge());
+//        ImageView im = (ImageView) cardView.findViewById(R.id.home_badge);
+//        Picasso.with(cardView.getContext()).load(R.drawable.arsenalsmall).into(im);
+//
+//        ImageView im2 = (ImageView) cardView.findViewById(R.id.away_badge);
+//        Picasso.with(cardView.getContext()).load(R.drawable.arsenalsmall).into(im2);
 
         cardView.setOnClickListener(new View.OnClickListener() {
 

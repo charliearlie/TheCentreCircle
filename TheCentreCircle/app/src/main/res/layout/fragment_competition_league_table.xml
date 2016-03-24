@@ -3,12 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="uk.ac.prco.plymouth.thecentrecircle.CompetitionTabbedActivity"
-    android:background="#ffffff">
+    tools:context="uk.ac.prco.plymouth.thecentrecircle.CompetitionTabbedActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -16,7 +11,8 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:weightSum="3.0"
-        android:layout_marginTop="3dp">
+        android:layout_marginTop="1dp"
+        android:background="#fff">
 
         <TextView
             android:layout_width="0dp"
@@ -28,7 +24,7 @@
             android:id="@+id/league_position"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="0dp"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="1dp"/>
 
@@ -41,7 +37,7 @@
             android:id="@+id/league_team_name"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="0dp"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:layout_marginTop="3dp"
             android:layout_marginBottom="1dp"/>
         <TextView
@@ -51,7 +47,7 @@
             android:id="@+id/league_games_played"
             android:layout_weight="0.2"
             android:layout_marginTop="3dp"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:textAlignment="textStart"
             android:layout_marginBottom="1dp"/>
         <TextView
@@ -60,7 +56,7 @@
             android:text="W"
             android:id="@+id/league_games_won"
             android:layout_weight="0.2"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:layout_marginTop="3dp"
             android:textAlignment="textStart"
             android:layout_marginBottom="1dp"/>
@@ -70,7 +66,7 @@
             android:text="D"
             android:id="@+id/league_games_drawn"
             android:layout_weight="0.2"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:layout_marginTop="3dp"
             android:textAlignment="textStart"
             android:layout_marginBottom="1dp"/>
@@ -80,7 +76,7 @@
             android:text="L"
             android:id="@+id/league_games_lost"
             android:layout_weight="0.2"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:layout_marginTop="3dp"
             android:textAlignment="textStart"
             android:layout_marginBottom="1dp"/>
@@ -91,7 +87,7 @@
             android:text="GF"
             android:id="@+id/league_goals_for"
             android:layout_weight="0.2"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:layout_marginTop="3dp"
             android:textAlignment="textStart"
             android:layout_marginBottom="1dp"/>
@@ -102,7 +98,7 @@
             android:text="GA"
             android:id="@+id/league_goals_against"
             android:layout_weight="0.2"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:layout_marginTop="3dp"
             android:textAlignment="textStart"
             android:layout_marginBottom="1dp"/>
@@ -113,7 +109,7 @@
             android:text="PTS"
             android:id="@+id/league_points"
             android:layout_weight="0.2"
-            android:textSize="12sp"
+            android:textSize="15sp"
             android:layout_marginTop="3dp"
             android:textAlignment="textStart"
             android:layout_marginBottom="1dp"/>
@@ -124,5 +120,5 @@
         android:id="@+id/league_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/activity_vertical_margin"/>
+        android:layout_marginTop="22dp"/>
 </RelativeLayout>
