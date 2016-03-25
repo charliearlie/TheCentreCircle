@@ -43,9 +43,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="7dp"/>
 
-        <TextView
+        <ImageView
             android:layout_height="25dp"
-            android:layout_width="0dp"
+            android:layout_width="25dp"
             android:layout_weight="0.1"
             android:layout_marginBottom="7dp"
             android:layout_marginTop="6dp"
@@ -80,9 +80,9 @@
             android:textAlignment="center"
             android:layout_marginBottom="7dp"/>
 
-        <TextView
+        <ImageView
             android:layout_height="25dp"
-            android:layout_width="0dp"
+            android:layout_width="25dp"
             android:layout_weight="0.1"
             android:layout_marginBottom="7dp"
             android:layout_marginTop="6dp"

@@ -113,16 +113,6 @@ public class MainActivity extends AppCompatActivity
          */
         View header = navigationView.getHeaderView(0);
 
-//        if (intent.hasExtra("userName") && intent.hasExtra("profileImage")) {
-//            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
-//            navHeaderTextView.setText(intent.getStringExtra("userName"));
-//            CircleImageView profileImage = (CircleImageView)header.findViewById(R.id.nav_profile_image);
-//            new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
-//                    .execute(intent.getStringExtra("profileImage"));
-//        } else if (intent.hasExtra("userName")) {
-//            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
-//            navHeaderTextView.setText(intent.getStringExtra("userName"));
-//        }
 
         mRecyclerView = (RecyclerView)findViewById(R.id.score_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -158,6 +148,9 @@ public class MainActivity extends AppCompatActivity
                     int homeBadge = postSnapShot.child("homeBadge").getValue(int.class);
                     int awayBadge = postSnapShot.child("awayBadge").getValue(int.class);
                     String matchStatus = postSnapShot.child("matchStatus").getValue(String.class);
+                    String competitionId = postSnapShot.child("matchCompId").getValue(String.class);
+                    String homeTeamId = postSnapShot.child("homeTeamId").getValue(String.class);
+                    String awayTeamId = postSnapShot.child("awayTeamId").getValue(String.class);
                     Firebase eventRef = todaysMatchesRef.child("/" + postSnapShot.getKey() + "/events");
                     eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -175,7 +168,8 @@ public class MainActivity extends AppCompatActivity
                     });
 
                     Match match = new Match(homeTeam, awayTeam, homeScore, awayScore,
-                            matchId, homeBadge, R.drawable.manutd, matchStatus, events);
+                            matchId, homeBadge, R.drawable.manutd, matchStatus, events, competitionId,
+                            homeTeamId, awayTeamId);
                     matches.add(match);
                 }
                 adapter.setListener(new ScoreCardAdapter.Listener() {

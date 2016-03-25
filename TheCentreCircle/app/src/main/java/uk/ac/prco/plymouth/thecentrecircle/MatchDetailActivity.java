@@ -48,7 +48,9 @@ public class MatchDetailActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
 
 
-        Constants cons = new Constants();
+
+
+        final Constants cons = new Constants();
 
         final String firebaseRef = getIntent().getStringExtra("firebaseurl");
         int matchId = getIntent().getIntExtra("matchId", 1);
@@ -71,6 +73,9 @@ public class MatchDetailActivity extends AppCompatActivity {
                 String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
                 String awayScore = dataSnapshot.child("awayScore").getValue(String.class);
                 String matchStatus = dataSnapshot.child("matchStatus").getValue(String.class);
+                String homeTeamId = dataSnapshot.child("homeTeamId").getValue(String.class);
+                String awayTeamId = dataSnapshot.child("awayTeamId").getValue(String.class);
+                String competitionId = dataSnapshot.child("matchCompId").getValue(String.class);
 
                 TextView homeTeamTextView = (TextView) findViewById(R.id.detail_home_team);
                 homeTeamTextView.setText(homeTeam);
@@ -82,6 +87,48 @@ public class MatchDetailActivity extends AppCompatActivity {
                 awayScoreTextView.setText(awayScore);
                 TextView matchStatusTextView = (TextView) findViewById(R.id.detail_match_status);
                 matchStatusTextView.setText(matchStatus);
+
+                if(competitionId.equals("1204")) {
+                    Firebase badgeRefHome = new Firebase(cons.getFirebaseUrl() + "/badges/" + homeTeamId);
+                    Firebase badgeRefAway = new Firebase(cons.getFirebaseUrl() + "/badges/" + awayTeamId);
+
+                    badgeRefHome.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
+                            ImageView im = (ImageView)findViewById(R.id.detail_home_badge);
+                            Picasso.with(getApplicationContext()).load(imageUrl).into(im);
+
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+
+                    badgeRefAway.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
+                            ImageView im2 = (ImageView)findViewById(R.id.detail_away_badge);
+                            Picasso.with(getApplicationContext()).load(imageUrl).into(im2);
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+
+
+                } else {
+                    ImageView im = (ImageView) findViewById(R.id.detail_home_badge);
+                    Picasso.with(getApplicationContext()).load(R.drawable.arsenal).into(im);
+
+                    ImageView im2 = (ImageView) findViewById(R.id.detail_away_badge);
+                    Picasso.with(getApplicationContext()).load(R.drawable.arsenal).into(im2);
+                }
 
 
                 System.out.println(homeTeam + new Date());
