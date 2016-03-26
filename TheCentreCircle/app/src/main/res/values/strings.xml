@@ -43,6 +43,14 @@
     <string name="title_activity_competition_tabbed">CompetitionTabbedActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="action_share">Share</string>
+
+    <!--Bottom bar menu strings-->
+    <string name="team_information">Information</string>
+    <string name="team_statistics">Statistics</string>
+    <string name="team_players">Players</string>
+    <string name="team_fixtures">Fixtures</string>
+
+
     <string name="title_activity_team_detail">TeamDetailActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

@@ -54,7 +54,7 @@ public class MatchDetailActivity extends AppCompatActivity {
 
         final String firebaseRef = getIntent().getStringExtra("firebaseurl");
         int matchId = getIntent().getIntExtra("matchId", 1);
-        Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/19032016");
+        Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/26032016");
         System.out.println(firebaseRef);
         Firebase matchRef = ref.child(String.valueOf(matchId));
         System.out.println("CUNT CHOPS: " + matchRef);
@@ -88,7 +88,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                 TextView matchStatusTextView = (TextView) findViewById(R.id.detail_match_status);
                 matchStatusTextView.setText(matchStatus);
 
-                if(competitionId.equals("1204")) {
+                if(competitionId.equals("1204") || competitionId.equals("1265")) {
                     Firebase badgeRefHome = new Firebase(cons.getFirebaseUrl() + "/badges/" + homeTeamId);
                     Firebase badgeRefAway = new Firebase(cons.getFirebaseUrl() + "/badges/" + awayTeamId);
 

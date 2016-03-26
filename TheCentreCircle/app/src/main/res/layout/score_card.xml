@@ -49,7 +49,8 @@
             android:layout_weight="0.1"
             android:layout_marginBottom="7dp"
             android:layout_marginTop="6dp"
-            android:id="@+id/home_badge"/>
+            android:id="@+id/home_badge"
+            android:src="@drawable/arsenal"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -86,7 +87,8 @@
             android:layout_weight="0.1"
             android:layout_marginBottom="7dp"
             android:layout_marginTop="6dp"
-            android:id="@+id/away_badge"/>
+            android:id="@+id/away_badge"
+            android:src="@drawable/arsenal"/>
 
         <TextView
             android:layout_width="0dp"

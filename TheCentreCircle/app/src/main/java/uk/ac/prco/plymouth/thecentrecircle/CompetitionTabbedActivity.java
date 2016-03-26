@@ -3,6 +3,7 @@ package uk.ac.prco.plymouth.thecentrecircle;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -271,6 +272,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity
                 }
             });
         } else {
+
             fab.setVisibility(View.INVISIBLE);
         }
     }

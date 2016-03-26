@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/bottomBarItemOne"
+        android:icon="@drawable/ic_info_outline_black_36dp"
+        android:title="@string/team_information" />
+
+    <item
+        android:id="@+id/bottomBarItemTwo"
+        android:icon="@drawable/ic_show_chart_black_36dp"
+        android:title="@string/team_statistics" />
+
+    <item
+        android:id="@+id/bottomBarItemThree"
+        android:icon="@drawable/ic_account_box_black_36dp"
+        android:title="@string/team_players" />
+
+    <item
+        android:id="@+id/bottomBarItemFour"
+        android:icon="@drawable/ic_date_range_white_36dp"
+        android:title="@string/team_fixtures" />
+
+</menu>

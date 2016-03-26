@@ -3,6 +3,7 @@ package uk.ac.prco.plymouth.thecentrecircle;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -104,6 +105,8 @@ public class CompetitionTeamListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView lv, View v, int position, long id) {
         if(listener != null) {
+            Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
+            startActivity(intent);
             Toast.makeText(getContext(), "ID is " + position, Toast.LENGTH_LONG).show();
             listener.itemClicked(id);
         }

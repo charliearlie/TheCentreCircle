@@ -47,7 +47,6 @@ import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter
 import jp.wasabeef.recyclerview.animators.adapters.SlideInRightAnimationAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
-import uk.ac.prco.plymouth.thecentrecircle.classes.MatchTest;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 public class MainActivity extends AppCompatActivity
@@ -85,8 +84,8 @@ public class MainActivity extends AppCompatActivity
 
         //Firebase reference to main application URL and 'today's' matches
         Firebase mainRef = new Firebase(cons.getFirebaseUrl());
-        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
-        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/19032016");
+        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
+        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/20032016");
 
         Intent intent = getIntent(); //Get the intent from user logging in
         if (intent.hasExtra("userLogged")) {
@@ -382,6 +381,9 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_settings) {
+                //TODO: Remove this as it's just so i can get to the team detail quickly.
+                Intent intent = new Intent(MainActivity.this, TeamDetailActivity.class);
+                startActivity(intent);
 
             } else if (id == R.id.nav_about) {
 
@@ -410,6 +412,9 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_settings) {
+                //TODO: Remove this as it's just so i can get to the team detail quickly.
+                Intent intent = new Intent(MainActivity.this, TeamDetailActivity.class);
+                startActivity(intent);
 
             } else if (id == R.id.nav_about) {
 
