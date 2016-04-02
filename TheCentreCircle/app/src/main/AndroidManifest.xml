@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="uk.ac.prco.plymouth.thecentrecircle">
+    package="uk.ac.prco.plymouth.thecentrecircle" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -10,11 +10,12 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
+        android:name=".TheCentreCircle"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_centrecircle"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
 
         <!-- The two above settings will be removed. We are using them to make the app more efficient by testing -->
         <meta-data
@@ -24,7 +25,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,7 +34,7 @@
         </activity>
         <activity
             android:name=".MatchDetailActivity"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="uk.ac.prco.plymouth.thecentrecircle.MainActivity" />
@@ -41,7 +42,7 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="uk.ac.prco.plymouth.thecentrecircle.MainActivity" />
@@ -72,7 +73,7 @@
             android:label="Favourite Competitions"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".ViewVideoActivity" />
-        <activity android:name=".TeamDetailActivity"></activity>
+        <activity android:name=".TeamDetailActivity" />
     </application>
 
 </manifest>

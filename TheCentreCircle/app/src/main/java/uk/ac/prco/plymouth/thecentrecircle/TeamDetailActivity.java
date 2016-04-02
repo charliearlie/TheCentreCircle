@@ -14,6 +14,7 @@ import com.roughike.bottombar.OnMenuTabClickListener;
 public class TeamDetailActivity extends AppCompatActivity {
 
     private BottomBar mBottomBar;
+    private String teamId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,36 +22,40 @@ public class TeamDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_team_detail);
         setupActionBar();
 
+        final Bundle bundle = getIntent().getExtras();
+
+
         mBottomBar = BottomBar.attach(this, savedInstanceState);
         mBottomBar.setItemsFromMenu(R.menu.menu_bottombar, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 if(menuItemId == R.id.bottomBarItemOne) {
                     TeamDetailInformationFragment tdpf = new TeamDetailInformationFragment();
+                    tdpf.setArguments(bundle);
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                             ft.replace(R.id.myCoordinator, tdpf);
-                            ft.addToBackStack(null);
+                            //ft.addToBackStack(null);
                             ft.commit();
 
                 } else if(menuItemId == R.id.bottomBarItemTwo) {
                     TeamDetailStatisticsFragment tdsf = new TeamDetailStatisticsFragment();
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.myCoordinator, tdsf);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
 
                 } else if(menuItemId == R.id.bottomBarItemThree) {
                     TeamDetailPlayersFragment tpf = new TeamDetailPlayersFragment();
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.myCoordinator, tpf);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
 
                 } else if(menuItemId == R.id.bottomBarItemFour) {
                     TeamDetailFixturesFragment tdff = new TeamDetailFixturesFragment();
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.myCoordinator, tdff);
-                    ft.addToBackStack(null);
+                    //ft.addToBackStack(null);
                     ft.commit();
                 }
             }
@@ -63,6 +68,7 @@ public class TeamDetailActivity extends AppCompatActivity {
             }
         });
 
+        //Set the colour for the bottom bar tabs
         mBottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorPrimary));
         mBottomBar.mapColorForTab(1, "#3F51B5");
         mBottomBar.mapColorForTab(2, "#8BC34A");
@@ -78,5 +84,14 @@ public class TeamDetailActivity extends AppCompatActivity {
             // Show the Up button in the action bar.
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Necessary to restore the BottomBar's state, otherwise we would
+        // lose the current tab on orientation change.
+        mBottomBar.onSaveInstanceState(outState);
     }
 }

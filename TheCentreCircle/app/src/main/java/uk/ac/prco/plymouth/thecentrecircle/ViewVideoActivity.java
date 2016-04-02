@@ -27,16 +27,21 @@ public class ViewVideoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_video);
+
+        //Retrieve the videos domain from the intent
         String domain = getIntent().getStringExtra("domain");
+
+        //Retrieve the full url
         videoUrl = getIntent().getStringExtra("url");
-        String title = getIntent().getStringExtra("title");
-        //https://streamable.com/c2u1
 
         setupActionBar();
 
+        //If the url ends with '.mp4' then we know the video player supports it
         if (!videoUrl.endsWith(".mp4")) {
+            //Split the video url to retrieve the unique ID for the video
             String[] array = videoUrl.split("/");
             String videoRef = array[3];
+
             if (domain.equals("streamable.com")) {
                 videoUrl = "https://cdn.streamable.com/video/mp4/" + videoRef + ".mp4";
             } else if (domain.equals("gfycat.com")) {
@@ -46,11 +51,17 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         videoView  = (VideoView) findViewById(R.id.videoView);
 
+        //Anchor the controller to the bottom of the layout
         FrameLayout controllerAnchor = (FrameLayout) findViewById(R.id.controllerAnchor);
         videoController = new MyMediaController(this, controllerAnchor);
+
+        //Set the URI of the videoView
         videoView.setVideoURI(Uri.parse(videoUrl));
 
+        //Start the video
         videoView.start();
+
+        //If the user has changed app and returned or switched orientation then play the video from the same point
         if (savedInstanceState != null) {
             int pos = savedInstanceState.getInt("pos");
             videoView.seekTo(pos);
@@ -95,6 +106,7 @@ public class ViewVideoActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_home) {
+            //Sharing intent which allows the user to share the video URL
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             sharingIntent.putExtra(Intent.EXTRA_TEXT, videoUrl);
@@ -104,6 +116,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Media controls for the VideoView
+     */
     public class MyMediaController extends MediaController {
         private FrameLayout anchorView;
 

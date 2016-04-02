@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.TaskStackBuilder;
 
 import java.util.Random;
@@ -60,6 +62,7 @@ public class MatchNotificationService extends IntentService {
     }
 
     private void showNotification(final Match match) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_centrecircle);
         Intent intent = new Intent(this, MatchDetailActivity.class);
         intent.putExtra("matchId", match.getMatchId());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -68,7 +71,8 @@ public class MatchNotificationService extends IntentService {
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Notification notification = new Notification.Builder(this)
-                .setSmallIcon(R.mipmap.zfb)
+                .setSmallIcon(R.mipmap.ic_centrecircle)
+                .setLargeIcon(bitmap)
                 .setContentTitle(getString(R.string.app_name))
                 .setAutoCancel(true)
                 .setPriority(Notification.PRIORITY_HIGH)

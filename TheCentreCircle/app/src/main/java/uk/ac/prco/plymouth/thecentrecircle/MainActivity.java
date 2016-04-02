@@ -48,6 +48,7 @@ import jp.wasabeef.recyclerview.animators.adapters.SlideInRightAnimationAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -69,23 +70,16 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String date = getStringDate(); //Get date in string format to get todays matches
+        String date = new CCUtilities().getStringDate(); //Get date in string format to get todays matches
 
         setTitle("Todays matches"); //Set action bar title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*
-         Initiate Firebase SDK for real time database connections
-         Initiate Facebook SDK to allow the user to log out from the nav drawer
-         */
-        Firebase.setAndroidContext(this);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-
         //Firebase reference to main application URL and 'today's' matches
         Firebase mainRef = new Firebase(cons.getFirebaseUrl());
         final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
-        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/20032016");
+        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/01042016");
 
         Intent intent = getIntent(); //Get the intent from user logging in
         if (intent.hasExtra("userLogged")) {
@@ -97,7 +91,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //drawer.addDrawerListener(toggle);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -151,20 +144,20 @@ public class MainActivity extends AppCompatActivity
                     String homeTeamId = postSnapShot.child("homeTeamId").getValue(String.class);
                     String awayTeamId = postSnapShot.child("awayTeamId").getValue(String.class);
                     Firebase eventRef = todaysMatchesRef.child("/" + postSnapShot.getKey() + "/events");
-                    eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                                Event event = eventSnapshot.getValue(Event.class);
-                                events.add(event);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
+//                    eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
+//                                Event event = eventSnapshot.getValue(Event.class);
+//                                events.add(event);
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(FirebaseError firebaseError) {
+//
+//                        }
+//                    });
 
                     Match match = new Match(homeTeam, awayTeam, homeScore, awayScore,
                             matchId, homeBadge, R.drawable.manutd, matchStatus, events, competitionId,
@@ -309,7 +302,6 @@ public class MainActivity extends AppCompatActivity
                             startActivity(intent);
                         }
                     });
-                    //Set new recycler animations. Will try to have a reusable version of this
                     setupRecyclerAnimations();
                 }
 

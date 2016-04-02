@@ -15,17 +15,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
 
 import uk.ac.prco.plymouth.thecentrecircle.adapters.LeagueTableAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
-import uk.ac.prco.plymouth.thecentrecircle.utilities.JSONReader;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 
 /**
@@ -86,7 +84,7 @@ public class CompetitionLeagueTableFragment extends Fragment {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
                 //Convert the byte code retrieved in to it's String representation
-                String returned = new JSONReader().readAll(bufferedReader);
+                String returned = new CCUtilities().readAllJson(bufferedReader);
 
                 jsonObject = new JSONObject(returned);
                 System.out.println("JSONOBJECT: " + jsonObject);

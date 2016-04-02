@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -31,7 +28,7 @@ import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
-import uk.ac.prco.plymouth.thecentrecircle.utilities.JSONReader;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 
 /**
@@ -95,7 +92,7 @@ public class CompetitionFixturesFragment extends Fragment {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
                 //Convert the byte code retrieved in to it's String representation
-                String returned = new JSONReader().readAll(bufferedReader);
+                String returned = new CCUtilities().readAllJson(bufferedReader);
 
                 jsonObject = new JSONObject(returned);
                 String errorMessage = jsonObject.getString("ERROR");

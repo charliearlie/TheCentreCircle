@@ -34,7 +34,7 @@ public class AllCompetitionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_all_competitions);
 
         //Retrieve the list view to display all the competitions available
-        ListView listView = (ListView) findViewById(R.id.competitionsListView);
+        final ListView listView = (ListView) findViewById(R.id.competitionsListView);
 
         setupActionBar();
         setTitle("All competitions");
@@ -42,6 +42,7 @@ public class AllCompetitionsActivity extends AppCompatActivity {
         //Create an adapter fot the competition names
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1);
+
         //Set the adapter for the list view to populate it
         listView.setAdapter(adapter);
 
@@ -52,11 +53,10 @@ public class AllCompetitionsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Competition competition = competitions.get(position);
-                System.out.println(competition);
+
+                //Set the intent to take us to the CompetitionTabbedActivity
                 Intent intent = new Intent(AllCompetitionsActivity.this, CompetitionTabbedActivity.class);
                 intent.putExtra("competition", competition);
-                Toast.makeText(AllCompetitionsActivity.this, "my id " + id,
-                        Toast.LENGTH_LONG).show();
                 startActivity(intent);
             }
         });
@@ -72,12 +72,8 @@ public class AllCompetitionsActivity extends AppCompatActivity {
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     adapter.add((String) childSnapshot.child("name").getValue());
                     competitions.add(childSnapshot.getValue(Competition.class));
-                    System.out.println(competitions);
                 }
-                if (competitions == null) {
-                    TextView noComps = (TextView) findViewById(R.id.no_fav_comps_textView);
-                    noComps.setVisibility(View.VISIBLE);
-                }
+
 
             }
 

@@ -10,25 +10,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.VideoView;
-
-import com.firebase.client.Query;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.keys.RedditEndPoints;
-import uk.ac.prco.plymouth.thecentrecircle.utilities.JSONReader;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 public class VideoListActivity extends AppCompatActivity {
 
@@ -43,16 +37,24 @@ public class VideoListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_video_list);
         RedditEndPoints rep = new RedditEndPoints();
         try {
-            new RetrieveRedditVideos().execute(rep.getSoccerTopMonth());
+            //Retrieve videos which are 'hot' from reddit.com/r/soccer
+            new RetrieveRedditVideos().execute(rep.getSoccerHot());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
 
-
+    /**
+     * Asynchronous tasks retrieving the JSON data from Reddit
+     */
     public class RetrieveRedditVideos extends AsyncTask<String, Void, JSONArray> {
 
+        /**
+         * Retrieve the JSON from reddit on a second thread
+         * @param params Array of parameters. Reddit URL at 0th element
+         * @return the JSON array retireved
+         */
         @Override
         protected JSONArray doInBackground(String... params) {
             JSONObject jsonObject;
@@ -66,7 +68,8 @@ public class VideoListActivity extends AppCompatActivity {
                 InputStream inputStream = urlConnection.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-                String returnedJson = new JSONReader().readAll(bufferedReader);
+                //Read the buffered data using our own string builder
+                String returnedJson = new CCUtilities().readAllJson(bufferedReader);
                 jsonObject = new JSONObject(returnedJson);
                 System.out.println(jsonObject);
                 jsonArray = jsonObject.getJSONObject("data").getJSONArray("children");
@@ -76,6 +79,10 @@ public class VideoListActivity extends AppCompatActivity {
             return jsonArray;
         }
 
+        /**
+         * After the JSON Array is retrieved this method lists it for the user
+         * @param jsonArray The JSON Array retrieved in doInBackground
+         */
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             try {

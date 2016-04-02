@@ -1,5 +1,6 @@
 package uk.ac.prco.plymouth.thecentrecircle.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,11 +53,25 @@ public class MatchEventAdapter extends RecyclerView.Adapter<MatchEventAdapter.Vi
         TextView awayTeamEventPlayer = (TextView) holder.view.findViewById(R.id.away_team_event_player);
         ImageView homeTeamEventType = (ImageView) holder.view.findViewById(R.id.home_team_event_type);
         ImageView awayTeamEventType = (ImageView) holder.view.findViewById(R.id.away_team_event_type);
-        System.out.println("EVENT TEAM " + event.getEventTeam());
+        System.out.println("EVENT ASSIST " + event.getEventAssist());
 
         if (event.getEventTeam().equals("localteam")) {
-            homeTeamEventMinute.setText(event.getEventMinute());
-            homeTeamEventPlayer.setText(event.getEventPlayer());
+            if (Integer.parseInt(event.getEventMinute()) < 10) {
+                String eventMin = "0" + event.getEventMinute();
+                homeTeamEventMinute.setText(eventMin);
+            } else {
+                homeTeamEventMinute.setText(event.getEventMinute());
+            }
+
+            if (event.getEventType().equals("goal") && event.getEventAssist().length() > 2) {
+                System.out.println(event.getEventId() + " " + event.getEventAssist().length());
+                String eventPlayer = event.getEventPlayer() + " (" +
+                        event.getEventAssist() + ")";
+                homeTeamEventPlayer.setText(eventPlayer);
+            } else {
+                homeTeamEventPlayer.setText(event.getEventPlayer());
+            }
+
             awayTeamEventMinute.setVisibility(View.GONE);
             awayTeamEventPlayer.setVisibility(View.GONE);
             awayTeamEventType.setVisibility(View.GONE);
@@ -74,8 +89,20 @@ public class MatchEventAdapter extends RecyclerView.Adapter<MatchEventAdapter.Vi
             }
 
         } else {
-            awayTeamEventMinute.setText(event.getEventMinute());
-            awayTeamEventPlayer.setText(event.getEventPlayer());
+            if (Integer.parseInt(event.getEventMinute()) < 10) {
+                String eventMin = "0" + event.getEventMinute();
+                awayTeamEventMinute.setText(eventMin);
+            } else {
+                awayTeamEventMinute.setText(event.getEventMinute());
+            }
+
+            if (event.getEventType().equals("goal") && event.getEventAssist().length() > 2) {
+                String eventPlayer = event.getEventPlayer() + " (" +
+                        event.getEventAssist() + ")";
+                awayTeamEventPlayer.setText(eventPlayer);
+            } else {
+                awayTeamEventPlayer.setText(event.getEventPlayer());
+            }
             homeTeamEventMinute.setVisibility(View.GONE);
             homeTeamEventPlayer.setVisibility(View.GONE);
             //homeTeamEventType.setVisibility(View.GONE);

@@ -24,6 +24,7 @@ import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 public class MatchDetailActivity extends AppCompatActivity {
 
@@ -50,14 +51,15 @@ public class MatchDetailActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
-
-
+        //Retrieve the date in format DDMMYYYY
+        String date = new CCUtilities().getStringDate();
 
         final Constants cons = new Constants();
 
         final String firebaseRef = getIntent().getStringExtra("firebaseurl");
         int matchId = getIntent().getIntExtra("matchId", 1);
-        Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/26032016");
+        Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
+        //Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/01042016");
         System.out.println(firebaseRef);
         Firebase matchRef = ref.child(String.valueOf(matchId));
         System.out.println("CUNT CHOPS: " + matchRef);
@@ -91,7 +93,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                 TextView matchStatusTextView = (TextView) findViewById(R.id.detail_match_status);
                 matchStatusTextView.setText(matchStatus);
 
-                if(competitionId.equals("1204") || competitionId.equals("1265")) {
+                if(competitionId != null) {
                     Firebase badgeRefHome = new Firebase(cons.getFirebaseUrl() + "/badges/" + homeTeamId);
                     Firebase badgeRefAway = new Firebase(cons.getFirebaseUrl() + "/badges/" + awayTeamId);
 
@@ -149,7 +151,17 @@ public class MatchDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    Event event = postSnapshot.getValue(Event.class);
+                    String eventAssist = postSnapshot.child("eventAssist").getValue(String.class);
+                    String eventAssistId = postSnapshot.child("eventAssistId").getValue(String.class);
+                    String eventExtraMin = postSnapshot.child("eventExtraMin").getValue(String.class);
+                    String eventId = postSnapshot.child("eventId").getValue(String.class);
+                    String eventMinute = postSnapshot.child("eventMinute").getValue(String.class);
+                    String eventPlayer = postSnapshot.child("eventPlayer").getValue(String.class);
+                    String eventPlayerId = postSnapshot.child("eventplayerId").getValue(String.class);
+                    String eventTeam = postSnapshot.child("eventTeam").getValue(String.class);
+                    String eventType = postSnapshot.child("eventType").getValue(String.class);
+                    Event event = new Event(eventAssist, eventAssistId, eventExtraMin, eventId,
+                            eventMinute, eventPlayer, eventPlayerId, eventTeam, eventType);
                     matchEvents.add(event);
                     events.add(event.getEventType() + " : " + event.getEventPlayer() + " ('" + event.getEventMinute()
                             +  ")");
@@ -165,30 +177,9 @@ public class MatchDetailActivity extends AppCompatActivity {
             }
         });
 
-
-
         ImageView homeBadge = (ImageView) findViewById(R.id.detail_home_badge);
         ImageView awayBadge = (ImageView) findViewById(R.id.detail_away_badge);
 
-
-//        if (match.getEvents() != null) {
-//            ArrayList<Event> events = match.getEvents();
-//
-//            for (Event event : events) {
-//                adapter.add(event.getEventType() + " : " + event.getEventPlayer() + " ('" + event.getEventMinute()
-//                +  ")");
-//            }
-//        }
-
-//
-
-
-
-       // homeScore.setText(Integer.toString(position));
-//        homeTeamTextView.setText(match.getHomeTeam());
-//        awayTeamTextView.setText(match.getAwayTeam());
-//        homeScoreTextView.setText(match.getHomeScore());
-//        awayScoreTextView.setText(match.getAwayScore());
         Picasso.with(getApplicationContext()).load(R.drawable.arsenal).into(homeBadge);
         Picasso.with(getApplicationContext()).load(R.drawable.arsenal).into(awayBadge);
 

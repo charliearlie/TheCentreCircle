@@ -79,6 +79,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity
 
         setupActionBar();
         setTitle(competition.getName());
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -89,23 +90,27 @@ public class CompetitionTabbedActivity extends AppCompatActivity
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        //Detect whether the user is logged in
         if (authData != null) {
-            ref.child("/users/" + authData.getUid() + "/favcompetitions").addListenerForSingleValueEvent(new ValueEventListener() {
+            //Look at the user's favourite competitions in Firebase with a single value event listener
+            ref.child("/users/" + authData.getUid() + "/favcompetitions")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    System.out.println("DATA SNAPSHOT: " + dataSnapshot);
                     for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        System.out.println("CHILD SNAPSHOT: " + childSnapshot);
                         favouriteComps.add(childSnapshot.getKey());
                         System.out.println(favouriteComps);
                     }
 
+                    //Search through the users favourite competitions to detect if this competition is found
+                    //TODO: Do this searching within the Firebase query
                     for (int i = 0; i < favouriteComps.size(); i++) {
                         if (favouriteComps.get(i).equals(competition.getId())) {
                             favourited = true;
                         }
                     }
 
+                    //Create the fab if favourited = false or hide it if not
                     createFAB(favourited);
 
                 }
@@ -116,6 +121,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity
                 }
             });
         } else {
+            //If no auth data, we do not want the FAB to be displayed so send the parameter true
             createFAB(true);
         }
 
@@ -182,8 +188,6 @@ public class CompetitionTabbedActivity extends AppCompatActivity
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_competition_tabbed, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
     }
@@ -230,6 +234,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity
 
         @Override
         public CharSequence getPageTitle(int position) {
+            //Names for each tab
             switch (position) {
                 case 0:
                     return "Fixtures";
@@ -258,14 +263,24 @@ public class CompetitionTabbedActivity extends AppCompatActivity
     private void createFAB(Boolean fav) {
         final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
         if (!fav) {
+            //Set icon on FAB to a heart
             fab.setImageResource(R.drawable.zc_favorite_white_36dp);
+
+            //Set the ripple to the accent colour of the app: blue
             fab.setRippleColor(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent ));
+
+            //Set the on click listener to respond to a press
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //Map for the String object key and Boolean value
                     Map<String, Boolean> map = new HashMap<>();
                     map.put(compId, true);
+
+                    //Add the map to the user's data stored within Firebase
                     ref.child("users").child(authData.getUid()).child("favcompetitions").child(compId).setValue(true);
+
+                    //Alert the user that the favouriting has been successful
                     Snackbar.make(view, "You have favourited this competition", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
                     fab.hide();

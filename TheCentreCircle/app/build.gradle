@@ -44,4 +44,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.roughike:bottom-bar:1.2.4'
     compile 'com.firebaseui:firebase-ui:0.3.1'
+
 }

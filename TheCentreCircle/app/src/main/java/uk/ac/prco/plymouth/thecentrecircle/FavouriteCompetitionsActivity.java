@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.AuthData;
@@ -35,7 +36,7 @@ public class FavouriteCompetitionsActivity extends AppCompatActivity {
         Constants constants = new Constants();
 
 
-        ListView listView = (ListView) findViewById(R.id.competitionsListView);
+        final ListView listView = (ListView) findViewById(R.id.competitionsListView);
 
         setupActionBar();
 
@@ -56,15 +57,16 @@ public class FavouriteCompetitionsActivity extends AppCompatActivity {
             }
         });
 
-        //Firebase.setAndroidContext(this);
-
 
         Firebase ref = new Firebase(constants.getFirebaseUrl());
         AuthData authData = ref.getAuth();
 
+        //Detect whether the user is logged in as an extra precaution but the user SHOULD not be able
+        //to reach this activity if not logged in
         if (authData != null) {
             final Firebase userRef = new Firebase(constants.getFirebaseUrl());
 
+            //Firebase reference to retrieve the user's favourite competitions
             userRef.child("/users/"
                     + authData.getUid() + "/favcompetitions").addChildEventListener(new ChildEventListener() {
                 @Override
@@ -76,8 +78,7 @@ public class FavouriteCompetitionsActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             adapter.add((String) dataSnapshot.child("name").getValue());
                             competitions.add(dataSnapshot.getValue(Competition.class));
-                            System.out.println(competitions);
-                            System.out.println(dataSnapshot);
+
                         }
 
                         @Override
@@ -85,7 +86,6 @@ public class FavouriteCompetitionsActivity extends AppCompatActivity {
 
                         }
                     });
-                    System.out.println(compKey);
                 }
 
                 @Override
@@ -108,6 +108,12 @@ public class FavouriteCompetitionsActivity extends AppCompatActivity {
 
                 }
             });
+
+            if (competitions == null) {
+                TextView noComps = (TextView) findViewById(R.id.no_fav_comps_textView);
+                //listView.setVisibility(View.GONE);
+                noComps.setVisibility(View.VISIBLE);
+            }
         }
 
     }
