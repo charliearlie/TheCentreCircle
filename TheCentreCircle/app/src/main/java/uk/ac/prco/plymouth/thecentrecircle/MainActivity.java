@@ -111,15 +111,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setVisibility(View.GONE); //Recycler view not visible until ready to display
         mRecyclerView.setLayoutManager(layoutManager);
         adapter = new ScoreCardAdapter(matches);
-
-        /*
-            Animations for the recycler view
-         */
-        final SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
-        alphaAdapter.setDuration(1000);
-        alphaAdapter.setInterpolator(new OvershootInterpolator());
-        //mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
-        mRecyclerView.setAdapter(alphaAdapter);
+        mRecyclerView.setAdapter(adapter);
 
 
         Query queryRef = todaysMatchesRef.orderByChild("matchTime");
@@ -182,7 +174,7 @@ public class MainActivity extends AppCompatActivity
                 });
 
                 //Alert the alphaAdapter that there is new data to be displayed
-                alphaAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
 
                 //Hide the loading icon and display the list of matches
                 findViewById(R.id.progress_bar).setVisibility(View.GONE);
@@ -252,25 +244,25 @@ public class MainActivity extends AppCompatActivity
                     matches.get(index).setAwayScore(dataSnapshot.child("awayScore").getValue(String.class));
                     matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
 
-
-                    adapter = new ScoreCardAdapter(matches);
-                    adapter.setListener(new ScoreCardAdapter.Listener() {
-
-                        /**
-                         * Main reason I want to somehow change this. This method appears twice. Not DRY
-                         * @param position
-                         */
-                        @Override
-                        public void onClick(int position) {
-                            Match detailedMatch = matches.get(position);
-                            Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-                            intent.putExtra("matchId", detailedMatch.getMatchId());
-                            intent.putExtra("firebaseurl", String.valueOf(ds.getRef()));
-                            startActivity(intent);
-                        }
-                    });
+                    adapter.notifyItemChanged(index);
+                    //adapter = new ScoreCardAdapter(matches);
+//                    adapter.setListener(new ScoreCardAdapter.Listener() {
+//
+//                        /**
+//                         * Main reason I want to somehow change this. This method appears twice. Not DRY
+//                         * @param position
+//                         */
+//                        @Override
+//                        public void onClick(int position) {
+//                            Match detailedMatch = matches.get(position);
+//                            Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
+//                            intent.putExtra("matchId", detailedMatch.getMatchId());
+//                            intent.putExtra("firebaseurl", String.valueOf(ds.getRef()));
+//                            startActivity(intent);
+//                        }
+//                    });
                     //Set new recycler animations. Will try to have a reusable version of this
-                    setupRecyclerAnimations();
+                    //setupRecyclerAnimations();
 
                     if(!homeScore.equals("0") || !awayScore.equals("0")) {
                         if (!homeScore.equals("?") || !awayScore.equals("?")) {
@@ -286,23 +278,24 @@ public class MainActivity extends AppCompatActivity
 
                 } else {
                     matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
-                    adapter = new ScoreCardAdapter(matches);
-                    adapter.setListener(new ScoreCardAdapter.Listener() {
-
-                        /**
-                         * Main reason I want to somehow change this. This method appears twice. Not DRY
-                         * @param position
-                         */
-                        @Override
-                        public void onClick(int position) {
-                            Match detailedMatch = matches.get(position);
-                            Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-                            intent.putExtra("matchId", detailedMatch.getMatchId());
-                            intent.putExtra("firebaseurl", String.valueOf(ds.getRef()));
-                            startActivity(intent);
-                        }
-                    });
-                    setupRecyclerAnimations();
+                    adapter.notifyItemChanged(index);
+//                    adapter = new ScoreCardAdapter(matches);
+//                    adapter.setListener(new ScoreCardAdapter.Listener() {
+//
+//                        /**
+//                         * Main reason I want to somehow change this. This method appears twice. Not DRY
+//                         * @param position
+//                         */
+//                        @Override
+//                        public void onClick(int position) {
+//                            Match detailedMatch = matches.get(position);
+//                            Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
+//                            intent.putExtra("matchId", detailedMatch.getMatchId());
+//                            intent.putExtra("firebaseurl", String.valueOf(ds.getRef()));
+//                            startActivity(intent);
+//                        }
+//                    });
+//                    setupRecyclerAnimations();
                 }
 
             }

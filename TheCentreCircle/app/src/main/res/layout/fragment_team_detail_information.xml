@@ -2,28 +2,127 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="3dp"
     tools:context="uk.ac.prco.plymouth.thecentrecircle.TeamDetailInformationFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ImageView
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:id="@+id/imageView"
-        android:src="@drawable/arsenal"
-        android:layout_marginTop="23dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Arsenal"
-        android:id="@+id/team_detail_information_name"
-        android:layout_marginStart="23dp"
-        android:layout_alignTop="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_marginTop="20dp" />
+        android:layout_width="match_parent"
+        android:elevation="4dp"
+        card_view:cardElevation="5dp"
+        card_view:cardCornerRadius="4dp"
+        android:id="@+id/team_card_view">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/team_detail_badge"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text=""
+                android:id="@+id/team_detail_information_name"
+                android:layout_marginStart="105dp"
+                android:layout_marginTop="11dp"
+                android:fontFamily="sans-serif-medium"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Manager: "
+                android:textSize="14sp"
+                android:id="@+id/team_manager_holder"
+                android:fontFamily="sans-serif-light"
+                android:layout_below="@+id/team_detail_information_name"
+                android:layout_alignStart="@+id/team_detail_information_name"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Est: "
+                android:textSize="14sp"
+                android:id="@+id/team_year_established_holder"
+                android:fontFamily="sans-serif-light"
+                android:layout_below="@+id/team_manager_holder"
+                android:layout_alignStart="@+id/team_manager_holder"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Stadium: "
+                android:id="@+id/team_stadium_holder"
+                android:fontFamily="sans-serif-light"
+                android:layout_below="@+id/team_year_established_holder"
+                android:layout_alignStart="@+id/team_year_established_holder"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Capacity: 60,035"
+                android:id="@+id/team_stadium_capacity"
+                android:fontFamily="sans-serif-light"
+                android:textSize="10sp"
+                android:layout_below="@+id/team_stadium_holder"
+                android:layout_alignStart="@+id/team_stadium_holder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="1886"
+                android:textSize="14sp"
+                android:id="@+id/team_year_established"
+                android:fontFamily="sans-serif-light"
+                android:layout_below="@+id/team_manager_holder"
+                android:layout_toEndOf="@+id/team_year_established_holder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Arsene Wenger"
+                android:textSize="14sp"
+                android:id="@+id/team_manager"
+                android:fontFamily="sans-serif-light"
+                android:layout_alignBottom="@+id/team_manager_holder"
+                android:layout_toEndOf="@+id/team_manager_holder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="Emirates Stadium"
+                android:id="@+id/team_stadium"
+                android:fontFamily="sans-serif-light"
+                android:layout_alignBottom="@+id/team_stadium_holder"
+                android:layout_toEndOf="@+id/team_stadium_holder" />
+
+        </RelativeLayout>
+
+
+
+    </android.support.v7.widget.CardView>
+
+
+
 
 </RelativeLayout>

@@ -17,8 +17,8 @@ setInterval(function () {
       "method": "GET",
       "hostname": "api.football-api.com",
       "port": null,
+      //"path": "/2.0/matches?from_date=27.10.2015&to_date=05.11.2015&Authorization=565ec012251f932ea4000001465e5017e24b4c3f49c5f59207d768b3"
       "path": "/2.0/matches?match_date=" + dateString + "&Authorization=565ec012251f932ea4000001465e5017e24b4c3f49c5f59207d768b3"
-      //"path": "/2.0/matches?match_date=" + dateString + "&Authorization=565ec012251f932ea4000001465e5017e24b4c3f49c5f59207d768b3"
     };
 
     var req = http.request(options, function (res) {
@@ -30,7 +30,6 @@ setInterval(function () {
 
       res.on("end", function () {
         var data = JSON.parse(content);
-        console.log(data);
 
         for (var i = 0; i < data.length; i++) {
             var date = getMatchDate(data[i].formatted_date);

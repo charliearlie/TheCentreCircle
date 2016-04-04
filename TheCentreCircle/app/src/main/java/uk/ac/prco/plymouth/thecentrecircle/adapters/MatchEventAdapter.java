@@ -86,6 +86,9 @@ public class MatchEventAdapter extends RecyclerView.Adapter<MatchEventAdapter.Vi
                 case "goal" :
                     Picasso.with(holder.view.getContext()).load(R.drawable.goalevent).into(homeTeamEventType);
                     break;
+                case "yellowred" :
+                    Picasso.with(holder.view.getContext()).load(R.drawable.yellow_red_card).into(homeTeamEventType);
+                    break;
             }
 
         } else {
@@ -117,7 +120,11 @@ public class MatchEventAdapter extends RecyclerView.Adapter<MatchEventAdapter.Vi
             case "goal" :
                 Picasso.with(holder.view.getContext()).load(R.drawable.goalevent).into(awayTeamEventType);
                 break;
+                case "yellowred" :
+                    Picasso.with(holder.view.getContext()).load(R.drawable.yellow_red_card).into(awayTeamEventType);
+                    break;
             }
+
         }
 
     }
