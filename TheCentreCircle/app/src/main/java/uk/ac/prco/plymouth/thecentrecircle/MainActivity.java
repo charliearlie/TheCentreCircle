@@ -49,6 +49,7 @@ import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
+import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -367,7 +368,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             } else if (id == R.id.nav_settings) {
                 //TODO: Remove this as it's just so i can get to the team detail quickly.
-                Intent intent = new Intent(MainActivity.this, TeamDetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
                 startActivity(intent);
 
             } else if (id == R.id.nav_about) {
@@ -398,7 +399,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             } else if (id == R.id.nav_settings) {
                 //TODO: Remove this as it's just so i can get to the team detail quickly.
-                Intent intent = new Intent(MainActivity.this, TeamDetailActivity.class);
+                Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
                 startActivity(intent);
 
             } else if (id == R.id.nav_about) {

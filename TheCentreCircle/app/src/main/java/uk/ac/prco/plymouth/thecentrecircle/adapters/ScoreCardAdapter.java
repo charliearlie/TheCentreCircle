@@ -1,21 +1,17 @@
-package uk.ac.prco.plymouth.thecentrecircle;
+package uk.ac.prco.plymouth.thecentrecircle.adapters;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import uk.ac.prco.plymouth.thecentrecircle.R;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 

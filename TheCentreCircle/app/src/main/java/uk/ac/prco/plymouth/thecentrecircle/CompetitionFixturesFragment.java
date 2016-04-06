@@ -29,6 +29,7 @@ import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
+import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
 
 
 /**
