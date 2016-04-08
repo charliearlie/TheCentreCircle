@@ -5,9 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -72,48 +77,35 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
         TextView matchStatus = (TextView) cardView.findViewById(R.id.match_status);
         matchStatus.setText(matches.get(position).getMatchStatus());
 
-//        if(matches.get(position).getCompetitionId().equals("1204") ||
-//                matches.get(position).getCompetitionId().equals("1265")) {
-//            Firebase badgeRefHome = ref.child(matches.get(position).getHomeTeamId());
-//            Firebase badgeRefAway = ref.child(matches.get(position).getAwayTeamId());
-//
-//            badgeRefHome.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-//                    ImageView im = (ImageView) cardView.findViewById(R.id.home_badge);
-//                    Picasso.with(cardView.getContext()).load(imageUrl).into(im);
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(FirebaseError firebaseError) {
-//
-//                }
-//            });
-//
-//            badgeRefAway.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-//                    ImageView im2 = (ImageView) cardView.findViewById(R.id.away_badge);
-//                    Picasso.with(cardView.getContext()).load(imageUrl).into(im2);
-//                }
-//
-//                @Override
-//                public void onCancelled(FirebaseError firebaseError) {
-//
-//                }
-//            });
-//
-//
-//        } else {
-//            ImageView im = (ImageView) cardView.findViewById(R.id.home_badge);
-//            Picasso.with(cardView.getContext()).load(R.drawable.arsenalsmall).into(im);
-//
-//            ImageView im2 = (ImageView) cardView.findViewById(R.id.away_badge);
-//            Picasso.with(cardView.getContext()).load(R.drawable.arsenalsmall).into(im2);
-//        }
+        Firebase badgeRefHome = ref.child(matches.get(position).getHomeTeamId());
+        Firebase badgeRefAway = ref.child(matches.get(position).getAwayTeamId());
+
+        badgeRefHome.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
+                ImageView im = (ImageView) cardView.findViewById(R.id.home_badge);
+                Picasso.with(cardView.getContext()).load(imageUrl).into(im);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+         badgeRefAway.addListenerForSingleValueEvent(new ValueEventListener() {
+             @Override
+             public void onDataChange(DataSnapshot dataSnapshot) {
+                 String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
+                 ImageView im2 = (ImageView) cardView.findViewById(R.id.away_badge);
+                 Picasso.with(cardView.getContext()).load(imageUrl).into(im2);
+             }
+
+             @Override
+             public void onCancelled(FirebaseError firebaseError) {
+
+             }
+         });
 
 
 

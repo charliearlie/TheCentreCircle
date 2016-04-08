@@ -81,6 +81,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                 String homeTeamId = dataSnapshot.child("homeTeamId").getValue(String.class);
                 String awayTeamId = dataSnapshot.child("awayTeamId").getValue(String.class);
                 String competitionId = dataSnapshot.child("matchCompId").getValue(String.class);
+                String venue = dataSnapshot.child("venue").getValue(String.class);
 
                 TextView homeTeamTextView = (TextView) findViewById(R.id.detail_home_team);
                 homeTeamTextView.setText(homeTeam);
@@ -92,6 +93,8 @@ public class MatchDetailActivity extends AppCompatActivity {
                 awayScoreTextView.setText(awayScore);
                 TextView matchStatusTextView = (TextView) findViewById(R.id.detail_match_status);
                 matchStatusTextView.setText(matchStatus);
+                TextView matchVenueTextView = (TextView) findViewById(R.id.match_detail_stadium);
+                matchVenueTextView.setText(venue);
 
                 if(competitionId != null) {
                     Firebase badgeRefHome = new Firebase(cons.getFirebaseUrl() + "/badges/" + homeTeamId);
