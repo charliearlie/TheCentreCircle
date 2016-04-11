@@ -17,4 +17,8 @@ public class Constants {
     public String getFootballAPIKey() {
         return "f49090a4-ef6b-a743-dd5c3dbf5711";
     }
+
+    public String getGoogleAPIKey() { return "AIzaSyBPhQLa7UBoxI9KeuG-PUpG29hpdQRpTqs";}
+
+    public String getGoogleAPIServerKey() { return "AIzaSyD0Iz3JGdYyCXwouuhP1EraxYcWDPyVLz8";}
 }

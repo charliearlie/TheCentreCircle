@@ -87,10 +87,8 @@ public class CompetitionLeagueTableFragment extends Fragment {
                 String returned = new CCUtilities().readAllJson(bufferedReader);
 
                 jsonObject = new JSONObject(returned);
-                System.out.println("JSONOBJECT: " + jsonObject);
                 //Retrieve all the matches from the returned object
                 jsonArray = jsonObject.getJSONArray("teams");
-                System.out.println("JSONARRAY: " + jsonArray);
 
 
                 return jsonArray;

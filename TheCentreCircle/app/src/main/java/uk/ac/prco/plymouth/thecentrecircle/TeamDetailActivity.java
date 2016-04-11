@@ -11,6 +11,8 @@ import android.os.Bundle;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnMenuTabClickListener;
 
+import uk.ac.prco.plymouth.thecentrecircle.classes.Team;
+
 public class TeamDetailActivity extends AppCompatActivity {
 
     private BottomBar mBottomBar;
@@ -22,8 +24,10 @@ public class TeamDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_team_detail);
         setupActionBar();
 
-        final Bundle bundle = getIntent().getExtras();
 
+        final Bundle bundle = getIntent().getExtras();
+        Team team = (Team) bundle.getSerializable("team");
+        setTitle(team.getName());
 
         mBottomBar = BottomBar.attach(this, savedInstanceState);
         mBottomBar.setItemsFromMenu(R.menu.menu_bottombar, new OnMenuTabClickListener() {
@@ -46,6 +50,7 @@ public class TeamDetailActivity extends AppCompatActivity {
 
                 } else if(menuItemId == R.id.bottomBarItemThree) {
                     TeamDetailPlayersFragment tpf = new TeamDetailPlayersFragment();
+                    tpf.setArguments(bundle);
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.myCoordinator, tpf);
                     //ft.addToBackStack(null);

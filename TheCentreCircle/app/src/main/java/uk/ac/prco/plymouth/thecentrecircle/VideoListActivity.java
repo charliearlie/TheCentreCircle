@@ -38,7 +38,7 @@ public class VideoListActivity extends AppCompatActivity {
         RedditEndPoints rep = new RedditEndPoints();
         try {
             //Retrieve videos which are 'hot' from reddit.com/r/soccer
-            new RetrieveRedditVideos().execute(rep.getSoccerHot());
+            new RetrieveRedditVideos().execute(rep.getSoccerTopMonth());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
