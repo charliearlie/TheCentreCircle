@@ -57,7 +57,7 @@ public class PlayerCardAdapter extends RecyclerView.Adapter<PlayerCardAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(PlayerCardAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(PlayerCardAdapter.ViewHolder holder, final int position) {
         final CardView cardView = holder.cardView;
         Firebase playerImageRef = ref.child(players.get(position).getId());
         playerImageRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -84,6 +84,16 @@ public class PlayerCardAdapter extends RecyclerView.Adapter<PlayerCardAdapter.Vi
         if (players.get(position).getInjured().equals("True")) {
             injuryImage.setVisibility(View.VISIBLE);
         }
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onClick(position);
+                }
+            }
+        });
 
 
     }

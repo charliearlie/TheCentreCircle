@@ -4,6 +4,7 @@ package uk.ac.prco.plymouth.thecentrecircle;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,6 +28,7 @@ import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Player;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Team;
+import uk.ac.prco.plymouth.thecentrecircle.fragments.PlayerDetailFragment;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 
@@ -73,6 +75,7 @@ public class TeamDetailPlayersFragment extends Fragment {
         playerQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                players.clear();
                 for (DataSnapshot playerSnapshot : dataSnapshot.getChildren()) {
                     Player player = playerSnapshot.getValue(Player.class);
                     players.add(player);
@@ -99,6 +102,11 @@ public class TeamDetailPlayersFragment extends Fragment {
                      */
                     @Override
                     public void onClick(int position) {
+                        PlayerDetailFragment pdf = new PlayerDetailFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("team", players.get(position));
+                        pdf.setArguments(bundle);
+                        ((TeamDetailActivity) getActivity()).openPlayerFragment(pdf);
                         Toast.makeText(getContext(), players.get(position).getName() + " pressed",
                                 Toast.LENGTH_SHORT).show();
                     }

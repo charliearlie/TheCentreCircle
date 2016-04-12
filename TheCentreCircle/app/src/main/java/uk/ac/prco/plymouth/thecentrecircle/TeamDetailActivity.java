@@ -3,6 +3,7 @@ package uk.ac.prco.plymouth.thecentrecircle;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.support.annotation.IdRes;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -99,4 +100,12 @@ public class TeamDetailActivity extends AppCompatActivity {
         // lose the current tab on orientation change.
         mBottomBar.onSaveInstanceState(outState);
     }
+
+    public void openPlayerFragment(Fragment targetFragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.myCoordinator, targetFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
 }

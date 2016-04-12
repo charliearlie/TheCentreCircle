@@ -6,4 +6,10 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_date_picker"
+        android:orderInCategory="1"
+        android:title="Date"
+        android:icon="@drawable/ic_date_range_white_36dp"
+        app:showAsAction="always"/>
 </menu>

@@ -32,6 +32,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile 'com.firebase:firebase-client-android:2.3.1'
@@ -44,5 +45,4 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.roughike:bottom-bar:1.2.4'
     compile 'com.firebaseui:firebase-ui:0.3.1'
-
 }

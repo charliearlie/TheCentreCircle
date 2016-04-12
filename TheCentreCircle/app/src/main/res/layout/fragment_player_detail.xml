@@ -1,15 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VideoListActivity">
-    <ListView
+    tools:context="uk.ac.prco.plymouth.thecentrecircle.fragments.PlayerDetailFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
         android:layout_width="wrap_content"
-        android:paddingTop="12dp"
         android:layout_height="wrap_content"
-        android:id="@+id/video_listView"
+        android:text="Hi, I am a player"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:fontFamily="sans-serif-condensed" />
+        android:layout_marginTop="207dp"
+        android:textSize="24sp"/>
+
 </RelativeLayout>
