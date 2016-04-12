@@ -26,7 +26,8 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="16sp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="26dp"/>
+            android:layout_marginTop="26dp"
+            android:fontFamily="sans-serif-condensed"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,7 +36,8 @@
             android:text=""
             android:id="@+id/match_detail_stadium"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif-condensed"/>
 
 
         <LinearLayout
@@ -63,7 +65,8 @@
                     android:text="Small Text"
                     android:id="@+id/detail_home_team"
                     android:gravity="center"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="sans-serif-condensed"/>
 
 
             </LinearLayout>
@@ -75,7 +78,8 @@
                 android:id="@+id/detail_home_score"
                 android:textSize="24sp"
                 android:layout_gravity="center_horizontal"
-                android:paddingTop="38dp"/>
+                android:paddingTop="38dp"
+                android:fontFamily="sans-serif-condensed"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -83,7 +87,8 @@
                 android:text=" : "
                 android:textSize="24sp"
                 android:layout_gravity="center_horizontal"
-                android:paddingTop="38dp"/>
+                android:paddingTop="38dp"
+                android:fontFamily="sans-serif-condensed"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -92,7 +97,8 @@
                 android:textSize="24sp"
                 android:id="@+id/detail_away_score"
                 android:layout_gravity="center_horizontal"
-                android:paddingTop="38dp"/>
+                android:paddingTop="38dp"
+                android:fontFamily="sans-serif-condensed"/>
 
 
             <LinearLayout
@@ -105,7 +111,8 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_gravity="center_horizontal"
-                    android:id="@+id/detail_away_badge"/>
+                    android:id="@+id/detail_away_badge"
+                    android:src="@drawable/ic_badge_outline"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -114,7 +121,8 @@
                     android:text="Small Text"
                     android:id="@+id/detail_away_team"
                     android:gravity="center"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="sans-serif-condensed"/>
             </LinearLayout>
 
 

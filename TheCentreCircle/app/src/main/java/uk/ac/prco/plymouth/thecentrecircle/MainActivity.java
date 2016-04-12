@@ -59,6 +59,8 @@ import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    int num = 0;
     //Variables needed for the list to be displayed
     private RecyclerView mRecyclerView;
     private ArrayList<Match> matches = new ArrayList<>();
@@ -141,21 +143,6 @@ public class MainActivity extends AppCompatActivity
                     String competitionId = postSnapShot.child("matchCompId").getValue(String.class);
                     String homeTeamId = postSnapShot.child("homeTeamId").getValue(String.class);
                     String awayTeamId = postSnapShot.child("awayTeamId").getValue(String.class);
-                    Firebase eventRef = todaysMatchesRef.child("/" + postSnapShot.getKey() + "/events");
-//                    eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-//                                Event event = eventSnapshot.getValue(Event.class);
-//                                events.add(event);
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(FirebaseError firebaseError) {
-//
-//                        }
-//                    });
 
                     Match match = new Match(homeTeam, awayTeam, homeScore, awayScore,
                             matchId, homeBadge, R.drawable.manutd, matchStatus, events, competitionId,
@@ -216,7 +203,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         /*
             Child Event listener to detect changes to data stored in the Firebase DB
             Not used to initially fill recycler view because that would mean
@@ -230,6 +216,7 @@ public class MainActivity extends AppCompatActivity
 
             }
 
+
             /**
              * Detect changes in matches, such as scores and major events
              * and as of now we refresh the adapter, I hope to just refresh the individual item
@@ -238,7 +225,7 @@ public class MainActivity extends AppCompatActivity
              */
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 final DataSnapshot ds = dataSnapshot;
-                //System.out.println("DATA CHANGED" + dataSnapshot);
+                System.out.println("DATA CHANGED");
                 int matchId = dataSnapshot.child("matchId").getValue(int.class);
                 int index = findMatchById(matchId);
                 String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
@@ -251,27 +238,10 @@ public class MainActivity extends AppCompatActivity
                     matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
 
                     adapter.notifyItemChanged(index);
-                    //adapter = new ScoreCardAdapter(matches);
-//                    adapter.setListener(new ScoreCardAdapter.Listener() {
-//
-//                        /**
-//                         * Main reason I want to somehow change this. This method appears twice. Not DRY
-//                         * @param position
-//                         */
-//                        @Override
-//                        public void onClick(int position) {
-//                            Match detailedMatch = matches.get(position);
-//                            Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-//                            intent.putExtra("matchId", detailedMatch.getMatchId());
-//                            intent.putExtra("firebaseurl", String.valueOf(ds.getRef()));
-//                            startActivity(intent);
-//                        }
-//                    });
-                    //Set new recycler animations. Will try to have a reusable version of this
-                    //setupRecyclerAnimations();
 
                     if(!homeScore.equals("0") || !awayScore.equals("0")) {
                         if (!homeScore.equals("?") || !awayScore.equals("?")) {
+                            addOneToNum();
                             Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
                             intent.putExtra("match", matches.get(index));
                             System.out.println("Notification sent WOOO");
@@ -279,29 +249,9 @@ public class MainActivity extends AppCompatActivity
                         }
 
                     }
-
-
-
                 } else {
                     matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
                     adapter.notifyItemChanged(index);
-//                    adapter = new ScoreCardAdapter(matches);
-//                    adapter.setListener(new ScoreCardAdapter.Listener() {
-//
-//                        /**
-//                         * Main reason I want to somehow change this. This method appears twice. Not DRY
-//                         * @param position
-//                         */
-//                        @Override
-//                        public void onClick(int position) {
-//                            Match detailedMatch = matches.get(position);
-//                            Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
-//                            intent.putExtra("matchId", detailedMatch.getMatchId());
-//                            intent.putExtra("firebaseurl", String.valueOf(ds.getRef()));
-//                            startActivity(intent);
-//                        }
-//                    });
-//                    setupRecyclerAnimations();
                 }
 
             }
@@ -380,6 +330,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
             } else if (id == R.id.nav_about) {
+                Toast.makeText(MainActivity.this, "num: " + num, Toast.LENGTH_LONG).show();
 
             } else if (id == R.id.nav_login) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -411,6 +362,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
             } else if (id == R.id.nav_about) {
+                Toast.makeText(MainActivity.this, "num: " + num, Toast.LENGTH_LONG).show();
 
             } else if (id == R.id.nav_logout) {
                 Toast.makeText(MainActivity.this, "Log out button pressed", Toast.LENGTH_LONG).show();
@@ -502,12 +454,16 @@ public class MainActivity extends AppCompatActivity
     public void openFixtureFragment(Fragment targetFragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, targetFragment);
-        ft.addToBackStack(null);
         ft.commit();
+        mRecyclerView.setVisibility(mRecyclerView.GONE);
     }
 
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
+    }
+
+    public void addOneToNum() {
+        num++;
     }
 
 }

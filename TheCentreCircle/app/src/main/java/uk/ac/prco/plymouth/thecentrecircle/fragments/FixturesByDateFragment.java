@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -61,7 +62,7 @@ public class FixturesByDateFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView)view.findViewById(R.id.fixture_recycler_by_date);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -95,6 +96,8 @@ public class FixturesByDateFragment extends Fragment {
                 }
                 adapter = new ScoreCardAdapter(matches);
                 mRecyclerView.setAdapter(adapter);
+                ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_fixtures_by_date);
+                progressBar.setVisibility(View.GONE);
                 adapter.setListener(new ScoreCardAdapter.Listener() {
 
                     @Override
