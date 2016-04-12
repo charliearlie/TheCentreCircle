@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         String date = new CCUtilities().getStringDate(); //Get date in string format to get todays matches
 
-        setTitle("Todays matches"); //Set action bar title
+        setTitle("The Centre Circle"); //Set action bar title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -495,6 +497,17 @@ public class MainActivity extends AppCompatActivity
         date = dateArray[0] + dateArray[1] + dateArray[2];
 
         return date;
+    }
+
+    public void openFixtureFragment(Fragment targetFragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.content_main, targetFragment);
+        ft.addToBackStack(null);
+        ft.commit();
+    }
+
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
 }
