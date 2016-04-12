@@ -143,10 +143,11 @@ public class MainActivity extends AppCompatActivity
                     String competitionId = postSnapShot.child("matchCompId").getValue(String.class);
                     String homeTeamId = postSnapShot.child("homeTeamId").getValue(String.class);
                     String awayTeamId = postSnapShot.child("awayTeamId").getValue(String.class);
+                    String date = postSnapShot.child("date").getValue(String.class);
 
                     Match match = new Match(homeTeam, awayTeam, homeScore, awayScore,
                             matchId, homeBadge, R.drawable.manutd, matchStatus, events, competitionId,
-                            homeTeamId, awayTeamId);
+                            homeTeamId, awayTeamId, date);
                     matches.add(match);
                 }
                 adapter.setListener(new ScoreCardAdapter.Listener() {
@@ -161,7 +162,7 @@ public class MainActivity extends AppCompatActivity
                         Match detailedMatch = matches.get(position);
                         Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
                         intent.putExtra("matchId", detailedMatch.getMatchId());
-                        intent.putExtra("firebaseurl", String.valueOf(dataSnapshot.getRef()));
+                        intent.putExtra("matchDate", detailedMatch.getDate());
                         startActivity(intent);
                     }
                 });

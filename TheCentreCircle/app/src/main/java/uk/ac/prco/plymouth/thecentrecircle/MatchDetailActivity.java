@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,6 +18,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -56,10 +58,11 @@ public class MatchDetailActivity extends AppCompatActivity {
 
         final Constants cons = new Constants();
 
-        final String firebaseRef = getIntent().getStringExtra("firebaseurl");
+        String firebaseRef = getIntent().getStringExtra("matchDate");
+        String matchDate = getDateFirebase(firebaseRef);
         int matchId = getIntent().getIntExtra("matchId", 1);
-        Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
-        //Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/01042016");
+        //Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
+        Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/" + matchDate);
         System.out.println(firebaseRef);
         Firebase matchRef = ref.child(String.valueOf(matchId));
         System.out.println("CUNT CHOPS: " + matchRef);
@@ -203,6 +206,13 @@ public class MatchDetailActivity extends AppCompatActivity {
             // Show the Up button in the action bar.
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    private String getDateFirebase(String date) {
+        String testDate = Character.toString(date.charAt(0)) + date.charAt(1) + date.charAt(3) + date.charAt(4)
+                + date.charAt(6) + date.charAt(7) + date.charAt(8) + date.charAt(9);
+
+        return testDate;
     }
 
 

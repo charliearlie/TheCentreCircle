@@ -19,6 +19,7 @@ public class Match implements Serializable {
     private int homeBadge;
     private int awayBadge;
     private String matchStatus;
+    private String date;
     private String halfTimeScore;
     private String fullTimeScore;
     private String extraTimeScore;
@@ -50,7 +51,7 @@ public class Match implements Serializable {
 
     public Match(String homeTeam, String awayTeam, String homeScore, String awayScore, int matchId,
                  int homeBadge, int awayBadge, String matchStatus, ArrayList<Event> events, String competitionId,
-                 String homeTeamId, String awayTeamId) {
+                 String homeTeamId, String awayTeamId, String date) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
         this.homeScore = homeScore;
@@ -63,6 +64,7 @@ public class Match implements Serializable {
         this.competitionId = competitionId;
         this.homeTeamId = homeTeamId;
         this.awayTeamId = awayTeamId;
+        this.date = date;
     }
 
     public Match(int matchId, String competitionId, String homeTeam, String homeTeamId,
@@ -166,5 +168,9 @@ public class Match implements Serializable {
 
     public void setHomeTeamId(String homeTeamId) {
         this.homeTeamId = homeTeamId;
+    }
+
+    public String getDate() {
+        return date;
     }
 }

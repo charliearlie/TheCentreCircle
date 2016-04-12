@@ -1,6 +1,7 @@
 package uk.ac.prco.plymouth.thecentrecircle.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 
 import uk.ac.prco.plymouth.thecentrecircle.MainActivity;
+import uk.ac.prco.plymouth.thecentrecircle.MatchDetailActivity;
 import uk.ac.prco.plymouth.thecentrecircle.R;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
@@ -71,7 +73,7 @@ public class FixturesByDateFragment extends Fragment {
 
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(final DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
                     final ArrayList<Event> events = new ArrayList<Event>();
                     String homeTeam = postSnapShot.child("homeTeam").getValue(String.class);
@@ -85,11 +87,12 @@ public class FixturesByDateFragment extends Fragment {
                     String competitionId = postSnapShot.child("matchCompId").getValue(String.class);
                     String homeTeamId = postSnapShot.child("homeTeamId").getValue(String.class);
                     String awayTeamId = postSnapShot.child("awayTeamId").getValue(String.class);
+                    String date = postSnapShot.child("date").getValue(String.class);
 
 
                     Match match = new Match(homeTeam, awayTeam, homeScore, awayScore,
                             matchId, homeBadge, R.drawable.manutd, matchStatus, events, competitionId,
-                            homeTeamId, awayTeamId);
+                            homeTeamId, awayTeamId, date);
                     matches.add(match);
 
 
@@ -102,7 +105,11 @@ public class FixturesByDateFragment extends Fragment {
 
                     @Override
                     public void onClick(int position) {
-                        
+                        Match detailedMatch = matches.get(position);
+                        Intent intent = new Intent(getActivity(), MatchDetailActivity.class);
+                        intent.putExtra("matchId", detailedMatch.getMatchId());
+                        intent.putExtra("matchDate", detailedMatch.getDate());
+                        startActivity(intent);
                     }
                 });
             }
