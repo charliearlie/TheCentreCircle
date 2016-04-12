@@ -34,7 +34,8 @@
         android:layout_marginEnd="0dp"
         android:textSize="15sp"
         android:layout_marginTop="3dp"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-condensed"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -44,7 +45,8 @@
         android:layout_marginTop="3dp"
         android:textSize="15sp"
         android:textAlignment="textStart"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-condensed"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,7 +56,8 @@
         android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-condensed"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -64,7 +67,8 @@
         android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-condensed"/>
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,7 +78,8 @@
         android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-condensed"/>
 
     <TextView
         android:layout_width="0dp"
@@ -85,7 +90,8 @@
         android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-condensed"/>
 
     <TextView
         android:layout_width="0dp"
@@ -96,7 +102,8 @@
         android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-condensed"/>
 
     <TextView
         android:layout_width="0dp"
@@ -107,6 +114,7 @@
         android:textSize="15sp"
         android:layout_marginTop="3dp"
         android:textAlignment="textStart"
-        android:layout_marginBottom="1dp"/>
+        android:layout_marginBottom="1dp"
+        android:fontFamily="sans-serif-condensed"/>
 
 </LinearLayout>
