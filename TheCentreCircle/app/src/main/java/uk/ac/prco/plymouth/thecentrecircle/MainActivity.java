@@ -47,8 +47,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.recyclerview.animators.adapters.SlideInBottomAnimationAdapter;
-import jp.wasabeef.recyclerview.animators.adapters.SlideInRightAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.DatePickerFragment;
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity
     //Variables needed for the list to be displayed
     private RecyclerView mRecyclerView;
     private ArrayList<Match> matches = new ArrayList<>();
+    private ArrayList<String> favouriteMatches = new ArrayList<>();
     private ScoreCardAdapter adapter;
 
 
@@ -72,6 +73,9 @@ public class MainActivity extends AppCompatActivity
     private AuthData aData; //Authorisation date if user is logged in
 
     private NavigationView navigationView;
+
+    //Firebase reference to main application URL and 'today's' matches
+    final Firebase mainRef = new Firebase(cons.getFirebaseUrl());
 
 
     @Override
@@ -84,8 +88,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Firebase reference to main application URL and 'today's' matches
-        Firebase mainRef = new Firebase(cons.getFirebaseUrl());
+
         final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
         //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/01042016");
 
@@ -195,6 +198,7 @@ public class MainActivity extends AppCompatActivity
                     Toast.makeText(MainActivity.this, authData.getUid(), Toast.LENGTH_LONG).show();
                     updateNavHeader(aData);
 
+
                 }
                 //If the user is not logged in, display the default menu containing a 'login' item
                 else {
@@ -226,7 +230,7 @@ public class MainActivity extends AppCompatActivity
              */
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 final DataSnapshot ds = dataSnapshot;
-                System.out.println("DATA CHANGED");
+                //System.out.println("DATA CHANGED");
                 int matchId = dataSnapshot.child("matchId").getValue(int.class);
                 int index = findMatchById(matchId);
                 String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
@@ -242,11 +246,16 @@ public class MainActivity extends AppCompatActivity
 
                     if(!homeScore.equals("0") || !awayScore.equals("0")) {
                         if (!homeScore.equals("?") || !awayScore.equals("?")) {
-                            addOneToNum();
-                            Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
-                            intent.putExtra("match", matches.get(index));
-                            System.out.println("Notification sent WOOO");
-                            startService(intent);
+                            for (String favouriteMatchId : favouriteMatches) {
+                                if (favouriteMatchId.equals(String.valueOf(matches.get(index).getMatchId()))) {
+                                    addOneToNum();
+                                    Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
+                                    intent.putExtra("match", matches.get(index));
+                                    System.out.println("Notification sent WOOO");
+                                    startService(intent);
+                                }
+                            }
+
                         }
 
                     }
@@ -263,6 +272,33 @@ public class MainActivity extends AppCompatActivity
             public void onCancelled(FirebaseError firebaseError) {
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        AuthData authData = mainRef.getAuth();
+
+        if (authData != null) {
+            Firebase userRef = mainRef.child("users/" + authData.getUid() + "/trackedMatches");
+
+            userRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    favouriteMatches.clear();
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        favouriteMatches.add(postSnapshot.getKey());
+                        System.out.println(favouriteMatches);
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
     }
 
 

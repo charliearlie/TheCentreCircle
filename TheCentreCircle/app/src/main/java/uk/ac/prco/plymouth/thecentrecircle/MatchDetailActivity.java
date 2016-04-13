@@ -2,16 +2,21 @@ package uk.ac.prco.plymouth.thecentrecircle;
 
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -21,6 +26,8 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
@@ -34,6 +41,9 @@ public class MatchDetailActivity extends AppCompatActivity {
     private MatchEventAdapter matchEventAdapter;
     ArrayList<String> events = new ArrayList<>();
     private ArrayList<Event> matchEvents = new ArrayList<>();
+    private int matchId = 0;
+    Firebase mainRef = new Firebase(new Constants().getFirebaseUrl());
+    private AuthData authData;
 //    @Override
 //    public void onBackPressed() {
 //        super.onBackPressed();
@@ -85,7 +95,8 @@ public class MatchDetailActivity extends AppCompatActivity {
                 String awayTeamId = dataSnapshot.child("awayTeamId").getValue(String.class);
                 String competitionId = dataSnapshot.child("matchCompId").getValue(String.class);
                 String venue = dataSnapshot.child("venue").getValue(String.class);
-
+                int retrievedMatchId = dataSnapshot.child("matchId").getValue(int.class);
+                getMatchId(retrievedMatchId);
                 TextView homeTeamTextView = (TextView) findViewById(R.id.detail_home_team);
                 homeTeamTextView.setText(homeTeam);
                 TextView awayTeamTextView = (TextView) findViewById(R.id.detail_away_team);
@@ -183,6 +194,7 @@ public class MatchDetailActivity extends AppCompatActivity {
             }
         });
 
+        authData = mainRef.getAuth();
         ImageView homeBadge = (ImageView) findViewById(R.id.detail_home_badge);
         ImageView awayBadge = (ImageView) findViewById(R.id.detail_away_badge);
 
@@ -208,11 +220,63 @@ public class MatchDetailActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_match_detail, menu);
+        return true;
+    }
+
+    boolean favourite = false;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favourite_match :
+                if (favourite) {
+                    item.setIcon(R.drawable.ic_star_border_white_24dp);
+                    favourite = false;
+                    if (authData != null) {
+                        //Add the map to the user's data stored within Firebase
+                        mainRef.child("users").child(authData.getUid()).child("trackedMatches")
+                                .child(String.valueOf(matchId)).removeValue();
+
+                        //Alert the user that the favouriting has been successful
+                        Snackbar.make(getCurrentFocus(), "You have stopped tracking this match",
+                                Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    }
+                } else {
+                    item.setIcon(R.drawable.ic_star_white_24dp);
+                    favourite = true;
+                    if (authData != null) {
+                        //Add the map to the user's data stored within Firebase
+                        mainRef.child("users").child(authData.getUid()).child("trackedMatches")
+                                .child(String.valueOf(matchId)).setValue(true);
+
+                        //Alert the user that the favouriting has been successful
+                        Snackbar.make(getCurrentFocus(), "You have started tracking this match", Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "As we like your tracked matches " +
+                                "to track across multiple devices, you need to log in to track a match",
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private String getDateFirebase(String date) {
         String testDate = Character.toString(date.charAt(0)) + date.charAt(1) + date.charAt(3) + date.charAt(4)
                 + date.charAt(6) + date.charAt(7) + date.charAt(8) + date.charAt(9);
 
         return testDate;
+    }
+
+    private void getMatchId(int id) {
+        matchId = id;
     }
 
 
