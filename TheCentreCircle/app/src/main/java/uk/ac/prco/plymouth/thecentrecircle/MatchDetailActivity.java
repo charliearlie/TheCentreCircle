@@ -38,12 +38,18 @@ import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 public class MatchDetailActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
+
     private MatchEventAdapter matchEventAdapter;
+
     ArrayList<String> events = new ArrayList<>();
     private ArrayList<Event> matchEvents = new ArrayList<>();
+
     private int matchId = 0;
+
     Firebase mainRef = new Firebase(new Constants().getFirebaseUrl());
+
     private AuthData authData;
+
 //    @Override
 //    public void onBackPressed() {
 //        super.onBackPressed();
@@ -198,13 +204,8 @@ public class MatchDetailActivity extends AppCompatActivity {
         ImageView homeBadge = (ImageView) findViewById(R.id.detail_home_badge);
         ImageView awayBadge = (ImageView) findViewById(R.id.detail_away_badge);
 
-        Picasso.with(getApplicationContext()).load(R.drawable.arsenal).into(homeBadge);
-        Picasso.with(getApplicationContext()).load(R.drawable.arsenal).into(awayBadge);
-
-
-
-//        assert getSupportActionBar() != null;
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Picasso.with(getApplicationContext()).load(R.drawable.ic_badge_outline).into(homeBadge);
+        Picasso.with(getApplicationContext()).load(R.drawable.ic_badge_outline).into(awayBadge);
 
 
     }
@@ -220,14 +221,39 @@ public class MatchDetailActivity extends AppCompatActivity {
         }
     }
 
+    boolean favourite = false;
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        AuthData menuAuth = mainRef.getAuth();
+
+        if (menuAuth != null) {
+            Firebase menuRef = new Firebase(new Constants().getFirebaseUrl() + "/users/" +
+            menuAuth.getUid() + "/trackedMatches");
+
+            menuRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        if (String.valueOf(matchId).equals(postSnapshot.getKey())) {
+                            menu.findItem(R.id.action_favourite_match).setIcon(R.drawable.ic_star_white_24dp);
+                            favourite = true;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_match_detail, menu);
         return true;
     }
 
-    boolean favourite = false;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

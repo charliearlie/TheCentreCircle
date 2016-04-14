@@ -40,6 +40,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.firebase.client.AuthData;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
@@ -53,6 +54,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.facebook.FacebookSdk;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -462,26 +465,47 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         if (token != null) {
             ref.authWithOAuthToken("facebook", token.getToken(), new Firebase.AuthResultHandler() {
                 @Override
-                public void onAuthenticated(AuthData authData) {
+                public void onAuthenticated(final AuthData authData) {
+                    Query userQuery = ref.child("users").orderByKey().equalTo(authData.getUid());
+                    userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot== null) {
+                                Toast.makeText(getApplicationContext(), "You weren't registered before!",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+
+                            } else {
+                                Toast.makeText(getApplicationContext(), "You were registered before!",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+                                System.out.println("DATASNAPSHOT LOGIN: " + dataSnapshot.child("users").getValue());
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                String userName = (String) authData.getProviderData().get("displayName");
+                                Map<String, String> map = new HashMap<String, String>();
+                                map.put("provider", authData.getProvider());
+                                map.put("displayName", userName);
+                                map.put("email", (String) authData.getProviderData().get("email"));
+                                Date date = new Date();
+                                map.put("dateJoined", date.toString());
+                                ref.child("users").child(authData.getUid()).setValue(map);
+                                intent.putExtra("userLogged", true);
+                                intent.putExtra("userName", userName);
+                                intent.putExtra("profileImage", (String) authData.getProviderData().get("profileImageURL"));
+                                //startActivity(intent);
+                                finish();
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
                     // The Facebook user is now authenticated with Firebase
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    String userName = (String) authData.getProviderData().get("displayName");
-                    Toast toast = Toast.makeText(LoginActivity.this, "Successfully logged in as " +
-                            userName, Toast.LENGTH_LONG);
-                    Map<String, String> map = new HashMap<String, String>();
-                    map.put("provider", authData.getProvider());
-                    map.put("displayName", userName);
-                    map.put("email", (String) authData.getProviderData().get("email"));
-                    Date date = new Date();
-                    map.put("dateJoined", date.toString());
-                    ref.child("users").child(authData.getUid()).setValue(map);
-                    intent.putExtra("userLogged", true);
-                    intent.putExtra("userName", userName);
-                    intent.putExtra("profileImage", (String) authData.getProviderData().get("profileImageURL"));
-                    toast.show();
-                    startActivity(intent);
-                    finish();
+
                 }
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {

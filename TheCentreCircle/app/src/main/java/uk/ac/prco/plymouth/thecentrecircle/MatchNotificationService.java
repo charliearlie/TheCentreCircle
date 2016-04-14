@@ -22,9 +22,6 @@ import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
  * TODO: Customize class - update intent actions and extra parameters.
  */
 public class MatchNotificationService extends IntentService {
-
-    public int notificationId = 5790;
-
     public MatchNotificationService() {
         super("MatchNotificationService");
     }
@@ -61,10 +58,20 @@ public class MatchNotificationService extends IntentService {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    /**
+     * Method which builds the notification then alerts the user to a change in score
+     * @param match The match in which the score has changed
+     */
     private void showNotification(final Match match) {
+
+        //Store the app logo as a bitmap so it can be the icon of the notification
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_centrecircle);
+
+        //Build the intent to open the match detail activity form the notification
         Intent intent = new Intent(this, MatchDetailActivity.class);
         intent.putExtra("matchId", match.getMatchId());
+        intent.putExtra("matchDate", match.getDate());
+
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MatchDetailActivity.class);
         stackBuilder.addNextIntent(intent);

@@ -89,14 +89,14 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
-        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/01042016");
-
-        Intent intent = getIntent(); //Get the intent from user logging in
-        if (intent.hasExtra("userLogged")) {
-            Snackbar.make(findViewById(R.id.content_main), "User logged in", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-        }
+        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
+        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/13042016");
+//
+//        Intent intent = getIntent(); //Get the intent from user logging in
+//        if (intent.hasExtra("userLogged")) {
+//            Snackbar.make(findViewById(R.id.content_main), "User logged in", Snackbar.LENGTH_LONG)
+//                    .setAction("Action", null).show();
+//        }
 
         //DrawerLayout settings for the navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -301,13 +301,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
-    private void setupRecyclerAnimations() {
-        SlideInBottomAnimationAdapter alphaAdapter = new SlideInBottomAnimationAdapter(adapter);
-        alphaAdapter.setDuration(1000);
-        alphaAdapter.setInterpolator(new OvershootInterpolator());
-        mRecyclerView.setAdapter(new SlideInRightAnimationAdapter(alphaAdapter));
-    }
     /**
      * If the nav drawer is open, the back button will make it slide in
      */
@@ -402,12 +395,15 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(MainActivity.this, "num: " + num, Toast.LENGTH_LONG).show();
 
             } else if (id == R.id.nav_logout) {
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.activity_main_drawer);
                 Toast.makeText(MainActivity.this, "Log out button pressed", Toast.LENGTH_LONG).show();
                 Firebase logRef = new Firebase(cons.getFirebaseUrl());
+                aData = logRef.getAuth();
                 LoginManager.getInstance().logOut();
                 logRef.unauth();
-                finish();
-                startActivity(getIntent());
+                aData = logRef.getAuth();
+                updateNavHeader(aData);
             }
         }
 
@@ -433,22 +429,31 @@ public class MainActivity extends AppCompatActivity
         return index;
     }
 
+    /**
+     * Update the navigation drawer header with the user's profile data
+     * @param authData The user's authentication data
+     */
     private void updateNavHeader(AuthData authData) {
         View header = navigationView.getHeaderView(0);
-        if(authData.getProvider().equals("facebook")) {
-            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
-            navHeaderTextView.setText((String) authData.getProviderData().get("displayName"));
-            CircleImageView profilePicture = (CircleImageView) header.findViewById(R.id.nav_profile_image);
-            Picasso.with(getApplicationContext()).load((String)authData.getProviderData()
-                    .get("profileImageURL")).into(profilePicture);
-            //new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
-                    //.execute((String) authData.getProviderData().get("profileImageURL"));
+        TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
+        CircleImageView profilePicture = (CircleImageView) header.findViewById(R.id.nav_profile_image);
+
+        if (authData != null) {
+            if(authData.getProvider().equals("facebook")) {
+                navHeaderTextView.setText((String) authData.getProviderData().get("displayName"));
+                Picasso.with(getApplicationContext()).load((String)authData.getProviderData()
+                        .get("profileImageURL")).into(profilePicture);
+            } else {
+                navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
+                navHeaderTextView.setText((String) authData.getProviderData().get("email"));
+                new DownloadImageTask(profilePicture)
+                        .execute((String) authData.getProviderData().get("profileImageURL"));
+            }
         } else {
-            TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
-            navHeaderTextView.setText((String) authData.getProviderData().get("email"));
-            new DownloadImageTask((CircleImageView) header.findViewById(R.id.nav_profile_image))
-                    .execute((String) authData.getProviderData().get("profileImageURL"));
+            navHeaderTextView.setText("The Centre Circle");
+            Picasso.with(getApplicationContext()).load(R.mipmap.ic_centrecircle).into(profilePicture);
         }
+
     }
 
     /**
@@ -488,6 +493,10 @@ public class MainActivity extends AppCompatActivity
         return date;
     }
 
+    /**
+     * Replace todays fixtures with fixtures from the date the user selected
+     * @param targetFragment the fixture fragment of the date selected
+     */
     public void openFixtureFragment(Fragment targetFragment) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, targetFragment);
@@ -499,6 +508,10 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setTitle(title);
     }
 
+    /**
+     * Test method to keep track of notifications because we've had issues with
+     * duplicate notifications
+     */
     public void addOneToNum() {
         num++;
     }
