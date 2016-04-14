@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
-        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/13042016");
+        final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
+        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/13042016");
 //
 //        Intent intent = getIntent(); //Get the intent from user logging in
 //        if (intent.hasExtra("userLogged")) {

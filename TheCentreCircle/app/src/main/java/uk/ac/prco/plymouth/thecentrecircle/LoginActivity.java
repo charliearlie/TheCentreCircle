@@ -470,17 +470,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot== null) {
+                            DataSnapshot userSnapshot = null;
+                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                userSnapshot = postSnapshot;
+                            }
+                            if (userSnapshot == null) {
+                                System.out.println(userSnapshot);
                                 Toast.makeText(getApplicationContext(), "You weren't registered before!",
                                         Toast.LENGTH_LONG)
                                         .show();
-
-                            } else {
-                                Toast.makeText(getApplicationContext(), "You were registered before!",
-                                        Toast.LENGTH_LONG)
-                                        .show();
-                                System.out.println("DATASNAPSHOT LOGIN: " + dataSnapshot.child("users").getValue());
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                 String userName = (String) authData.getProviderData().get("displayName");
                                 Map<String, String> map = new HashMap<String, String>();
                                 map.put("provider", authData.getProvider());
@@ -489,11 +488,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 Date date = new Date();
                                 map.put("dateJoined", date.toString());
                                 ref.child("users").child(authData.getUid()).setValue(map);
-                                intent.putExtra("userLogged", true);
-                                intent.putExtra("userName", userName);
-                                intent.putExtra("profileImage", (String) authData.getProviderData().get("profileImageURL"));
+//                                intent.putExtra("userLogged", true);
+//                                intent.putExtra("userName", userName);
+//                                intent.putExtra("profileImage", (String) authData.getProviderData().get("profileImageURL"));
                                 //startActivity(intent);
                                 finish();
+
+                            } else {
+                                System.out.println("THIS ANNOYING SNAPSHOT: " + dataSnapshot);
+                                Toast.makeText(getApplicationContext(), "You were registered before!",
+                                        Toast.LENGTH_LONG)
+                                        .show();
+                                finish();
+
 
                             }
                         }
