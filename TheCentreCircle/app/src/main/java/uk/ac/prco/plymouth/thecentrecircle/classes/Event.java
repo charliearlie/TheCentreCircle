@@ -3,7 +3,8 @@ package uk.ac.prco.plymouth.thecentrecircle.classes;
 import java.io.Serializable;
 
 /**
- * Created by charliewaite on 15/03/2016.
+ * Represents an event object which belongs to a match
+ * @author Charles Waite
  */
 public class Event implements Serializable {
     private String eventAssist;

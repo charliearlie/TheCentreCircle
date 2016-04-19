@@ -20,14 +20,23 @@ import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
+/**
+ * An activity to list all supported competitions
+ *
+ * @author Charles Waite
+ **/
 public class AllCompetitionsActivity extends AppCompatActivity {
 
     Constants constants = new Constants();
     private ArrayList<Competition> competitions = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,16 +71,20 @@ public class AllCompetitionsActivity extends AppCompatActivity {
         });
 
         Firebase ref = new Firebase(constants.getFirebaseUrl() + "/competitions");
-        //Order competitions by region
-        //TODO: Order this some other way, maybe UEFA coefficients?
-        Query queryRef = ref.orderByChild("region");
-
+        Query queryRef = ref.orderByChild("coefficientPoints");
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    adapter.add((String) childSnapshot.child("name").getValue());
+
                     competitions.add(childSnapshot.getValue(Competition.class));
+                }
+                Collections.reverse(competitions);
+
+                for (Competition competition : competitions) {
+                    String listItem = competition.getRegion() + ": "
+                            + competition.getName();
+                    adapter.add(listItem);
                 }
 
 

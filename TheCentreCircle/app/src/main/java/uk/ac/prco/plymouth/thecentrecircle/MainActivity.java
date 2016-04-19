@@ -91,12 +91,6 @@ public class MainActivity extends AppCompatActivity
 
         final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
         //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/13042016");
-//
-//        Intent intent = getIntent(); //Get the intent from user logging in
-//        if (intent.hasExtra("userLogged")) {
-//            Snackbar.make(findViewById(R.id.content_main), "User logged in", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show();
-//        }
 
         //DrawerLayout settings for the navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -117,7 +111,7 @@ public class MainActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
 
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.score_recycler);
+        mRecyclerView = (RecyclerView) findViewById(R.id.score_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setVisibility(View.GONE); //Recycler view not visible until ready to display
         mRecyclerView.setLayoutManager(layoutManager);
@@ -244,7 +238,7 @@ public class MainActivity extends AppCompatActivity
 
                     adapter.notifyItemChanged(index);
 
-                    if(!homeScore.equals("0") || !awayScore.equals("0")) {
+                    if (!homeScore.equals("0") || !awayScore.equals("0")) {
                         if (!homeScore.equals("?") || !awayScore.equals("?")) {
                             for (String favouriteMatchId : favouriteMatches) {
                                 if (favouriteMatchId.equals(String.valueOf(matches.get(index).getMatchId()))) {
@@ -415,6 +409,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * When a match is updated, the onDataChange method needs to find the match to update in the array list
+     *
      * @param matchId The match ID accompanying the match in the DB
      * @return Index of match which needs updating
      */
@@ -431,20 +426,21 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Update the navigation drawer header with the user's profile data
+     *
      * @param authData The user's authentication data
      */
     private void updateNavHeader(AuthData authData) {
         View header = navigationView.getHeaderView(0);
-        TextView navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
+        TextView navHeaderTextView = (TextView) header.findViewById(R.id.nav_email);
         CircleImageView profilePicture = (CircleImageView) header.findViewById(R.id.nav_profile_image);
 
         if (authData != null) {
-            if(authData.getProvider().equals("facebook")) {
+            if (authData.getProvider().equals("facebook")) {
                 navHeaderTextView.setText((String) authData.getProviderData().get("displayName"));
-                Picasso.with(getApplicationContext()).load((String)authData.getProviderData()
+                Picasso.with(getApplicationContext()).load((String) authData.getProviderData()
                         .get("profileImageURL")).into(profilePicture);
             } else {
-                navHeaderTextView = (TextView)header.findViewById(R.id.nav_email);
+                navHeaderTextView = (TextView) header.findViewById(R.id.nav_email);
                 navHeaderTextView.setText((String) authData.getProviderData().get("email"));
                 new DownloadImageTask(profilePicture)
                         .execute((String) authData.getProviderData().get("profileImageURL"));
@@ -463,24 +459,24 @@ public class MainActivity extends AppCompatActivity
 
         ImageView bmImage;
 
-        public DownloadImageTask(CircleImageView bmImage){
+        public DownloadImageTask(CircleImageView bmImage) {
             this.bmImage = bmImage;
         }
 
-        protected Bitmap doInBackground(String... urls){
+        protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
             Bitmap mFacebookProfile = null;
-            try{
+            try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mFacebookProfile = BitmapFactory.decodeStream(in);
-            } catch (Exception e){
+            } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
             }
             return mFacebookProfile;
         }
 
-        protected void onPostExecute(Bitmap result){
+        protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
         }
     }
@@ -495,6 +491,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Replace todays fixtures with fixtures from the date the user selected
+     *
      * @param targetFragment the fixture fragment of the date selected
      */
     public void openFixtureFragment(Fragment targetFragment) {

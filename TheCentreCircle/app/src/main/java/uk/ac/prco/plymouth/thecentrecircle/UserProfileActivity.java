@@ -17,6 +17,7 @@ import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 public class UserProfileActivity extends AppCompatActivity {
 
     Constants cons = new Constants();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

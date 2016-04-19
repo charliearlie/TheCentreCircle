@@ -28,13 +28,15 @@ import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 /**
  * A simple {@link Fragment} subclass.
- */
+ * @author Charles Waite
+ **/
 public class CompetitionLeagueTableFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     Competition competition;
+
     public CompetitionLeagueTableFragment() {
         // Required empty public constructor
     }

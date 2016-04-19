@@ -37,8 +37,12 @@ import java.util.Map;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
+/**
+ * Tabbed activity to view different information related to a competition
+ * @author Charles Waite
+ **/
 public class CompetitionTabbedActivity extends AppCompatActivity
-                                implements CompetitionTeamListFragment.CompetitionTeamListListener{
+        implements CompetitionTeamListFragment.CompetitionTeamListListener {
     Constants constants = new Constants();
     Bundle bundle = new Bundle();
     String compId;
@@ -95,31 +99,31 @@ public class CompetitionTabbedActivity extends AppCompatActivity
             //Look at the user's favourite competitions in Firebase with a single value event listener
             ref.child("/users/" + authData.getUid() + "/favcompetitions")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                        favouriteComps.add(childSnapshot.getKey());
-                        System.out.println(favouriteComps);
-                    }
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                favouriteComps.add(childSnapshot.getKey());
+                                System.out.println(favouriteComps);
+                            }
 
-                    //Search through the users favourite competitions to detect if this competition is found
-                    //TODO: Do this searching within the Firebase query
-                    for (int i = 0; i < favouriteComps.size(); i++) {
-                        if (favouriteComps.get(i).equals(competition.getId())) {
-                            favourited = true;
+                            //Search through the users favourite competitions to detect if this competition is found
+                            //TODO: Do this searching within the Firebase query
+                            for (int i = 0; i < favouriteComps.size(); i++) {
+                                if (favouriteComps.get(i).equals(competition.getId())) {
+                                    favourited = true;
+                                }
+                            }
+
+                            //Create the fab if favourited = false or hide it if not
+                            createFAB(favourited);
+
                         }
-                    }
 
-                    //Create the fab if favourited = false or hide it if not
-                    createFAB(favourited);
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
 
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
+                        }
+                    });
         } else {
             //If no auth data, we do not want the FAB to be displayed so send the parameter true
             createFAB(true);
@@ -251,7 +255,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity
 
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
+     **/
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupActionBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -267,7 +271,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity
             fab.setImageResource(R.drawable.zc_favorite_white_36dp);
 
             //Set the ripple to the accent colour of the app: blue
-            fab.setRippleColor(ContextCompat.getColor(getApplicationContext(),R.color.colorAccent ));
+            fab.setRippleColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
 
             //Set the on click listener to respond to a press
             fab.setOnClickListener(new View.OnClickListener() {

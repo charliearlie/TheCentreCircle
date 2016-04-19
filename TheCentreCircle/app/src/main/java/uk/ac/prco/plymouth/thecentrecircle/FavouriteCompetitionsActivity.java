@@ -25,16 +25,20 @@ import java.util.ArrayList;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Competition;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
+/**
+ * Similar to AllCompetitionsActivity but displays only the user's favourite competitions
+ * @author Charles Waite
+ **/
 public class FavouriteCompetitionsActivity extends AppCompatActivity {
 
     private ArrayList<Competition> competitions = new ArrayList<>();
     String[] favourites = new String[15];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_competitions);
         Constants constants = new Constants();
-
 
         final ListView listView = (ListView) findViewById(R.id.competitionsListView);
 
@@ -74,18 +78,18 @@ public class FavouriteCompetitionsActivity extends AppCompatActivity {
                     String compKey = dataSnapshot.getKey();
                     userRef.child("/competitions/" + compKey).addListenerForSingleValueEvent(
                             new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            adapter.add((String) dataSnapshot.child("name").getValue());
-                            competitions.add(dataSnapshot.getValue(Competition.class));
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    adapter.add((String) dataSnapshot.child("name").getValue());
+                                    competitions.add(dataSnapshot.getValue(Competition.class));
 
-                        }
+                                }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
 
-                        }
-                    });
+                                }
+                            });
                 }
 
                 @Override

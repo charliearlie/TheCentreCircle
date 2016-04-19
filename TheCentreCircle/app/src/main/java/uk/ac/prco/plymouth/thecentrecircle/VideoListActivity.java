@@ -52,6 +52,7 @@ public class VideoListActivity extends AppCompatActivity {
 
         /**
          * Retrieve the JSON from reddit on a second thread
+         *
          * @param params Array of parameters. Reddit URL at 0th element
          * @return the JSON array retireved
          */
@@ -81,22 +82,21 @@ public class VideoListActivity extends AppCompatActivity {
 
         /**
          * After the JSON Array is retrieved this method lists it for the user
+         *
          * @param jsonArray The JSON Array retrieved in doInBackground
          */
         @Override
         protected void onPostExecute(JSONArray jsonArray) {
             try {
                 for (int i = 0; i < jsonArray.length(); i++) {
+                    //Retrieve the data object from the ith object
                     JSONObject jsonObject = jsonArray.getJSONObject(i).getJSONObject("data");
                     String domain = (String) jsonObject.get("domain");
-                    if(domain.equals("streamable.com") || domain.equals("gfycat.com")) {
-                        String title = jsonObject.getString("title");
-                        String videoUrl = (String) jsonObject.get("url");
-                        String permalink = "https://reddit.com" +  (String) jsonObject.get("permalink");
+
+                    //As of now we only support Streamable or Gfycat
+                    //TODO: Consider implementing the YouTube API
+                    if (domain.equals("streamable.com") || domain.equals("gfycat.com")) {
                         videos.add(jsonObject);
-                        System.out.println("Title: " + title +
-                                " found at the following URL: " + videoUrl + " -- " +
-                                "You can read the comments at: " + permalink );
                     }
                 }
 
@@ -105,6 +105,7 @@ public class VideoListActivity extends AppCompatActivity {
                         android.R.layout.simple_list_item_1, android.R.id.text1);
                 listView.setAdapter(adapter);
 
+                //Add each video's title to the list
                 for (JSONObject vid : videos) {
                     adapter.add(vid.getString("title"));
                 }
@@ -113,30 +114,22 @@ public class VideoListActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         try {
-                            String title = videos.get(position).getString("title");
-                            String url = videos.get(position).getString("url");
-                            String redditComments = videos.get(position).getString("permalink");
+                            //When a video is selected, open the View Video Activity
                             Intent intent = new Intent(VideoListActivity.this, ViewVideoActivity.class);
-                            intent.putExtra("title", title);
-                            intent.putExtra("url", url);
-                            intent.putExtra("redditComments", redditComments);
+                            intent.putExtra("title", videos.get(position).getString("title"));
+                            intent.putExtra("url", videos.get(position).getString("url"));
+                            intent.putExtra("redditComments", videos.get(position).getString("permalink"));
                             intent.putExtra("domain", videos.get(position).getString("domain"));
-                            Toast.makeText(VideoListActivity.this, "my id " + id,
-                                    Toast.LENGTH_LONG).show();
                             startActivity(intent);
                         } catch (Exception ex) {
-
+                            ex.printStackTrace();
                         }
                     }
                 });
 
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
-
-
-
         }
     }
 }

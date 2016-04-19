@@ -34,22 +34,23 @@ public class TeamDetailActivity extends AppCompatActivity {
         mBottomBar.setItemsFromMenu(R.menu.menu_bottombar, new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
-                if(menuItemId == R.id.bottomBarItemOne) {
+                if (menuItemId == R.id.bottomBarItemOne) {
                     TeamDetailInformationFragment tdpf = new TeamDetailInformationFragment();
                     tdpf.setArguments(bundle);
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                            ft.replace(R.id.myCoordinator, tdpf);
-                            //ft.addToBackStack(null);
-                            ft.commit();
+                    ft.replace(R.id.myCoordinator, tdpf);
+                    //ft.addToBackStack(null);
+                    ft.commit();
 
-                } else if(menuItemId == R.id.bottomBarItemTwo) {
+                } else if (menuItemId == R.id.bottomBarItemTwo) {
                     TeamDetailStatisticsFragment tdsf = new TeamDetailStatisticsFragment();
+                    tdsf.setArguments(bundle);
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.myCoordinator, tdsf);
                     //ft.addToBackStack(null);
                     ft.commit();
 
-                } else if(menuItemId == R.id.bottomBarItemThree) {
+                } else if (menuItemId == R.id.bottomBarItemThree) {
                     TeamDetailPlayersFragment tpf = new TeamDetailPlayersFragment();
                     tpf.setArguments(bundle);
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -57,7 +58,7 @@ public class TeamDetailActivity extends AppCompatActivity {
                     //ft.addToBackStack(null);
                     ft.commit();
 
-                } else if(menuItemId == R.id.bottomBarItemFour) {
+                } else if (menuItemId == R.id.bottomBarItemFour) {
                     TeamDetailFixturesFragment tdff = new TeamDetailFixturesFragment();
                     FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                     ft.replace(R.id.myCoordinator, tdff);

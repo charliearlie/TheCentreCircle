@@ -53,7 +53,9 @@ public class MatchEventAdapter extends RecyclerView.Adapter<MatchEventAdapter.Vi
         TextView awayTeamEventPlayer = (TextView) holder.view.findViewById(R.id.away_team_event_player);
         ImageView homeTeamEventType = (ImageView) holder.view.findViewById(R.id.home_team_event_type);
         ImageView awayTeamEventType = (ImageView) holder.view.findViewById(R.id.away_team_event_type);
-        System.out.println("EVENT ASSIST " + event.getEventAssist());
+
+        TextView homeTeamEventAssist = (TextView) holder.view.findViewById(R.id.home_team_event_assist);
+        TextView awayTeamEventAssist = (TextView) holder.view.findViewById(R.id.away_team_event_assist);
 
         if (event.getEventTeam().equals("localteam")) {
             if (Integer.parseInt(event.getEventMinute()) < 10) {
@@ -63,13 +65,12 @@ public class MatchEventAdapter extends RecyclerView.Adapter<MatchEventAdapter.Vi
                 homeTeamEventMinute.setText(event.getEventMinute());
             }
 
+            homeTeamEventPlayer.setText(event.getEventPlayer());
+
             if (event.getEventType().equals("goal") && event.getEventAssist().length() > 2) {
-                System.out.println(event.getEventId() + " " + event.getEventAssist().length());
-                String eventPlayer = event.getEventPlayer() + " (" +
-                        event.getEventAssist() + ")";
-                homeTeamEventPlayer.setText(eventPlayer);
-            } else {
-                homeTeamEventPlayer.setText(event.getEventPlayer());
+                String assist = "(" + event.getEventAssist() + ")";
+                homeTeamEventAssist.setText(assist);
+                homeTeamEventAssist.setVisibility(View.VISIBLE);
             }
 
             awayTeamEventMinute.setVisibility(View.GONE);
@@ -99,12 +100,13 @@ public class MatchEventAdapter extends RecyclerView.Adapter<MatchEventAdapter.Vi
                 awayTeamEventMinute.setText(event.getEventMinute());
             }
 
+            awayTeamEventPlayer.setText(event.getEventPlayer());
+
+
             if (event.getEventType().equals("goal") && event.getEventAssist().length() > 2) {
-                String eventPlayer = event.getEventPlayer() + " (" +
-                        event.getEventAssist() + ")";
-                awayTeamEventPlayer.setText(eventPlayer);
-            } else {
-                awayTeamEventPlayer.setText(event.getEventPlayer());
+                String assist = "(" + event.getEventAssist() + ")";
+                awayTeamEventAssist.setText(assist);
+                awayTeamEventAssist.setVisibility(View.VISIBLE);
             }
             homeTeamEventMinute.setVisibility(View.GONE);
             homeTeamEventPlayer.setVisibility(View.GONE);

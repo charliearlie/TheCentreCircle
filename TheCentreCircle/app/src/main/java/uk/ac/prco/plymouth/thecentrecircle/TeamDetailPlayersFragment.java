@@ -67,7 +67,7 @@ public class TeamDetailPlayersFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.player_recycler);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.player_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //Query the team's squad object

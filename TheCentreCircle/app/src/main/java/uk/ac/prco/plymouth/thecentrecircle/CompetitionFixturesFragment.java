@@ -1,7 +1,6 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
 
-
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,7 +33,8 @@ import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
- */
+ * @author Charles Waite
+ **/
 public class CompetitionFixturesFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ProgressDialog progressDialog;
@@ -123,6 +123,7 @@ public class CompetitionFixturesFragment extends Fragment {
 
         /**
          * What we do with the JSON array after it is fully populated
+         *
          * @param jsonArray the returned array of matches from the API
          */
         @Override
@@ -133,7 +134,7 @@ public class CompetitionFixturesFragment extends Fragment {
             Competition competition = (Competition) args.getSerializable("competition");
             ArrayList<Match> matches = new ArrayList<>();
 
-            if(jsonArray != null) {
+            if (jsonArray != null) {
                 try {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         //Retrieve the specific details from each match
@@ -145,7 +146,7 @@ public class CompetitionFixturesFragment extends Fragment {
                         int matchId = Integer.parseInt(String.valueOf(jsonArray.getJSONObject(i).get("match_id")));
                         String matchStatus = String.valueOf(jsonArray.getJSONObject(i).get("match_status"));
 
-                        if(homeScore.equals("?") && awayScore.equals("?")) {
+                        if (homeScore.equals("?") && awayScore.equals("?")) {
                             homeScore = "-";
                             awayScore = "-";
                         }

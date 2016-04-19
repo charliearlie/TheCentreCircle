@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * Created by Charles Waite on 18/02/2016.
+ * Represents a match object from the external API
+ * @author Charles Waite
  */
 public class Match implements Serializable {
 

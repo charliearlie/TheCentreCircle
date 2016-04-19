@@ -76,7 +76,7 @@ public class TeamDetailInformationFragment extends Fragment {
         TextView teamStadiumCapacityTextView = (TextView) view.findViewById(R.id.team_stadium_capacity);
         String capacity = "Capacity: " + team.getVenue_capacity();
         teamStadiumCapacityTextView.setText(capacity);
-        final ImageView im = (ImageView)view.findViewById(R.id.team_detail_badge);
+        final ImageView im = (ImageView) view.findViewById(R.id.team_detail_badge);
         Firebase badgeRef = new Firebase(cons.getFirebaseUrl() + "/badges/" + team.getTeam_id());
 
         badgeRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -108,7 +108,7 @@ public class TeamDetailInformationFragment extends Fragment {
 
             //URL to retrieve data from external API
             String url = "https://kgsearch.googleapis.com/v1/entities:search" +
-                    "?key="+ constants.getGoogleAPIServerKey() + "&query=" + teamName + "&types=SportsTeam";
+                    "?key=" + constants.getGoogleAPIServerKey() + "&query=" + teamName + "&types=SportsTeam";
 
             //Retrieve the fixtures from the URL in the background
             new retrieveClubInformation().execute(url);
@@ -174,7 +174,6 @@ public class TeamDetailInformationFragment extends Fragment {
 
 
     }
-
 
 
 }

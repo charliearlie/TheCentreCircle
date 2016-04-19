@@ -49,7 +49,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             }
         }
 
-        videoView  = (VideoView) findViewById(R.id.videoView);
+        videoView = (VideoView) findViewById(R.id.videoView);
 
         //Anchor the controller to the bottom of the layout
         FrameLayout controllerAnchor = (FrameLayout) findViewById(R.id.controllerAnchor);
@@ -128,8 +128,7 @@ public class ViewVideoActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld)
-        {
+        protected void onSizeChanged(int xNew, int yNew, int xOld, int yOld) {
             super.onSizeChanged(xNew, yNew, xOld, yOld);
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) anchorView.getLayoutParams();
             lp.setMargins(0, 0, 0, yNew);

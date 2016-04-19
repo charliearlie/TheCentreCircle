@@ -10,7 +10,8 @@ import android.view.ViewGroup;
 
 /**
  * A simple {@link Fragment} subclass.
- */
+ * @author Charles Waite
+ **/
 public class CompetitionStatisticsFragment extends Fragment {
 
     /**
@@ -18,7 +19,6 @@ public class CompetitionStatisticsFragment extends Fragment {
      */
 
     //TODO: Sort out all stats from API
-
     public CompetitionStatisticsFragment() {
         // Required empty public constructor
     }

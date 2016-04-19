@@ -95,7 +95,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         setupActionBar();
         // Set up the login form.
@@ -105,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         if (intent.hasExtra("userEmail")) {
-            mEmailView.setText((String)getIntent().getExtras().get("userEmail") );
+            mEmailView.setText((String) getIntent().getExtras().get("userEmail"));
         }
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -128,11 +127,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mRegisterButton = (Button)findViewById(R.id.email_register_button);
+        Button mRegisterButton = (Button) findViewById(R.id.email_register_button);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-               Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -273,6 +272,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    /**
+     * Method which matches the user's inputted email against a regex pattern
+     *
+     * @param email User's inputted email address
+     * @return a boolean which tells us if the email matched the pattern
+     */
     private boolean isEmailValid(String email) {
         Pattern pattern;
         Matcher matcher;
@@ -398,8 +403,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onAuthenticated(AuthData authData) {
                     System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
-                    Toast toast = Toast.makeText(LoginActivity.this, "Successfully logged in as " + authData.getUid(), Toast.LENGTH_LONG);
-                    toast.show();
                     finish();
                 }
 
@@ -433,6 +436,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 public void onSuccess(Map<String, Object> result) {
                     System.out.println("Successfully created user account with uid: " + result.get("uid"));
                 }
+
                 @Override
                 public void onError(FirebaseError firebaseError) {
                     // there was an error
@@ -461,11 +465,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 
+    /**
+     * Detect if a user has logged in using Facebook login
+     *
+     * @param token oauth2 token provided by Facebook SDK
+     */
     private void onFacebookAccessTokenChange(final AccessToken token) {
         if (token != null) {
+            //Authorise the user with Firebase using their Facebook auth token
             ref.authWithOAuthToken("facebook", token.getToken(), new Firebase.AuthResultHandler() {
+
                 @Override
                 public void onAuthenticated(final AuthData authData) {
+                    /**
+                     * Query to see if the user already exists in the database
+                     Facebook login does not contain separate register and login so we must check
+                     if this is the user's first time logging in
+                     */
                     Query userQuery = ref.child("users").orderByKey().equalTo(authData.getUid());
                     userQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -475,34 +491,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 userSnapshot = postSnapshot;
                             }
                             if (userSnapshot == null) {
-                                System.out.println(userSnapshot);
+                                System.out.println(userSnapshot); //TODO: Remove this testing line
                                 Toast.makeText(getApplicationContext(), "You weren't registered before!",
-                                        Toast.LENGTH_LONG)
-                                        .show();
-                                //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                String userName = (String) authData.getProviderData().get("displayName");
+                                        Toast.LENGTH_LONG).show(); //TODO: Remove this testing line
+                                //Create map to take user's basic Facebook data: Full name and email
                                 Map<String, String> map = new HashMap<String, String>();
                                 map.put("provider", authData.getProvider());
-                                map.put("displayName", userName);
+                                map.put("displayName", (String) authData.getProviderData().get("displayName"));
                                 map.put("email", (String) authData.getProviderData().get("email"));
                                 Date date = new Date();
                                 map.put("dateJoined", date.toString());
+                                //Add the values of this map to the user's node of the database
                                 ref.child("users").child(authData.getUid()).setValue(map);
-//                                intent.putExtra("userLogged", true);
-//                                intent.putExtra("userName", userName);
-//                                intent.putExtra("profileImage", (String) authData.getProviderData().get("profileImageURL"));
-                                //startActivity(intent);
                                 finish();
-
-                            } else {
-                                System.out.println("THIS ANNOYING SNAPSHOT: " + dataSnapshot);
-                                Toast.makeText(getApplicationContext(), "You were registered before!",
-                                        Toast.LENGTH_LONG)
-                                        .show();
-                                finish();
-
 
                             }
+                            finish();
                         }
 
                         @Override
@@ -510,13 +514,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                         }
                     });
-                    // The Facebook user is now authenticated with Firebase
-
-
                 }
+
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {
-                    // there was an error
+                    //TODO: Handle authentication error, although this method will never be reached...
                 }
             });
         } else {

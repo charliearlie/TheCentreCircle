@@ -47,5 +47,5 @@ dependencies {
     compile 'com.roughike:bottom-bar:1.2.4'
     compile 'com.firebaseui:firebase-ui:0.3.1'
     compile 'jp.wasabeef:recyclerview-animators:2.2.1'
-    compile 'com.hkm.slidingmenulib:libmenu:0.4.9'
+    compile 'com.hkm.ui:ultimaterecyclerview:0.5.0'
 }

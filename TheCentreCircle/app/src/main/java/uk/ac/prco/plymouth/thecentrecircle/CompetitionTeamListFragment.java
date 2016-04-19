@@ -37,9 +37,11 @@ public class CompetitionTeamListFragment extends ListFragment {
     private Firebase ref = new Firebase(cons.getFirebaseUrl() + "/teams");
     private ArrayList<Team> teams = new ArrayList<>();
 
-    interface CompetitionTeamListListener{
+    interface CompetitionTeamListListener {
         void itemClicked(long id);
-    };
+    }
+
+    ;
 
     private CompetitionTeamListListener listener;
 
@@ -109,7 +111,7 @@ public class CompetitionTeamListFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView lv, View v, int position, long id) {
-        if(listener != null) {
+        if (listener != null) {
             Bundle bundle = new Bundle();
             bundle.putSerializable("team", teams.get(position));
             Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
@@ -123,6 +125,7 @@ public class CompetitionTeamListFragment extends ListFragment {
 
     /**
      * Takes the data snapshot retrieved by Firebase and extracts the teams details from it
+     *
      * @param dataSnapshot returned from Firebase query
      * @return the team retrieved from the snapshot
      */
@@ -142,7 +145,7 @@ public class CompetitionTeamListFragment extends ListFragment {
         String venue_name = dataSnapshot.child("venue_name").getValue(String.class);
         String venue_surface = dataSnapshot.child("venue_surface").getValue(String.class);
         Team team = new Team(coach_id, coach_name, country, founded, is_national,
-                leagues,name, team_id, venue_address, venue_capacity, venue_city,
+                leagues, name, team_id, venue_address, venue_capacity, venue_city,
                 venue_id, venue_name, venue_surface);
 
         return team;

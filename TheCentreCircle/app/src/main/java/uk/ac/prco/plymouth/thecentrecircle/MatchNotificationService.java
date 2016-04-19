@@ -60,6 +60,7 @@ public class MatchNotificationService extends IntentService {
 
     /**
      * Method which builds the notification then alerts the user to a change in score
+     *
      * @param match The match in which the score has changed
      */
     private void showNotification(final Match match) {
@@ -86,7 +87,7 @@ public class MatchNotificationService extends IntentService {
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentIntent(pendingIntent)
                 .setContentText("GOAL! " + match.getHomeTeam() + " " + match.getHomeScore() +
-                " : " + match.getAwayScore() + " " + match.getAwayTeam())
+                        " : " + match.getAwayScore() + " " + match.getAwayTeam())
                 .build();
 
         Random random = new Random();

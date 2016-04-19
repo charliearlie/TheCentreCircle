@@ -116,7 +116,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                 TextView matchVenueTextView = (TextView) findViewById(R.id.match_detail_stadium);
                 matchVenueTextView.setText(venue);
 
-                if(competitionId != null) {
+                if (competitionId != null) {
                     Firebase badgeRefHome = new Firebase(cons.getFirebaseUrl() + "/badges/" + homeTeamId);
                     Firebase badgeRefAway = new Firebase(cons.getFirebaseUrl() + "/badges/" + awayTeamId);
 
@@ -124,7 +124,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-                            ImageView im = (ImageView)findViewById(R.id.detail_home_badge);
+                            ImageView im = (ImageView) findViewById(R.id.detail_home_badge);
                             Picasso.with(getApplicationContext()).load(imageUrl).into(im);
 
                         }
@@ -139,7 +139,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-                            ImageView im2 = (ImageView)findViewById(R.id.detail_away_badge);
+                            ImageView im2 = (ImageView) findViewById(R.id.detail_away_badge);
                             Picasso.with(getApplicationContext()).load(imageUrl).into(im2);
                         }
 
@@ -187,7 +187,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                             eventMinute, eventPlayer, eventPlayerId, eventTeam, eventType);
                     matchEvents.add(event);
                     events.add(event.getEventType() + " : " + event.getEventPlayer() + " ('" + event.getEventMinute()
-                            +  ")");
+                            + ")");
                 }
 
                 matchEventAdapter = new MatchEventAdapter(matchEvents);
@@ -229,7 +229,7 @@ public class MatchDetailActivity extends AppCompatActivity {
 
         if (menuAuth != null) {
             Firebase menuRef = new Firebase(new Constants().getFirebaseUrl() + "/users/" +
-            menuAuth.getUid() + "/trackedMatches");
+                    menuAuth.getUid() + "/trackedMatches");
 
             menuRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -257,7 +257,7 @@ public class MatchDetailActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_favourite_match :
+            case R.id.action_favourite_match:
                 if (favourite) {
                     item.setIcon(R.drawable.ic_star_border_white_24dp);
                     favourite = false;
@@ -283,7 +283,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                                 .setAction("Action", null).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "As we like your tracked matches " +
-                                "to track across multiple devices, you need to log in to track a match",
+                                        "to track across multiple devices, you need to log in to track a match",
                                 Toast.LENGTH_LONG).show();
                     }
 
@@ -304,8 +304,6 @@ public class MatchDetailActivity extends AppCompatActivity {
     private void getMatchId(int id) {
         matchId = id;
     }
-
-
 
 
 }

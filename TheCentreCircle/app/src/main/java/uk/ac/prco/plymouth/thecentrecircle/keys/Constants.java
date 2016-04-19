@@ -10,6 +10,8 @@ public class Constants {
 
     }
 
+    public final String FIREBASE_URL = "https://cwprco304.firebaseio.com";
+
     public String getFirebaseUrl() {
         return "https://cwprco304.firebaseio.com";
     }
