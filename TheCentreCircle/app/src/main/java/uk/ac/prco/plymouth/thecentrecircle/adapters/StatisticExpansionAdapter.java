@@ -25,12 +25,17 @@ public class StatisticExpansionAdapter extends customizedAdapter<StatisticCatego
         super(context);
     }
 
-    public static List<SmartItem> getPreCodeMenu(String[] a, String[] b, String[] c) {
-        List<SmartItem> e = new ArrayList<>();
-        e.add(SmartItem.parent("Wins", "open", DataUtil.getSmallList(a)));
-        e.add(SmartItem.parent("Draws", "open", DataUtil.getSmallList(b)));
-        e.add(SmartItem.parent("Losses", "open", DataUtil.getSmallList(c)));
-        return e;
+    public static List<SmartItem> getPreCodeMenu(String[] a, String[] b, String[] c, String[] d,
+                                                 String[] e, String[] f) {
+        List<SmartItem> smartItemList = new ArrayList<>();
+        smartItemList.add(SmartItem.parent("Wins", "open", DataUtil.getSmallList(a)));
+        smartItemList.add(SmartItem.parent("Draws", "open", DataUtil.getSmallList(b)));
+        smartItemList.add(SmartItem.parent("Losses", "open", DataUtil.getSmallList(c)));
+        smartItemList.add(SmartItem.parent("Goals scored", "open", DataUtil.getSmallList(d)));
+        smartItemList.add(SmartItem.parent("Goals conceded", "open", DataUtil.getSmallList(e)));
+        smartItemList.add(SmartItem.parent("Goals by minute", "open", DataUtil.getSmallList(f)));
+
+        return smartItemList;
     }
 
     @Override

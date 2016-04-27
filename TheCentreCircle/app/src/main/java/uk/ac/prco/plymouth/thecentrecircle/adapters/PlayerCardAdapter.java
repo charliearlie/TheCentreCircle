@@ -79,11 +79,13 @@ public class PlayerCardAdapter extends RecyclerView.Adapter<PlayerCardAdapter.Vi
         playerImage.setImageResource(R.drawable.messi);
         TextView playerName = (TextView) cardView.findViewById(R.id.player_name);
         playerName.setText(players.get(position).getName());
-        ImageView injuryImage = (ImageView) cardView.findViewById(R.id.player_injury);
-        injuryImage.setVisibility(View.GONE);
-        if (players.get(position).getInjured().equals("True")) {
-            injuryImage.setVisibility(View.VISIBLE);
-        }
+        TextView playerApps = (TextView) cardView.findViewById(R.id.player_recycler_apps);
+        TextView playerGoals = (TextView) cardView.findViewById(R.id.player_recycler_goals);
+        TextView playerAssists = (TextView) cardView.findViewById(R.id.player_recycler_assists);
+
+        playerApps.setText(players.get(position).getAppearences());
+        playerGoals.setText(players.get(position).getGoals());
+        playerAssists.setText(players.get(position).getAssists());
 
         cardView.setOnClickListener(new View.OnClickListener() {
 

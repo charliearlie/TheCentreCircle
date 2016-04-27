@@ -7,9 +7,15 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_home"
-        android:title="Home"
+    <item android:id="@+id/action_share"
+        android:title="@string/action_share"
         android:icon="@drawable/zc_share_white_24dp"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom" />
+
+    <item android:id="@+id/action_comments"
+        android:title="View comments on reddit"
+        android:icon="@drawable/reddit_icon"
         android:orderInCategory="1"
         app:showAsAction="ifRoom" />
 

@@ -49,6 +49,8 @@ import java.util.Date;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter;
+import mehdi.sakout.aboutpage.AboutPage;
+import mehdi.sakout.aboutpage.Element;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.DatePickerFragment;
@@ -328,6 +330,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.action_date_picker) {
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getSupportFragmentManager(), "datePicker");
+        } else if (id == R.id.action_about) {
+            
         }
 
         return super.onOptionsItemSelected(item);
@@ -349,9 +353,6 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
                 startActivity(intent);
             } else if (id == R.id.nav_settings) {
-                //TODO: Remove this as it's just so i can get to the team detail quickly.
-                Intent intent = new Intent(MainActivity.this, UserProfileActivity.class);
-                startActivity(intent);
 
             } else if (id == R.id.nav_about) {
                 Toast.makeText(MainActivity.this, "num: " + num, Toast.LENGTH_LONG).show();
@@ -386,7 +387,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
             } else if (id == R.id.nav_about) {
-                Toast.makeText(MainActivity.this, "num: " + num, Toast.LENGTH_LONG).show();
+
 
             } else if (id == R.id.nav_logout) {
                 navigationView.getMenu().clear();
@@ -446,7 +447,7 @@ public class MainActivity extends AppCompatActivity
                         .execute((String) authData.getProviderData().get("profileImageURL"));
             }
         } else {
-            navHeaderTextView.setText("The Centre Circle");
+            navHeaderTextView.setText(getResources().getText(R.string.app_name));
             Picasso.with(getApplicationContext()).load(R.mipmap.ic_centrecircle).into(profilePicture);
         }
 

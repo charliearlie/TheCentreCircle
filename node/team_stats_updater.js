@@ -33,13 +33,13 @@ var http = require('http');
 var firebase = require('firebase')
 var ref = new Firebase('https://cwprco304.firebaseio.com');
 
-for(var i = 0; i < teams4.length; i++) {
+for(var i = 0; i < premTeams.length; i++) {
 
     var options = {
       "method": "GET",
       "hostname": "api.football-api.com",
       "port": null,
-      "path": "/2.0/team/"+ teams4[i] + "?Authorization=565ec012251f932ea4000001465e5017e24b4c3f49c5f59207d768b3"
+      "path": "/2.0/team/"+ premTeams[i] + "?Authorization=565ec012251f932ea4000001465e5017e24b4c3f49c5f59207d768b3"
     };
 
     var req = http.request(options, function (res) {

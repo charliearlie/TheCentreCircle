@@ -27,6 +27,7 @@
             android:layout_marginRight="8dp"
             android:layout_toLeftOf="@id/exp_section_notification_number"
             android:layout_toStartOf="@id/exp_section_notification_number"
+            android:fontFamily="sans-serif-condensed"
             android:gravity="start"
             android:lines="1"
             android:text="sample menu item parent"

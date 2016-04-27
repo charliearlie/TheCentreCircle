@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view_players"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="75dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:layout_marginTop="1dp"
@@ -34,7 +34,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2.2"
+            android:layout_weight="1.4"
             android:text="H. Bellerin"
             android:id="@+id/player_name"
             android:textSize="20sp"
@@ -42,13 +42,77 @@
             android:layout_marginStart="4dp"
             android:layout_gravity="center_vertical" />
 
-        <ImageView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="20dp"
-            android:layout_weight="0.4"
-            android:id="@+id/player_injury"
-            android:src="@drawable/ic_red_cross"
-            android:layout_gravity="center_vertical" />
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:padding="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/player_recycler_apps"
+                    android:fontFamily="sans-serif-condensed"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/player_recycler_apps"
+                    android:text="30"
+                    android:fontFamily="sans-serif-condensed"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/player_recycler_goals"
+                    android:fontFamily="sans-serif-condensed"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/player_recycler_goals"
+                    android:text="12"
+                    android:fontFamily="sans-serif-condensed"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/player_recycler_assists"
+                    android:fontFamily="sans-serif-condensed"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/player_recycler_assists"
+                    android:text="18"
+                    android:fontFamily="sans-serif-condensed"/>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

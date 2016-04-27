@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Centre Circle</string>
+    <string name="app_name">The Centre Circle</string>
 
     <!--Navigation drawer strings -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -57,4 +57,9 @@
     <string name="title_activity_team_detail">TeamDetailActivity</string>
 
     <string name="title_activity_user_profile">UserProfileActivity</string>
+
+
+    <string name="player_recycler_apps">Appearances: </string>
+    <string name="player_recycler_goals">Goals: </string>
+    <string name="player_recycler_assists">Assists: </string>
 </resources>

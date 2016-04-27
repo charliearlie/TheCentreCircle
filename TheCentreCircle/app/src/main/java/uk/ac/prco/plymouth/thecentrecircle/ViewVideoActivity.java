@@ -1,6 +1,7 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
 import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -10,6 +11,9 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
+import android.transition.Explode;
+import android.transition.Slide;
+import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
@@ -18,21 +22,34 @@ import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
 public class ViewVideoActivity extends AppCompatActivity {
-    VideoView videoView;
-    MyMediaController videoController;
+    private VideoView videoView;
+    private MyMediaController videoController;
     private ShareActionProvider shareActionProvider;
-    String videoUrl;
+    private String videoUrl;
+    private String redditPermalink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_video);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Show the Up button in the action bar.
+            Transition exitTrans = new Slide();
+            getWindow().setExitTransition(exitTrans);
+
+            Transition reenterTrans = new Slide();
+            getWindow().setReenterTransition(reenterTrans);
+        }
+
+
+
         //Retrieve the videos domain from the intent
         String domain = getIntent().getStringExtra("domain");
 
         //Retrieve the full url
         videoUrl = getIntent().getStringExtra("url");
+        redditPermalink = getIntent().getStringExtra("redditComments");
 
         setupActionBar();
 
@@ -87,6 +104,14 @@ public class ViewVideoActivity extends AppCompatActivity {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setupTransitionAnimations() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Show the Up button in the action bar.
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -105,12 +130,25 @@ public class ViewVideoActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        } else if (id == R.id.action_home) {
+        } else if (id == R.id.action_share) {
             //Sharing intent which allows the user to share the video URL
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             sharingIntent.putExtra(Intent.EXTRA_TEXT, videoUrl);
             startActivity(Intent.createChooser(sharingIntent, "Share via"));
+        } else if (id == R.id.action_comments) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(ViewVideoActivity.this);
+                Intent intent = new Intent(ViewVideoActivity.this, RedditCommentsWebViewActivity.class);
+                intent.putExtra("redditPermalink", redditPermalink);
+                startActivity(intent, options.toBundle());
+            } else {
+                Intent intent = new Intent(ViewVideoActivity.this, RedditCommentsWebViewActivity.class);
+                intent.putExtra("redditPermalink", redditPermalink);
+                startActivity(intent);
+            }
+
+
         }
 
         return super.onOptionsItemSelected(item);

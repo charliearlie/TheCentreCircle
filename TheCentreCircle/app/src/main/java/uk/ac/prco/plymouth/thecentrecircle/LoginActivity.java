@@ -57,6 +57,8 @@ import com.facebook.FacebookSdk;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
+import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -69,7 +71,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    Firebase ref = new Firebase("https://cwprco304.firebaseio.com");
+    Firebase ref = new Firebase(new Constants().FIREBASE_URL);
 
     LoginButton loginButton;
     private CallbackManager callbackManager;
@@ -174,6 +176,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
+
+    /**
+     * Method which reads the users phone contacts if they grant the permission.
+     * This is to retireve their own email address to make logging in quicker
+     * @return Boolean value depicting whether the user granted the permission or not
+     */
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return true;

@@ -48,4 +48,5 @@ dependencies {
     compile 'com.firebaseui:firebase-ui:0.3.1'
     compile 'jp.wasabeef:recyclerview-animators:2.2.1'
     compile 'com.hkm.ui:ultimaterecyclerview:0.5.0'
+    compile 'com.github.medyo:android-about-page:1.0.3'
 }
