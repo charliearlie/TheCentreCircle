@@ -1,10 +1,15 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.transition.Slide;
+import android.transition.Transition;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,7 +31,7 @@ import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 public class VideoListActivity extends AppCompatActivity {
 
-
+    private Toolbar toolbar;
     ArrayList<JSONObject> videos = new ArrayList<>();
     ListView listView;
 
@@ -35,12 +40,33 @@ public class VideoListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_list);
+        // add back arrow to toolbar
+        setupActionBar();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Show the Up button in the action bar.
+            Transition exitTrans = new Slide();
+            getWindow().setExitTransition(exitTrans);
+
+            Transition reenterTrans = new Slide();
+            getWindow().setReenterTransition(reenterTrans);
+        }
         RedditEndPoints rep = new RedditEndPoints();
         try {
             //Retrieve videos which are 'hot' from reddit.com/r/soccer
             new RetrieveRedditVideos().execute(rep.getSoccerTopMonth());
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Set up the {@link android.app.ActionBar}, if the API is available.
+     **/
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void setupActionBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            // Show the Up button in the action bar.
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 

@@ -1,44 +1,40 @@
-package uk.ac.prco.plymouth.thecentrecircle;
+package uk.ac.prco.plymouth.thecentrecircle.fragments;
 
-import android.annotation.TargetApi;
+
 import android.content.Intent;
-import android.os.Build;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
+import uk.ac.prco.plymouth.thecentrecircle.MatchDetailTabbedActivity;
+import uk.ac.prco.plymouth.thecentrecircle.R;
+import uk.ac.prco.plymouth.thecentrecircle.TeamDetailActivity;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
-import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Team;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
-public class MatchDetailActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class MatchDetailInfoFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
 
@@ -49,40 +45,35 @@ public class MatchDetailActivity extends AppCompatActivity {
 
     private int matchId = 0;
 
-    Firebase mainRef = new Firebase(new Constants().getFirebaseUrl());
 
-    private AuthData authData;
+    public MatchDetailInfoFragment() {
+        // Required empty public constructor
+    }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        finish();
-//    }
-
-    public static final int EXTRA_MATCHID = 0;
-    public static final ArrayList<Match> EXTRA_MATCHES = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_match_detail);
-        setupActionBar();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_match_detail_info, container, false);
+    }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.event_recycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+    @Override
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.event_recycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
 
         //Retrieve the date in format DDMMYYYY
         String date = new CCUtilities().getStringDate();
 
         final Constants cons = new Constants();
+        final Bundle args = getArguments();
 
-        String firebaseRef = getIntent().getStringExtra("matchDate");
-        String matchDate = getDateFirebase(firebaseRef);
-        int matchId = getIntent().getIntExtra("matchId", 1);
+        String matchDate = args.getString("matchDate");
+        int matchId = args.getInt("matchId");
         //Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
         Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/" + matchDate);
-        System.out.println(firebaseRef);
         Firebase matchRef = ref.child(String.valueOf(matchId));
 
         //final Firebase matchRef = new Firebase(cons.getFirebaseUrl() + "/premierleague/matches/" + match.getMatchId());
@@ -105,17 +96,17 @@ public class MatchDetailActivity extends AppCompatActivity {
                 String venue = dataSnapshot.child("venue").getValue(String.class);
                 int retrievedMatchId = dataSnapshot.child("matchId").getValue(int.class);
                 getMatchId(retrievedMatchId);
-                TextView homeTeamTextView = (TextView) findViewById(R.id.detail_home_team);
+                TextView homeTeamTextView = (TextView) view.findViewById(R.id.detail_home_team);
                 homeTeamTextView.setText(homeTeam);
-                TextView awayTeamTextView = (TextView) findViewById(R.id.detail_away_team);
+                TextView awayTeamTextView = (TextView) view.findViewById(R.id.detail_away_team);
                 awayTeamTextView.setText(awayTeam);
-                final TextView homeScoreTextView = (TextView) findViewById(R.id.detail_home_score);
+                final TextView homeScoreTextView = (TextView) view.findViewById(R.id.detail_home_score);
                 homeScoreTextView.setText(homeScore);
-                final TextView awayScoreTextView = (TextView) findViewById(R.id.detail_away_score);
+                final TextView awayScoreTextView = (TextView) view.findViewById(R.id.detail_away_score);
                 awayScoreTextView.setText(awayScore);
-                TextView matchStatusTextView = (TextView) findViewById(R.id.detail_match_status);
+                TextView matchStatusTextView = (TextView) view.findViewById(R.id.detail_match_status);
                 matchStatusTextView.setText(matchStatus);
-                TextView matchVenueTextView = (TextView) findViewById(R.id.match_detail_stadium);
+                TextView matchVenueTextView = (TextView) view.findViewById(R.id.match_detail_stadium);
                 matchVenueTextView.setText(venue);
 
                 if (competitionId != null) {
@@ -126,8 +117,8 @@ public class MatchDetailActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-                            ImageView im = (ImageView) findViewById(R.id.detail_home_badge);
-                            Picasso.with(getApplicationContext()).load(imageUrl).into(im);
+                            ImageView im = (ImageView) view.findViewById(R.id.detail_home_badge);
+                            Picasso.with(getContext()).load(imageUrl).into(im);
 
                             if (im != null) {
                                 im.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +131,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                                                 Team team = getTeamFromSnapshot(dataSnapshot);
                                                 Bundle bundle = new Bundle();
                                                 bundle.putSerializable("team", team);
-                                                Intent intent = new Intent(MatchDetailActivity.this, TeamDetailActivity.class);
+                                                Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
                                                 intent.putExtras(bundle);
                                                 startActivity(intent);
                                             }
@@ -167,8 +158,8 @@ public class MatchDetailActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-                            ImageView im2 = (ImageView) findViewById(R.id.detail_away_badge);
-                            Picasso.with(getApplicationContext()).load(imageUrl).into(im2);
+                            ImageView im2 = (ImageView) view.findViewById(R.id.detail_away_badge);
+                            Picasso.with(getContext()).load(imageUrl).into(im2);
 
                             if (im2 != null) {
                                 im2.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +172,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                                                 Team team = getTeamFromSnapshot(dataSnapshot);
                                                 Bundle bundle = new Bundle();
                                                 bundle.putSerializable("team", team);
-                                                Intent intent = new Intent(MatchDetailActivity.this, TeamDetailActivity.class);
+                                                Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
                                                 intent.putExtras(bundle);
                                                 startActivity(intent);
                                             }
@@ -203,16 +194,7 @@ public class MatchDetailActivity extends AppCompatActivity {
                     });
 
 
-                } else {
-                    ImageView im = (ImageView) findViewById(R.id.detail_home_badge);
-                    Picasso.with(getApplicationContext()).load(R.drawable.arsenal).into(im);
-
-                    ImageView im2 = (ImageView) findViewById(R.id.detail_away_badge);
-                    Picasso.with(getApplicationContext()).load(R.drawable.arsenal).into(im2);
                 }
-
-
-                System.out.println(homeTeam + new Date());
             }
 
             @Override
@@ -253,99 +235,6 @@ public class MatchDetailActivity extends AppCompatActivity {
 
             }
         });
-
-        authData = mainRef.getAuth();
-//        ImageView homeBadge = (ImageView) findViewById(R.id.detail_home_badge);
-//        ImageView awayBadge = (ImageView) findViewById(R.id.detail_away_badge);
-//
-//        Picasso.with(getApplicationContext()).load(R.drawable.ic_badge_outline).into(homeBadge);
-//        Picasso.with(getApplicationContext()).load(R.drawable.ic_badge_outline).into(awayBadge);
-
-
-    }
-
-    /**
-     * Set up the {@link android.app.ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
-
-    boolean favourite = false;
-
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu) {
-        AuthData menuAuth = mainRef.getAuth();
-
-        if (menuAuth != null) {
-            Firebase menuRef = new Firebase(new Constants().getFirebaseUrl() + "/users/" +
-                    menuAuth.getUid() + "/trackedMatches");
-
-            menuRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        if (String.valueOf(matchId).equals(postSnapshot.getKey())) {
-                            menu.findItem(R.id.action_favourite_match).setIcon(R.drawable.ic_star_white_24dp);
-                            favourite = true;
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-        }
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_match_detail, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_favourite_match:
-                if (favourite) {
-                    item.setIcon(R.drawable.ic_star_border_white_24dp);
-                    favourite = false;
-                    if (authData != null) {
-                        //Add the map to the user's data stored within Firebase
-                        mainRef.child("users").child(authData.getUid()).child("trackedMatches")
-                                .child(String.valueOf(matchId)).removeValue();
-
-                        //Alert the user that the favouriting has been successful
-                        Snackbar.make(getCurrentFocus(), "You have stopped tracking this match",
-                                Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    }
-                } else {
-                    item.setIcon(R.drawable.ic_star_white_24dp);
-                    favourite = true;
-                    if (authData != null) {
-                        //Add the map to the user's data stored within Firebase
-                        mainRef.child("users").child(authData.getUid()).child("trackedMatches")
-                                .child(String.valueOf(matchId)).setValue(true);
-
-                        //Alert the user that the favouriting has been successful
-                        Snackbar.make(getCurrentFocus(), "You have started tracking this match", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "As we like your tracked matches " +
-                                        "to track across multiple devices, you need to log in to track a match",
-                                Toast.LENGTH_LONG).show();
-                    }
-
-                }
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private String getDateFirebase(String date) {
@@ -380,6 +269,5 @@ public class MatchDetailActivity extends AppCompatActivity {
 
         return team;
     }
-
 
 }

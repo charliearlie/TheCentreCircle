@@ -62,7 +62,18 @@
             android:name=".AllCompetitionsActivity"
             android:label="Nations"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".VideoListActivity" />
+        <activity android:name=".VideoListActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uk.ac.prco.plymouth.thecentrecircle.MainActivity" />
+        </activity>
+        <activity android:name=".ViewVideoActivity"
+            android:parentActivityName=".VideoListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uk.ac.prco.plymouth.thecentrecircle.VideoListActivity" />
+        </activity>
         <activity
             android:name=".CompetitionTabbedActivity"
             android:label="@string/title_activity_competition_tabbed"
@@ -72,13 +83,21 @@
             android:name=".FavouriteCompetitionsActivity"
             android:label="Favourite Competitions"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".ViewVideoActivity" />
         <activity android:name=".TeamDetailActivity" />
         <activity
             android:name=".UserProfileActivity"
             android:label="@string/title_activity_user_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".RedditCommentsWebViewActivity" />
+        <activity
+            android:name=".MatchDetailTabbedActivity"
+            android:label="@string/title_activity_match_detail_tabbed"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="uk.ac.prco.plymouth.thecentrecircle.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

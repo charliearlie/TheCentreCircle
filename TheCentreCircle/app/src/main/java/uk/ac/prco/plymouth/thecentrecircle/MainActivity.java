@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
 
 
         final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
-        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/13042016");
+        //final Firebase todaysMatchesRef = new Firebase(cons.getFirebaseUrl() + "/matches/28042016");
 
         //DrawerLayout settings for the navigation drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(int position) {
                         Match detailedMatch = matches.get(position);
-                        Intent intent = new Intent(MainActivity.this, MatchDetailActivity.class);
+                        Intent intent = new Intent(MainActivity.this, MatchDetailTabbedActivity.class);
                         intent.putExtra("matchId", detailedMatch.getMatchId());
                         intent.putExtra("matchDate", detailedMatch.getDate());
                         startActivity(intent);
@@ -331,7 +331,11 @@ public class MainActivity extends AppCompatActivity
             DialogFragment newFragment = new DatePickerFragment();
             newFragment.show(getSupportFragmentManager(), "datePicker");
         } else if (id == R.id.action_about) {
-            
+            Match detailedMatch = matches.get(1);
+            Intent intent = new Intent(MainActivity.this, MatchDetailTabbedActivity.class);
+            intent.putExtra("matchId", detailedMatch.getMatchId());
+            intent.putExtra("matchDate", detailedMatch.getDate());
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

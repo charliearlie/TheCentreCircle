@@ -62,4 +62,5 @@
     <string name="player_recycler_apps">Appearances: </string>
     <string name="player_recycler_goals">Goals: </string>
     <string name="player_recycler_assists">Assists: </string>
+    <string name="title_activity_match_detail_tabbed">MatchDetailTabbedActivity</string>
 </resources>
