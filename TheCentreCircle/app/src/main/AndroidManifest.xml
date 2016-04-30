@@ -93,7 +93,8 @@
             android:name=".MatchDetailTabbedActivity"
             android:label="@string/title_activity_match_detail_tabbed"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:launchMode="singleTask">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="uk.ac.prco.plymouth.thecentrecircle.MainActivity" />

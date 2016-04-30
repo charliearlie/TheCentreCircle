@@ -1,7 +1,6 @@
 package uk.ac.prco.plymouth.thecentrecircle.fragments;
 
 
-import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,41 +18,28 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.concurrent.Exchanger;
 
 import uk.ac.prco.plymouth.thecentrecircle.R;
-import uk.ac.prco.plymouth.thecentrecircle.adapters.LineupAdapter;
-import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MatchLineupsFragment extends Fragment {
-    private RecyclerView mRecyclerView;
-    private ProgressDialog progressDialog;
-
-    ArrayList<String> events = new ArrayList<>();
-    private ArrayList<Event> matchEvents = new ArrayList<>();
-
+public class MatchDetailStatisticFragment extends Fragment {
     private Constants consts = new Constants();
 
     private int matchId;
 
 
-    public MatchLineupsFragment() {
+    public MatchDetailStatisticFragment() {
         // Required empty public constructor
     }
 
@@ -62,14 +48,11 @@ public class MatchLineupsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_match_lineups, container, false);
+        return inflater.inflate(R.layout.fragment_match_detail_statistic, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.lineup_recycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(layoutManager);
 
         final Bundle args = getArguments();
         matchId = args.getInt("matchId");
@@ -84,15 +67,14 @@ public class MatchLineupsFragment extends Fragment {
 
         String url = builder.build().toString();
 
-        new RetrieveTeamLineup().execute(url);
+        new RetrieveStatistics().execute(url);
 
     }
 
-    public class RetrieveTeamLineup extends AsyncTask<String, Void, ArrayList<JSONArray>> {
+    public class RetrieveStatistics extends AsyncTask<String, Void, ArrayList<JSONArray>> {
 
         @Override
         protected ArrayList<JSONArray> doInBackground(String... params) {
-
             JSONObject jsonObject;
             JSONArray localTeamJSONArray= new JSONArray();
             JSONArray visitorTeamJSONArray = new JSONArray();
@@ -113,7 +95,7 @@ public class MatchLineupsFragment extends Fragment {
                 String returned = new CCUtilities().readAllJson(bufferedReader);
 
                 jsonObject = new JSONObject(returned);
-                jsonObject = jsonObject.getJSONObject("lineup");
+                jsonObject = jsonObject.getJSONObject("match_stats");
                 localTeamJSONArray = jsonObject.getJSONArray("localteam");
                 visitorTeamJSONArray = jsonObject.getJSONArray("visitorteam");
 
@@ -133,23 +115,34 @@ public class MatchLineupsFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(ArrayList<JSONArray> teams) {
-            super.onPostExecute(teams);
-            if (teams != null) {
-                JSONArray homeArray = teams.get(0);
-                JSONArray awayArray = teams.get(1);
+        protected void onPostExecute(ArrayList<JSONArray> jsonArrays) {
 
-                mRecyclerView = (RecyclerView) getView().findViewById(R.id.lineup_recycler);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                LineupAdapter lineupAdapter = new LineupAdapter(teams);
-                mRecyclerView.setAdapter(lineupAdapter);
-            } else {
-                TextView noLineupsAvailable = (TextView) getView().findViewById(R.id.no_lineups_available);
-                noLineupsAvailable.setVisibility(View.VISIBLE);
-                noLineupsAvailable.setText("No lineups available");
+            super.onPostExecute(jsonArrays);
+
+            if (jsonArrays != null) {
+                try {
+                    JSONArray homeArray = jsonArrays.get(0);
+                    JSONArray awayArray = jsonArrays.get(1);
+                    JSONObject homeStats = homeArray.getJSONObject(0);
+                    JSONObject awayStats = awayArray.getJSONObject(0);
+
+                    if (getView() != null) {
+                        View view = getView();
+
+                        TextView homeShotsTextView = (TextView) view.findViewById(R.id.shots_total_home);
+                        TextView awayShotsTextView = (TextView) view.findViewById(R.id.shots_total_away);
+                        homeShotsTextView.setText(homeStats.getString("shots_total"));
+                        awayShotsTextView.setText(awayStats.getString("shots_total"));
+
+                        TextView homeShotsOnTargetTextView = (TextView) view.findViewById(R.id.shots_on_target_home);
+                        TextView awayShotsOnTargetTextView = (TextView) view.findViewById(R.id.shots_on_target_away);
+                    }
+
+                } catch (JSONException ex) {
+                    ex.printStackTrace();
+                }
             }
-
-
         }
     }
+
 }

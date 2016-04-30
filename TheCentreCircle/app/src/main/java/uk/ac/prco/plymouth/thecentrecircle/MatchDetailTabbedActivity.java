@@ -2,7 +2,6 @@ package uk.ac.prco.plymouth.thecentrecircle;
 
 import android.annotation.TargetApi;
 import android.os.Build;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -34,17 +33,14 @@ import java.util.ArrayList;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.MatchDetailInfoFragment;
+import uk.ac.prco.plymouth.thecentrecircle.fragments.MatchDetailStatisticFragment;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.MatchLineupsFragment;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
+/**
+ * Activity which contains three fragments displaying match info, lineups and statistics
+ */
 public class MatchDetailTabbedActivity extends AppCompatActivity {
-
-    private RecyclerView mRecyclerView;
-
-    private MatchEventAdapter matchEventAdapter;
-
-    ArrayList<String> events = new ArrayList<>();
-    private ArrayList<Event> matchEvents = new ArrayList<>();
 
     Firebase mainRef = new Firebase(new Constants().getFirebaseUrl());
 
@@ -62,6 +58,7 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * TODO:Analyse resources being used to see if FragmentStatePagerAdapter is more useful
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -79,6 +76,7 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setupActionBar();
+        setTitle("Match details");
 
         String firebaseRef = getIntent().getStringExtra("matchDate");
         matchDate = getDateFirebase(firebaseRef);
@@ -93,9 +91,12 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container_match);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        //Set up Tab Layout with the view pager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_match);
         tabLayout.setupWithViewPager(mViewPager);
 
+        //See if a user is authorised
         authData = mainRef.getAuth();
 
     }
@@ -104,16 +105,18 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        AuthData menuAuth = mainRef.getAuth();
+        //AuthData menuAuth = mainRef.getAuth();
 
-        if (menuAuth != null) {
+        if (authData != null) {
             Firebase menuRef = new Firebase(new Constants().getFirebaseUrl() + "/users/" +
-                    menuAuth.getUid() + "/trackedMatches");
+                    authData.getUid() + "/trackedMatches");
 
+            //Add listener to detect if user has 'favourited' this match
             menuRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        //If user has favourited match, fill the star icon in as selected
                         if (String.valueOf(matchId).equals(postSnapshot.getKey())) {
                             menu.findItem(R.id.action_favourite_match).setIcon(R.drawable.ic_star_white_24dp);
                             favourite = true;
@@ -140,11 +143,11 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
                     item.setIcon(R.drawable.ic_star_border_white_24dp);
                     favourite = false;
                     if (authData != null) {
-                        //Add the map to the user's data stored within Firebase
+                        //Remove the match from the user's profile
                         mainRef.child("users").child(authData.getUid()).child("trackedMatches")
                                 .child(String.valueOf(matchId)).removeValue();
 
-                        //Alert the user that the favouriting has been successful
+                        //Alert the user that the 'unfavouriting' has been successful
                         Snackbar.make(getCurrentFocus(), "You have stopped tracking this match",
                                 Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
@@ -172,6 +175,11 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
      */
@@ -189,6 +197,8 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
 
         return testDate;
     }
+
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -245,12 +255,14 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
                     tab1.setArguments(bundle);
                     return tab1;
                 case 1:
-
-
-                case 2:
-                    MatchLineupsFragment tab2 = new MatchLineupsFragment();
+                    MatchDetailStatisticFragment tab2 = new MatchDetailStatisticFragment();
                     tab2.setArguments(bundle);
                     return tab2;
+
+                case 2:
+                    MatchLineupsFragment tab3 = new MatchLineupsFragment();
+                    tab3.setArguments(bundle);
+                    return tab3;
 
             }
             return PlaceholderFragment.newInstance(position + 1);

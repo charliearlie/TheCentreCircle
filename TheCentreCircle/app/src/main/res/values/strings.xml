@@ -63,4 +63,13 @@
     <string name="player_recycler_goals">Goals: </string>
     <string name="player_recycler_assists">Assists: </string>
     <string name="title_activity_match_detail_tabbed">MatchDetailTabbedActivity</string>
+
+    <!--Match statistic values-->
+    <string name="statistic_total_shots">Total shots</string>
+    <string name="statistic_total_shots_on_target">Shots on target</string>
+    <string name="statistic_possession">Possession</string>
+    <string name="statistic_corners">Corners</string>
+
+
+
 </resources>

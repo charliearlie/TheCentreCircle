@@ -29,7 +29,6 @@ import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Team;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
-import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +43,6 @@ public class MatchDetailInfoFragment extends Fragment {
     private ArrayList<Event> matchEvents = new ArrayList<>();
 
     private int matchId = 0;
-
 
     public MatchDetailInfoFragment() {
         // Required empty public constructor
@@ -61,26 +59,24 @@ public class MatchDetailInfoFragment extends Fragment {
     @SuppressWarnings("unchecked")
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+        //Initialise the recycler view and set it's layout manager
         mRecyclerView = (RecyclerView) view.findViewById(R.id.event_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
 
-        System.out.println("SAVED INSTANCE STATE: " + savedInstanceState);
+        final Constants consts = new Constants();
 
-        //Retrieve the date in format DDMMYYYY
-        String date = new CCUtilities().getStringDate();
-
-        final Constants cons = new Constants();
+        //Retrieve the arguments from the activity
         final Bundle args = getArguments();
-
         String matchDate = args.getString("matchDate");
         int matchId = args.getInt("matchId");
+
+        //Set the Firebase reference as the match selected
         //Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/" + date);
-        Firebase ref = new Firebase(cons.getFirebaseUrl() + "/matches/" + matchDate);
-        Firebase matchRef = ref.child(String.valueOf(matchId));
+        Firebase ref = new Firebase(consts.FIREBASE_URL + "/matches/" + matchDate);
+        final Firebase matchRef = ref.child(String.valueOf(matchId));
 
-        //final Firebase matchRef = new Firebase(cons.getFirebaseUrl() + "/premierleague/matches/" + match.getMatchId());
-
+        //Add value event listener to update the score and time
         matchRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -88,6 +84,8 @@ public class MatchDetailInfoFragment extends Fragment {
                 if (dataSnapshot.hasChild("homeTeam")) {
                     System.out.println("Home team was in this update " + new Date());
                 }
+
+                //Retrieve match data
                 String homeTeam = dataSnapshot.child("homeTeam").getValue(String.class);
                 String awayTeam = dataSnapshot.child("awayTeam").getValue(String.class);
                 String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
@@ -97,8 +95,8 @@ public class MatchDetailInfoFragment extends Fragment {
                 final String awayTeamId = dataSnapshot.child("awayTeamId").getValue(String.class);
                 String competitionId = dataSnapshot.child("matchCompId").getValue(String.class);
                 String venue = dataSnapshot.child("venue").getValue(String.class);
-                int retrievedMatchId = dataSnapshot.child("matchId").getValue(int.class);
-                getMatchId(retrievedMatchId);
+
+                //Update the text views
                 TextView homeTeamTextView = (TextView) view.findViewById(R.id.detail_home_team);
                 homeTeamTextView.setText(homeTeam);
                 TextView awayTeamTextView = (TextView) view.findViewById(R.id.detail_away_team);
@@ -112,9 +110,10 @@ public class MatchDetailInfoFragment extends Fragment {
                 TextView matchVenueTextView = (TextView) view.findViewById(R.id.match_detail_stadium);
                 matchVenueTextView.setText(venue);
 
+
                 if (competitionId != null) {
-                    Firebase badgeRefHome = new Firebase(cons.getFirebaseUrl() + "/badges/" + homeTeamId);
-                    Firebase badgeRefAway = new Firebase(cons.getFirebaseUrl() + "/badges/" + awayTeamId);
+                    Firebase badgeRefHome = new Firebase(consts.FIREBASE_URL + "/badges/" + homeTeamId);
+                    Firebase badgeRefAway = new Firebase(consts.FIREBASE_URL + "/badges/" + awayTeamId);
 
                     badgeRefHome.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -127,7 +126,7 @@ public class MatchDetailInfoFragment extends Fragment {
                                 im.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Firebase teamRef = new Firebase(cons.FIREBASE_URL + "/teams/" + homeTeamId);
+                                        Firebase teamRef = new Firebase(consts.FIREBASE_URL + "/teams/" + homeTeamId);
                                         teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -168,7 +167,7 @@ public class MatchDetailInfoFragment extends Fragment {
                                 im2.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Firebase teamRef = new Firebase(cons.FIREBASE_URL + "/teams/" + awayTeamId);
+                                        Firebase teamRef = new Firebase(consts.FIREBASE_URL + "/teams/" + awayTeamId);
                                         teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -197,6 +196,9 @@ public class MatchDetailInfoFragment extends Fragment {
                     });
 
 
+                }
+                if (getActivity() == null) {
+                    matchRef.removeEventListener(this);
                 }
             }
 
@@ -267,10 +269,6 @@ public class MatchDetailInfoFragment extends Fragment {
                 + date.charAt(6) + date.charAt(7) + date.charAt(8) + date.charAt(9);
 
         return testDate;
-    }
-
-    private void getMatchId(int id) {
-        matchId = id;
     }
 
     private Team getTeamFromSnapshot(DataSnapshot dataSnapshot) {

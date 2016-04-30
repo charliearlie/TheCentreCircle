@@ -69,12 +69,12 @@ public class MatchNotificationService extends IntentService {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_centrecircle);
 
         //Build the intent to open the match detail activity form the notification
-        Intent intent = new Intent(this, MatchDetailActivity.class);
+        Intent intent = new Intent(this, MatchDetailTabbedActivity.class);
         intent.putExtra("matchId", match.getMatchId());
         intent.putExtra("matchDate", match.getDate());
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MatchDetailActivity.class);
+        stackBuilder.addParentStack(MatchDetailTabbedActivity.class);
         stackBuilder.addNextIntent(intent);
         PendingIntent pendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
