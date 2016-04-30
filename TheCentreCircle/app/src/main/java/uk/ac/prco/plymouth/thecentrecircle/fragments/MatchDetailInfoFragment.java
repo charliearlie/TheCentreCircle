@@ -40,7 +40,7 @@ public class MatchDetailInfoFragment extends Fragment {
 
     private MatchEventAdapter matchEventAdapter;
 
-    ArrayList<String> events = new ArrayList<>();
+    private ArrayList<String> events = new ArrayList<>();
     private ArrayList<Event> matchEvents = new ArrayList<>();
 
     private int matchId = 0;
@@ -58,11 +58,14 @@ public class MatchDetailInfoFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_match_detail_info, container, false);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.event_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(layoutManager);
+
+        System.out.println("SAVED INSTANCE STATE: " + savedInstanceState);
 
         //Retrieve the date in format DDMMYYYY
         String date = new CCUtilities().getStringDate();
@@ -203,38 +206,60 @@ public class MatchDetailInfoFragment extends Fragment {
             }
         });
 
-        Firebase eventRef = matchRef.child("events");
 
-        eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                events.clear();
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    String eventAssist = postSnapshot.child("eventAssist").getValue(String.class);
-                    String eventAssistId = postSnapshot.child("eventAssistId").getValue(String.class);
-                    String eventExtraMin = postSnapshot.child("eventExtraMin").getValue(String.class);
-                    String eventId = postSnapshot.child("eventId").getValue(String.class);
-                    String eventMinute = postSnapshot.child("eventMinute").getValue(String.class);
-                    String eventPlayer = postSnapshot.child("eventPlayer").getValue(String.class);
-                    String eventPlayerId = postSnapshot.child("eventplayerId").getValue(String.class);
-                    String eventTeam = postSnapshot.child("eventTeam").getValue(String.class);
-                    String eventType = postSnapshot.child("eventType").getValue(String.class);
-                    Event event = new Event(eventAssist, eventAssistId, eventExtraMin, eventId,
-                            eventMinute, eventPlayer, eventPlayerId, eventTeam, eventType);
-                    matchEvents.add(event);
-                    events.add(event.getEventType() + " : " + event.getEventPlayer() + " ('" + event.getEventMinute()
-                            + ")");
+        /**
+         * This would avoid the events being up to date when returning from another tab but
+         * it would prevent us connecting to Firebase and refilling the matchEvents every single time
+         * the tab is returned too.
+         * May be removed..
+         */
+        if (matchEvents.size() < 1) {
+            Firebase eventRef = matchRef.child("events");
+            eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    matchEvents.clear();
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        String eventAssist = postSnapshot.child("eventAssist").getValue(String.class);
+                        String eventAssistId = postSnapshot.child("eventAssistId").getValue(String.class);
+                        String eventExtraMin = postSnapshot.child("eventExtraMin").getValue(String.class);
+                        String eventId = postSnapshot.child("eventId").getValue(String.class);
+                        String eventMinute = postSnapshot.child("eventMinute").getValue(String.class);
+                        String eventPlayer = postSnapshot.child("eventPlayer").getValue(String.class);
+                        String eventPlayerId = postSnapshot.child("eventplayerId").getValue(String.class);
+                        String eventTeam = postSnapshot.child("eventTeam").getValue(String.class);
+                        String eventType = postSnapshot.child("eventType").getValue(String.class);
+                        Event event = new Event(eventAssist, eventAssistId, eventExtraMin, eventId,
+                                eventMinute, eventPlayer, eventPlayerId, eventTeam, eventType);
+                        matchEvents.add(event);
+//                        events.add(event.getEventType() + " : " + event.getEventPlayer() + " ('" + event.getEventMinute()
+//                                + ")");
+                    }
+
+                    matchEventAdapter = new MatchEventAdapter(matchEvents);
+                    mRecyclerView.setAdapter(matchEventAdapter);
                 }
 
-                matchEventAdapter = new MatchEventAdapter(matchEvents);
-                mRecyclerView.setAdapter(matchEventAdapter);
-            }
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+                }
+            });
+        } else {
+            matchEventAdapter = new MatchEventAdapter(matchEvents);
+            mRecyclerView.setAdapter(matchEventAdapter);
+        }
 
-            }
-        });
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putSerializable("events", matchEvents);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     private String getDateFirebase(String date) {

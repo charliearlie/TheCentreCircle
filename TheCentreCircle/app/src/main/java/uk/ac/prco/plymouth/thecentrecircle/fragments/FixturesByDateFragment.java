@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import uk.ac.prco.plymouth.thecentrecircle.MainActivity;
 import uk.ac.prco.plymouth.thecentrecircle.MatchDetailActivity;
+import uk.ac.prco.plymouth.thecentrecircle.MatchDetailTabbedActivity;
 import uk.ac.prco.plymouth.thecentrecircle.R;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
@@ -106,7 +107,7 @@ public class FixturesByDateFragment extends Fragment {
                     @Override
                     public void onClick(int position) {
                         Match detailedMatch = matches.get(position);
-                        Intent intent = new Intent(getActivity(), MatchDetailActivity.class);
+                        Intent intent = new Intent(getActivity(), MatchDetailTabbedActivity.class);
                         intent.putExtra("matchId", detailedMatch.getMatchId());
                         intent.putExtra("matchDate", detailedMatch.getDate());
                         startActivity(intent);

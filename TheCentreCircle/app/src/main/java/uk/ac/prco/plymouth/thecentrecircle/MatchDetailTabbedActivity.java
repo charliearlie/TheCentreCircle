@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.MatchDetailInfoFragment;
+import uk.ac.prco.plymouth.thecentrecircle.fragments.MatchLineupsFragment;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
 public class MatchDetailTabbedActivity extends AppCompatActivity {
@@ -245,9 +246,11 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
                     return tab1;
                 case 1:
 
-                case 2:
 
-                case 3:
+                case 2:
+                    MatchLineupsFragment tab2 = new MatchLineupsFragment();
+                    tab2.setArguments(bundle);
+                    return tab2;
 
             }
             return PlaceholderFragment.newInstance(position + 1);

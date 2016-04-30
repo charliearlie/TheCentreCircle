@@ -4,10 +4,28 @@
     android:layout_height="match_parent"
     tools:context="uk.ac.prco.plymouth.thecentrecircle.fragments.MatchLineupsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/lineup_recycler"
+        android:scrollbars="vertical"
+        android:layout_marginTop="22dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/no_lineups_available"
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Accents in player names are not formatted because of the API"
+        android:id="@+id/textView2"
+        android:layout_gravity="left|top" />
 
 </FrameLayout>
