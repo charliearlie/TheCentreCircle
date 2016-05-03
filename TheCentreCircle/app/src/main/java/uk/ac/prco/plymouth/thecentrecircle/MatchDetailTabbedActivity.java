@@ -81,20 +81,27 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
         String firebaseRef = getIntent().getStringExtra("matchDate");
         matchDate = getDateFirebase(firebaseRef);
         matchId = getIntent().getIntExtra("matchId", 1);
-        bundle.putString("matchDate", matchDate);
-        bundle.putInt("matchId", matchId);
+        bundle.putString("matchDate", getDateFirebase(firebaseRef));
+        bundle.putInt("matchId", getIntent().getIntExtra("matchId", 1));
+        bundle.putString("matchHomeName", getIntent().getStringExtra("matchHomeName"));
+        bundle.putString("matchAwayName", getIntent().getStringExtra("matchAwayName"));
+        bundle.putString("matchStatus", getIntent().getStringExtra("matchStatus"));
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container_match);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        //Set up Tab Layout with the view pager
+        mViewPager = (ViewPager) findViewById(R.id.container_match);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_match);
-        tabLayout.setupWithViewPager(mViewPager);
+        if (mViewPager != null) {
+            // Set up the ViewPager with the sections adapter.
+            mViewPager.setAdapter(mSectionsPagerAdapter);
+            if(tabLayout != null) {
+                //Set up Tab Layout with the view pager
+                tabLayout.setupWithViewPager(mViewPager);
+            }
+        }
 
         //See if a user is authorised
         authData = mainRef.getAuth();

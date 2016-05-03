@@ -11,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,8 +38,6 @@ import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 public class MatchDetailStatisticFragment extends Fragment {
     private Constants consts = new Constants();
 
-    private int matchId;
-
 
     public MatchDetailStatisticFragment() {
         // Required empty public constructor
@@ -53,9 +53,16 @@ public class MatchDetailStatisticFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        int matchId;
+        String homeTeamName;
+        String awayTeamName;
+        String matchStatus;
 
         final Bundle args = getArguments();
         matchId = args.getInt("matchId");
+        homeTeamName = args.getString("matchHomeName");
+        awayTeamName = args.getString("matchAwayName");
+        matchStatus = args.getString("matchStatus");
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http")
@@ -67,7 +74,27 @@ public class MatchDetailStatisticFragment extends Fragment {
 
         String url = builder.build().toString();
 
-        new RetrieveStatistics().execute(url);
+        TextView homeTeamNameTextView = (TextView) view.findViewById(R.id.home_name_statistic_header);
+        homeTeamNameTextView.setText(homeTeamName);
+        TextView awayTeamNameTextView = (TextView) view.findViewById(R.id.away_name_statistic_header);
+        awayTeamNameTextView.setText(awayTeamName);
+
+        if (!matchStatus.contains(":") && !matchStatus.equals("postp.")) {
+            new RetrieveStatistics().execute(url);
+            Toast.makeText(getContext(), "This match has been played", Toast.LENGTH_LONG).show();
+        } else {
+            TextView noStatsTextView = (TextView) view.findViewById(R.id.stats_not_available);
+            noStatsTextView.setVisibility(View.VISIBLE);
+            LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.match_statistic_view);
+            for ( int i = 1; i < linearLayout.getChildCount();  i++ ){
+                View childView = linearLayout.getChildAt(i);
+                System.out.println("child: " + childView);
+                childView.setVisibility(View.GONE);
+            }
+
+        }
+
+
 
     }
 
@@ -148,6 +175,26 @@ public class MatchDetailStatisticFragment extends Fragment {
                         TextView awayCornersTextView = (TextView) view.findViewById(R.id.corners_away);
                         homeCornersTextView.setText(homeStats.getString("corners"));
                         awayCornersTextView.setText(awayStats.getString("corners"));
+
+                        TextView homeOffsidesTextView = (TextView) view.findViewById(R.id.offsides_home);
+                        TextView awayOffsidesTextView = (TextView) view.findViewById(R.id.offsides_away);
+                        homeOffsidesTextView.setText(homeStats.getString("offsides"));
+                        awayOffsidesTextView.setText(awayStats.getString("offsides"));
+
+                        TextView homeFoulsTextView = (TextView) view.findViewById(R.id.fouls_home);
+                        TextView awayFoulsTextView = (TextView) view.findViewById(R.id.fouls_away);
+                        homeFoulsTextView.setText(homeStats.getString("fouls"));
+                        awayFoulsTextView.setText(awayStats.getString("fouls"));
+
+                        TextView homeYellowsTextView = (TextView) view.findViewById(R.id.yellow_cards_home);
+                        TextView awayYellowsTextView = (TextView) view.findViewById(R.id.yellow_cards_away);
+                        homeYellowsTextView.setText(homeStats.getString("yellowcards"));
+                        awayYellowsTextView.setText(awayStats.getString("yellowcards"));
+
+                        TextView homeRedsTextView = (TextView) view.findViewById(R.id.red_cards_home);
+                        TextView awayRedsTextView = (TextView) view.findViewById(R.id.red_cards_away);
+                        homeRedsTextView.setText(homeStats.getString("redcards"));
+                        awayRedsTextView.setText(awayStats.getString("redcards "));
 
                     }
 

@@ -110,6 +110,9 @@ public class FixturesByDateFragment extends Fragment {
                         Intent intent = new Intent(getActivity(), MatchDetailTabbedActivity.class);
                         intent.putExtra("matchId", detailedMatch.getMatchId());
                         intent.putExtra("matchDate", detailedMatch.getDate());
+                        intent.putExtra("matchHomeName", detailedMatch.getHomeTeam());
+                        intent.putExtra("matchAwayName", detailedMatch.getAwayTeam());
+                        intent.putExtra("matchStatus", detailedMatch.getMatchStatus());
                         startActivity(intent);
                     }
                 });

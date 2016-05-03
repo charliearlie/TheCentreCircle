@@ -69,6 +69,10 @@
     <string name="statistic_total_shots_on_target">Shots on target</string>
     <string name="statistic_possession">Possession</string>
     <string name="statistic_corners">Corners</string>
+    <string name="statistic_offsides">Offsides</string>
+    <string name="statistic_fouls">Fouls</string>
+    <string name="statistic_yellow_cards">Yellow cards</string>
+    <string name="statistic_red_cards">Red cards</string>
 
 
 

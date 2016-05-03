@@ -53,6 +53,8 @@ public class MatchLineupsFragment extends Fragment {
     private int matchId;
 
 
+
+
     public MatchLineupsFragment() {
         // Required empty public constructor
     }
@@ -73,6 +75,7 @@ public class MatchLineupsFragment extends Fragment {
 
         final Bundle args = getArguments();
         matchId = args.getInt("matchId");
+        String matchStatus = args.getString("matchStatus");
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http")
@@ -84,7 +87,9 @@ public class MatchLineupsFragment extends Fragment {
 
         String url = builder.build().toString();
 
-        new RetrieveTeamLineup().execute(url);
+        if (!matchStatus.contains(":") && !matchStatus.equals("postp.")) {
+            new RetrieveTeamLineup().execute(url);
+        }
 
     }
 
@@ -104,7 +109,7 @@ public class MatchLineupsFragment extends Fragment {
                 URLConnection urlConnection = url.openConnection();
                 urlConnection.setDoInput(true);
                 int lineupAvailable = urlConnection.getInputStream().available();
-                System.out.println(lineupAvailable);
+                System.out.println("apiiiii-" + lineupAvailable);
                 InputStream inputStream = urlConnection.getInputStream();
                 System.out.println("INPUT STREAM: " + inputStream);
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
@@ -135,19 +140,23 @@ public class MatchLineupsFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<JSONArray> teams) {
             super.onPostExecute(teams);
-            if (teams != null) {
-                JSONArray homeArray = teams.get(0);
-                JSONArray awayArray = teams.get(1);
 
-                mRecyclerView = (RecyclerView) getView().findViewById(R.id.lineup_recycler);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                LineupAdapter lineupAdapter = new LineupAdapter(teams);
-                mRecyclerView.setAdapter(lineupAdapter);
-            } else {
-                TextView noLineupsAvailable = (TextView) getView().findViewById(R.id.no_lineups_available);
-                noLineupsAvailable.setVisibility(View.VISIBLE);
-                noLineupsAvailable.setText("No lineups available");
+            if(getView() != null) {
+                if (teams != null) {
+                    JSONArray homeArray = teams.get(0);
+                    JSONArray awayArray = teams.get(1);
+
+                    mRecyclerView = (RecyclerView) getView().findViewById(R.id.lineup_recycler);
+                    mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                    LineupAdapter lineupAdapter = new LineupAdapter(teams);
+                    mRecyclerView.setAdapter(lineupAdapter);
+                } else {
+                    TextView noLineupsAvailable = (TextView) getView().findViewById(R.id.no_lineups_available);
+                    noLineupsAvailable.setVisibility(View.VISIBLE);
+                    noLineupsAvailable.setText("No lineups available");
+                }
             }
+
 
 
         }

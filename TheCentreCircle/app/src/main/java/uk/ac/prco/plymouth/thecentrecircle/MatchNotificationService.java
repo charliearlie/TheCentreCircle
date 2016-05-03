@@ -72,6 +72,9 @@ public class MatchNotificationService extends IntentService {
         Intent intent = new Intent(this, MatchDetailTabbedActivity.class);
         intent.putExtra("matchId", match.getMatchId());
         intent.putExtra("matchDate", match.getDate());
+        intent.putExtra("matchHomeName", match.getHomeTeam());
+        intent.putExtra("matchAwayName", match.getAwayTeam());
+        intent.putExtra("matchStatus", match.getMatchStatus());
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MatchDetailTabbedActivity.class);

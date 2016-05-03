@@ -2,6 +2,7 @@ package uk.ac.prco.plymouth.thecentrecircle;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -26,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -104,7 +106,6 @@ public class MainActivity extends AppCompatActivity
         //Retrieve the navigation drawer and set it's listener for menu item presses
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
         /*
            Retrieve the header of the nav drawer to set the text view to the user's display name
@@ -233,6 +234,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Method which sets up the recycler view by setting it's layout manager and adapter
+     * Recycler is also set to hidden until all the matches are retrieved
+     */
     private void setUpRecyclerView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.score_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -242,6 +247,10 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setAdapter(adapter);
     }
 
+    /**
+     * Add a single value event listener to retrieve all matches being played today
+     * @param queryRef Firebase query of todays matches ordered by their kick-off time
+     */
     private void fillRecyclerWithTodaysMatches(Query queryRef) {
         queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             /**
@@ -267,6 +276,9 @@ public class MainActivity extends AppCompatActivity
                         Intent intent = new Intent(MainActivity.this, MatchDetailTabbedActivity.class);
                         intent.putExtra("matchId", detailedMatch.getMatchId());
                         intent.putExtra("matchDate", detailedMatch.getDate());
+                        intent.putExtra("matchHomeName", detailedMatch.getHomeTeam());
+                        intent.putExtra("matchAwayName", detailedMatch.getAwayTeam());
+                        intent.putExtra("matchStatus", detailedMatch.getMatchStatus());
                         startActivity(intent);
                     }
                 });
@@ -275,17 +287,25 @@ public class MainActivity extends AppCompatActivity
                 adapter.notifyDataSetChanged();
 
                 //Hide the loading icon and display the list of matches
-                findViewById(R.id.progress_bar).setVisibility(View.GONE);
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
                 mRecyclerView.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                Log.e("Firebase error", firebaseError.getMessage());
             }
         });
     }
 
+    /**
+     * Method which extracts the data from the Friebase snapshot and returns it as a Match object
+     * @param dataSnapshot Snapshot containing all the data retrieved
+     * @return The Match object created from the snapshot data
+     */
     private Match getMatchFromSnapshot(DataSnapshot dataSnapshot) {
         String homeTeam = dataSnapshot.child("homeTeam").getValue(String.class);
         String awayTeam = dataSnapshot.child("awayTeam").getValue(String.class);
@@ -413,7 +433,10 @@ public class MainActivity extends AppCompatActivity
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+
         return true;
     }
 
