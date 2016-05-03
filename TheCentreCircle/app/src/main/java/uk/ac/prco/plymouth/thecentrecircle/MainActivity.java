@@ -61,14 +61,12 @@ import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
     int num = 0;
     //Variables needed for the list to be displayed
     private RecyclerView mRecyclerView;
     private ArrayList<Match> matches = new ArrayList<>();
     private ArrayList<String> favouriteMatches = new ArrayList<>();
     private ScoreCardAdapter adapter;
-
 
     private Constants cons = new Constants(); //Constants such as URLs and API keys
 
@@ -79,12 +77,14 @@ public class MainActivity extends AppCompatActivity
     //Firebase reference to main application URL and 'today's' matches
     final Firebase mainRef = new Firebase(cons.getFirebaseUrl());
 
+    String date = new CCUtilities().getStringDate(); //Get date in string format to get todays matches
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String date = new CCUtilities().getStringDate(); //Get date in string format to get todays matches
+
 
         setTitle("The Centre Circle"); //Set action bar title
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -112,73 +112,9 @@ public class MainActivity extends AppCompatActivity
          */
         View header = navigationView.getHeaderView(0);
 
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.score_recycler);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setVisibility(View.GONE); //Recycler view not visible until ready to display
-        mRecyclerView.setLayoutManager(layoutManager);
-        adapter = new ScoreCardAdapter(matches);
-        mRecyclerView.setAdapter(adapter);
-
-
+        setUpRecyclerView();
         Query queryRef = todaysMatchesRef.orderByChild("matchTime");
-        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            /**
-             * Fills the matches ArrayList with all of 'todays' matches from matchRef URL
-             * @param dataSnapshot
-             */
-            @Override
-            public void onDataChange(final DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                    final ArrayList<Event> events = new ArrayList<Event>();
-                    String homeTeam = postSnapShot.child("homeTeam").getValue(String.class);
-                    String awayTeam = postSnapShot.child("awayTeam").getValue(String.class);
-                    String homeScore = postSnapShot.child("homeScore").getValue(String.class);
-                    String awayScore = postSnapShot.child("awayScore").getValue(String.class);
-                    int matchId = postSnapShot.child("matchId").getValue(int.class);
-                    int homeBadge = postSnapShot.child("homeBadge").getValue(int.class);
-                    int awayBadge = postSnapShot.child("awayBadge").getValue(int.class);
-                    String matchStatus = postSnapShot.child("matchStatus").getValue(String.class);
-                    String competitionId = postSnapShot.child("matchCompId").getValue(String.class);
-                    String homeTeamId = postSnapShot.child("homeTeamId").getValue(String.class);
-                    String awayTeamId = postSnapShot.child("awayTeamId").getValue(String.class);
-                    String date = postSnapShot.child("date").getValue(String.class);
-
-                    Match match = new Match(homeTeam, awayTeam, homeScore, awayScore,
-                            matchId, homeBadge, R.drawable.manutd, matchStatus, events, competitionId,
-                            homeTeamId, awayTeamId, date);
-                    matches.add(match);
-                }
-                adapter.setListener(new ScoreCardAdapter.Listener() {
-
-                    /**
-                     * After the user has pressed a match, the information to retrieve
-                     * further match details is passed to MatchDetailActivity
-                     * @param position
-                     */
-                    @Override
-                    public void onClick(int position) {
-                        Match detailedMatch = matches.get(position);
-                        Intent intent = new Intent(MainActivity.this, MatchDetailTabbedActivity.class);
-                        intent.putExtra("matchId", detailedMatch.getMatchId());
-                        intent.putExtra("matchDate", detailedMatch.getDate());
-                        startActivity(intent);
-                    }
-                });
-
-                //Alert the alphaAdapter that there is new data to be displayed
-                adapter.notifyDataSetChanged();
-
-                //Hide the loading icon and display the list of matches
-                findViewById(R.id.progress_bar).setVisibility(View.GONE);
-                mRecyclerView.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+        fillRecyclerWithTodaysMatches(queryRef);
 
         /*
             AuthStateListener to detect whether a user has now been authorised
@@ -295,6 +231,75 @@ public class MainActivity extends AppCompatActivity
                 }
             });
         }
+    }
+
+    private void setUpRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.score_recycler);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setVisibility(View.GONE); //Recycler view not visible until ready to display
+        mRecyclerView.setLayoutManager(layoutManager);
+        adapter = new ScoreCardAdapter(matches);
+        mRecyclerView.setAdapter(adapter);
+    }
+
+    private void fillRecyclerWithTodaysMatches(Query queryRef) {
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            /**
+             * Fills the matches ArrayList with all of 'todays' matches from matchRef URL
+             * @param dataSnapshot
+             */
+            @Override
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                    Match match = getMatchFromSnapshot(postSnapShot);
+                    matches.add(match);
+                }
+                adapter.setListener(new ScoreCardAdapter.Listener() {
+
+                    /**
+                     * After the user has pressed a match, the information to retrieve
+                     * further match details is passed to MatchDetailActivity
+                     * @param position
+                     */
+                    @Override
+                    public void onClick(int position) {
+                        Match detailedMatch = matches.get(position);
+                        Intent intent = new Intent(MainActivity.this, MatchDetailTabbedActivity.class);
+                        intent.putExtra("matchId", detailedMatch.getMatchId());
+                        intent.putExtra("matchDate", detailedMatch.getDate());
+                        startActivity(intent);
+                    }
+                });
+
+                //Alert the alphaAdapter that there is new data to be displayed
+                adapter.notifyDataSetChanged();
+
+                //Hide the loading icon and display the list of matches
+                findViewById(R.id.progress_bar).setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private Match getMatchFromSnapshot(DataSnapshot dataSnapshot) {
+        String homeTeam = dataSnapshot.child("homeTeam").getValue(String.class);
+        String awayTeam = dataSnapshot.child("awayTeam").getValue(String.class);
+        String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
+        String awayScore = dataSnapshot.child("awayScore").getValue(String.class);
+        int matchId = dataSnapshot.child("matchId").getValue(int.class);
+        String matchStatus = dataSnapshot.child("matchStatus").getValue(String.class);
+        String competitionId = dataSnapshot.child("matchCompId").getValue(String.class);
+        String homeTeamId = dataSnapshot.child("homeTeamId").getValue(String.class);
+        String awayTeamId = dataSnapshot.child("awayTeamId").getValue(String.class);
+        String date = dataSnapshot.child("date").getValue(String.class);
+
+        return new Match(homeTeam, awayTeam, homeScore, awayScore,
+                matchId, 0, 0, matchStatus, null, competitionId, homeTeamId, awayTeamId, date);
     }
 
     /**
@@ -442,8 +447,8 @@ public class MainActivity extends AppCompatActivity
         if (authData != null) {
             if (authData.getProvider().equals("facebook")) {
                 navHeaderTextView.setText((String) authData.getProviderData().get("displayName"));
-                Picasso.with(getApplicationContext()).load((String) authData.getProviderData()
-                        .get("profileImageURL")).into(profilePicture);
+                new DownloadImageTask(profilePicture)
+                        .execute((String) authData.getProviderData().get("profileImageURL"));
             } else {
                 navHeaderTextView = (TextView) header.findViewById(R.id.nav_email);
                 navHeaderTextView.setText((String) authData.getProviderData().get("email"));
@@ -456,6 +461,8 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
+
 
     /**
      * An asynchronous task class to download the user's Facebook profile image in the background

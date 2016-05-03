@@ -191,6 +191,12 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method which breaks a string down to be used with Firebase
+     * This works but I am sure it could be achieved more elegantly
+     * @param date
+     * @return
+     */
     private String getDateFirebase(String date) {
         String testDate = Character.toString(date.charAt(0)) + date.charAt(1) + date.charAt(3) + date.charAt(4)
                 + date.charAt(6) + date.charAt(7) + date.charAt(8) + date.charAt(9);

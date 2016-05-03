@@ -111,92 +111,88 @@ public class MatchDetailInfoFragment extends Fragment {
                 matchVenueTextView.setText(venue);
 
 
-                if (competitionId != null) {
-                    Firebase badgeRefHome = new Firebase(consts.FIREBASE_URL + "/badges/" + homeTeamId);
-                    Firebase badgeRefAway = new Firebase(consts.FIREBASE_URL + "/badges/" + awayTeamId);
 
-                    badgeRefHome.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-                            ImageView im = (ImageView) view.findViewById(R.id.detail_home_badge);
-                            Picasso.with(getContext()).load(imageUrl).into(im);
+                Firebase badgeRefHome = new Firebase(consts.FIREBASE_URL + "/badges/" + homeTeamId);
+                Firebase badgeRefAway = new Firebase(consts.FIREBASE_URL + "/badges/" + awayTeamId);
 
-                            if (im != null) {
-                                im.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Firebase teamRef = new Firebase(consts.FIREBASE_URL + "/teams/" + homeTeamId);
-                                        teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                Team team = getTeamFromSnapshot(dataSnapshot);
-                                                Bundle bundle = new Bundle();
-                                                bundle.putSerializable("team", team);
-                                                Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
-                                                intent.putExtras(bundle);
-                                                startActivity(intent);
-                                            }
+                badgeRefHome.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
+                        ImageView im = (ImageView) view.findViewById(R.id.detail_home_badge);
+                        Picasso.with(getContext()).load(imageUrl).into(im);
 
-                                            @Override
-                                            public void onCancelled(FirebaseError firebaseError) {
+                        if (im != null) {
+                            im.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Firebase teamRef = new Firebase(consts.FIREBASE_URL + "/teams/" + homeTeamId);
+                                    teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Team team = getTeamFromSnapshot(dataSnapshot);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("team", team);
+                                            Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+                                        }
 
-                                            }
-                                        });
-                                    }
-                                });
-                            }
+                                        @Override
+                                        public void onCancelled(FirebaseError firebaseError) {
 
-
+                                        }
+                                    });
+                                }
+                            });
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
 
+                    }
+                });
+
+                badgeRefAway.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
+                        ImageView im2 = (ImageView) view.findViewById(R.id.detail_away_badge);
+                        Picasso.with(getContext()).load(imageUrl).into(im2);
+
+                        if (im2 != null) {
+                            im2.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Firebase teamRef = new Firebase(consts.FIREBASE_URL + "/teams/" + awayTeamId);
+                                    teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Team team = getTeamFromSnapshot(dataSnapshot);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putSerializable("team", team);
+                                            Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
+                                            intent.putExtras(bundle);
+                                            startActivity(intent);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(FirebaseError firebaseError) {
+
+                                        }
+                                    });
+                                }
+                            });
                         }
-                    });
+                    }
 
-                    badgeRefAway.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-                            ImageView im2 = (ImageView) view.findViewById(R.id.detail_away_badge);
-                            Picasso.with(getContext()).load(imageUrl).into(im2);
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
 
-                            if (im2 != null) {
-                                im2.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Firebase teamRef = new Firebase(consts.FIREBASE_URL + "/teams/" + awayTeamId);
-                                        teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                Team team = getTeamFromSnapshot(dataSnapshot);
-                                                Bundle bundle = new Bundle();
-                                                bundle.putSerializable("team", team);
-                                                Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
-                                                intent.putExtras(bundle);
-                                                startActivity(intent);
-                                            }
+                    }
+                });
 
-                                            @Override
-                                            public void onCancelled(FirebaseError firebaseError) {
-
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-
-                        }
-                    });
-
-
-                }
                 if (getActivity() == null) {
                     matchRef.removeEventListener(this);
                 }
@@ -255,22 +251,11 @@ public class MatchDetailInfoFragment extends Fragment {
 
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        savedInstanceState.putSerializable("events", matchEvents);
-
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    private String getDateFirebase(String date) {
-        String testDate = Character.toString(date.charAt(0)) + date.charAt(1) + date.charAt(3) + date.charAt(4)
-                + date.charAt(6) + date.charAt(7) + date.charAt(8) + date.charAt(9);
-
-        return testDate;
-    }
-
+    /**
+     * Method to retrieve a teams information from a data snapshot
+     * @param dataSnapshot
+     * @return
+     */
     private Team getTeamFromSnapshot(DataSnapshot dataSnapshot) {
         String coach_id = dataSnapshot.child("coach_id").getValue(String.class);
         String coach_name = dataSnapshot.child("coach_name").getValue(String.class);

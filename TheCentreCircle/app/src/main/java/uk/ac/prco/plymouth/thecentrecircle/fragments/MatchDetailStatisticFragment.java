@@ -136,6 +136,19 @@ public class MatchDetailStatisticFragment extends Fragment {
 
                         TextView homeShotsOnTargetTextView = (TextView) view.findViewById(R.id.shots_on_target_home);
                         TextView awayShotsOnTargetTextView = (TextView) view.findViewById(R.id.shots_on_target_away);
+                        homeShotsOnTargetTextView.setText(homeStats.getString("shots_ongoal"));
+                        awayShotsOnTargetTextView.setText(awayStats.getString("shots_ongoal"));
+
+                        TextView homePossessionTextView = (TextView) view.findViewById(R.id.possession_home);
+                        TextView awayPossessionTextView = (TextView) view.findViewById(R.id.possession_away);
+                        homePossessionTextView.setText(homeStats.getString("possesiontime"));
+                        awayPossessionTextView.setText(awayStats.getString("possesiontime"));
+
+                        TextView homeCornersTextView = (TextView) view.findViewById(R.id.corners_home);
+                        TextView awayCornersTextView = (TextView) view.findViewById(R.id.corners_away);
+                        homeCornersTextView.setText(homeStats.getString("corners"));
+                        awayCornersTextView.setText(awayStats.getString("corners"));
+
                     }
 
                 } catch (JSONException ex) {
