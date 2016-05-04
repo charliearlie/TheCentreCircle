@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <string name="ga_trackingId">UA-77305025-1</string>
+    <bool name="ga_autoActivityTracking">true</bool>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.MainActivity">Main activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.LoginActivity">Login activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.MatchDetailTabbedActivity">Match activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.RegisterActivity">Register activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.VideoListActivity">Video list activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.ViewVideoActivity">View video activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.UserProfileActivity">User profile activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.TeamDetailActivity">Team detail activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.CompetitionTabbedActivity">Competition activity</screenName>
+    <screenName name="uk.ac.prco.plymouth.thecentrecircle.RedditCommentsWebViewActivity">Reddit comments activity</screenName>
+</resources>

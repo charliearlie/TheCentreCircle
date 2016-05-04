@@ -75,6 +75,7 @@ public class MatchNotificationService extends IntentService {
         intent.putExtra("matchHomeName", match.getHomeTeam());
         intent.putExtra("matchAwayName", match.getAwayTeam());
         intent.putExtra("matchStatus", match.getMatchStatus());
+        intent.setAction("actionstring" + System.currentTimeMillis());
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(MatchDetailTabbedActivity.class);
@@ -92,6 +93,11 @@ public class MatchNotificationService extends IntentService {
                 .setContentText("GOAL! " + match.getHomeTeam() + " " + match.getHomeScore() +
                         " : " + match.getAwayScore() + " " + match.getAwayTeam())
                 .build();
+
+        notification.ledARGB = 0xffff0000;
+        notification.flags = Notification.FLAG_SHOW_LIGHTS;
+        notification.ledOnMS = 1000;
+        notification.ledOffMS = 2000;
 
         Random random = new Random();
         int m = random.nextInt(9999 - 1000) + 1000;
