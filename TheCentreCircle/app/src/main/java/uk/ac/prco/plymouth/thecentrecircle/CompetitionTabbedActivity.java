@@ -29,6 +29,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,13 +45,14 @@ import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
  **/
 public class CompetitionTabbedActivity extends AppCompatActivity
         implements CompetitionTeamListFragment.CompetitionTeamListListener {
-    Constants constants = new Constants();
-    Bundle bundle = new Bundle();
-    String compId;
-    ArrayList<String> favouriteComps = new ArrayList<>();
-    Boolean favourited = false;
-    final Firebase ref = new Firebase(constants.getFirebaseUrl());
-    final AuthData authData = ref.getAuth();
+    private Constants constants = new Constants();
+    private Bundle bundle = new Bundle();
+    private String compId;
+    private String compName;
+    private ArrayList<String> favouriteComps = new ArrayList<>();
+    private Boolean favourited = false;
+    private final Firebase ref = new Firebase(constants.getFirebaseUrl());
+    private final AuthData authData = ref.getAuth();
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -78,6 +81,7 @@ public class CompetitionTabbedActivity extends AppCompatActivity
 
         final Competition competition = (Competition) getIntent().getSerializableExtra("competition");
         compId = String.valueOf(competition.getId());
+        compName = competition.getName();
 
         bundle.putSerializable("competition", competition);
 
@@ -277,6 +281,13 @@ public class CompetitionTabbedActivity extends AppCompatActivity
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Tracker mTracker = ((TheCentreCircle) getApplication()).getTracker();
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Liked competition")
+                            .setAction("User 'favourited' a competition")
+                            .setLabel(compName)
+                            .build());
+                    System.out.println("USER LIKED COMPETITION");
                     //Map for the String object key and Boolean value
                     Map<String, Boolean> map = new HashMap<>();
                     map.put(compId, true);

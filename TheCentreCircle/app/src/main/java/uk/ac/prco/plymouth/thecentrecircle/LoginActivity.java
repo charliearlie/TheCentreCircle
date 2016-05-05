@@ -56,6 +56,8 @@ import java.util.regex.Pattern;
 import com.facebook.FacebookSdk;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 
@@ -411,6 +413,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 @Override
                 public void onAuthenticated(AuthData authData) {
                     System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
+                    Tracker mTracker = ((TheCentreCircle) getApplication()).getTracker();
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Authentication")
+                            .setAction("User logged in with email and password")
+                            .setLabel("What is the label for?")
+                            .build());
                     finish();
                 }
 
@@ -485,6 +493,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 @Override
                 public void onAuthenticated(final AuthData authData) {
+                    Tracker mTracker = ((TheCentreCircle) getApplication()).getTracker();
+                    mTracker.send(new HitBuilders.EventBuilder()
+                            .setCategory("Authentication")
+                            .setAction("User logged in with Facebook")
+                            .setLabel("What is the label for?")
+                            .build());
                     /**
                      * Query to see if the user already exists in the database
                      Facebook login does not contain separate register and login so we must check
