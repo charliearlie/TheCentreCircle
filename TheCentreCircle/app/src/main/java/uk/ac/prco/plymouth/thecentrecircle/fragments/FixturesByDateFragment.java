@@ -20,8 +20,6 @@ import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
-import uk.ac.prco.plymouth.thecentrecircle.MainActivity;
-import uk.ac.prco.plymouth.thecentrecircle.MatchDetailActivity;
 import uk.ac.prco.plymouth.thecentrecircle.MatchDetailTabbedActivity;
 import uk.ac.prco.plymouth.thecentrecircle.R;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;

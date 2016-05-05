@@ -3,7 +3,6 @@ package uk.ac.prco.plymouth.thecentrecircle;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -21,8 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
@@ -281,13 +278,14 @@ public class CompetitionTabbedActivity extends AppCompatActivity
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //Tell Google Analytics that someone liked a competition
                     Tracker mTracker = ((TheCentreCircle) getApplication()).getTracker();
                     mTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Liked competition")
                             .setAction("User 'favourited' a competition")
                             .setLabel(compName)
                             .build());
-                    System.out.println("USER LIKED COMPETITION");
+
                     //Map for the String object key and Boolean value
                     Map<String, Boolean> map = new HashMap<>();
                     map.put(compId, true);

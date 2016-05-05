@@ -1,11 +1,12 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
 import android.annotation.TargetApi;
+import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -27,11 +28,10 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
-import java.util.ArrayList;
-
-import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
-import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.MatchDetailInfoFragment;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.MatchDetailStatisticFragment;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.MatchLineupsFragment;
@@ -50,6 +50,8 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
 
     private String matchDate;
     private int matchId;
+
+    private Toolbar toolbar;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -71,12 +73,12 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_detail_tabbed);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         setupActionBar();
         setTitle("Match details");
+
+
 
         String firebaseRef = getIntent().getStringExtra("matchDate");
         matchDate = getDateFirebase(firebaseRef);
@@ -106,6 +108,17 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
         //See if a user is authorised
         authData = mainRef.getAuth();
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+//        if (isFirstUse()) {
+//            showFavouriteTutorial();
+//        }
+
+        //showFavouriteTutorial();
     }
 
     private boolean favourite = false;
@@ -153,6 +166,7 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
                         //Remove the match from the user's profile
                         mainRef.child("users").child(authData.getUid()).child("trackedMatches")
                                 .child(String.valueOf(matchId)).removeValue();
+
 
                         //Alert the user that the 'unfavouriting' has been successful
                         Snackbar.make(getCurrentFocus(), "You have stopped tracking this match",
@@ -205,10 +219,42 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
      * @return
      */
     private String getDateFirebase(String date) {
-        String testDate = Character.toString(date.charAt(0)) + date.charAt(1) + date.charAt(3) + date.charAt(4)
+        date = Character.toString(date.charAt(0)) + date.charAt(1) + date.charAt(3) + date.charAt(4)
                 + date.charAt(6) + date.charAt(7) + date.charAt(8) + date.charAt(9);
 
-        return testDate;
+        return date;
+    }
+
+    private boolean isFirstUse() {
+        final String PREFS_NAME = "MyPrefsFile";
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        if(settings.getBoolean("match_detail_activity_first_time", true)) {
+            settings.edit().putBoolean("match_detail_activity_first_time", false).apply();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void showFavouriteTutorial() {
+        Target showcaseTarget = new Target() {
+            @Override
+            public Point getPoint() {
+                return new ViewTarget(toolbar.findViewById(R.id.action_favourite_match)).getPoint();
+            }
+        };
+
+        new ShowcaseView.Builder(this)
+                .setTarget(showcaseTarget)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .setContentTitle("Track matches")
+                .setContentText("Tracking matches allows you to receive notifications when" +
+                        " goals are scored")
+                .hideOnTouchOutside()
+                .build();
+
     }
 
 

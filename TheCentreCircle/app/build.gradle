@@ -15,7 +15,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -48,4 +48,5 @@ dependencies {
     compile 'com.hkm.ui:ultimaterecyclerview:0.5.0'
     compile 'com.github.medyo:android-about-page:1.0.3'
     compile 'com.google.android.gms:play-services-analytics:8.4.0'
+    compile 'com.github.amlcurran.showcaseview:library:5.4.3'
 }

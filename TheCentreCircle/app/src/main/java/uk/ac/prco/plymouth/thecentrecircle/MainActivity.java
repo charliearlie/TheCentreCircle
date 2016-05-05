@@ -1,21 +1,18 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -25,7 +22,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,6 +36,11 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 
@@ -49,12 +50,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter;
-import mehdi.sakout.aboutpage.AboutPage;
-import mehdi.sakout.aboutpage.Element;
-import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
+import uk.ac.prco.plymouth.thecentrecircle.classes.Team;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.DatePickerFragment;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
@@ -76,10 +73,16 @@ public class MainActivity extends AppCompatActivity
 
     private NavigationView navigationView;
 
+    private Toolbar toolbar;
+
+    private Team favouriteTeam;
+
+    CCUtilities utils = new CCUtilities();
+
     //Firebase reference to main application URL and 'today's' matches
     final Firebase mainRef = new Firebase(cons.getFirebaseUrl());
 
-    String date = new CCUtilities().getStringDate(); //Get date in string format to get todays matches
+    String date = utils.getStringDate(); //Get date in string format to get todays matches
 
 
     @Override
@@ -90,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 
 
         setTitle("The Centre Circle"); //Set action bar title
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -164,7 +167,6 @@ public class MainActivity extends AppCompatActivity
              */
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 final DataSnapshot ds = dataSnapshot;
-                //System.out.println("DATA CHANGED");
                 int matchId = dataSnapshot.child("matchId").getValue(int.class);
                 int index = findMatchById(matchId);
                 String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
@@ -185,7 +187,6 @@ public class MainActivity extends AppCompatActivity
                                     addOneToNum();
                                     Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
                                     intent.putExtra("match", matches.get(index));
-                                    System.out.println("Notification sent WOOO");
                                     startService(intent);
                                 }
                             }
@@ -204,6 +205,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             public void onCancelled(FirebaseError firebaseError) {
+                sendFirebaseErrorToAnalytics(firebaseError);
             }
         });
     }
@@ -214,6 +216,7 @@ public class MainActivity extends AppCompatActivity
 
         AuthData authData = mainRef.getAuth();
 
+
         if (authData != null) {
             Firebase userRef = mainRef.child("users/" + authData.getUid() + "/trackedMatches");
 
@@ -223,15 +226,33 @@ public class MainActivity extends AppCompatActivity
                     favouriteMatches.clear();
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         favouriteMatches.add(postSnapshot.getKey());
-                        System.out.println(favouriteMatches);
                     }
                 }
 
                 @Override
                 public void onCancelled(FirebaseError firebaseError) {
-
+                    sendFirebaseErrorToAnalytics(firebaseError);
                 }
             });
+        }
+
+
+    }
+
+    /**
+     * Method which detects if this is the first time the user has loaded the application
+     * @return boolean determining whether it is their first time
+     */
+    private boolean isFirstUse() {
+        final String PREFS_NAME = "MyPrefsFile";
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        if(settings.getBoolean("my_first_time_using_app", true)) {
+            settings.edit().putBoolean("my_first_time_using_app", false).apply();
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -261,7 +282,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                    Match match = getMatchFromSnapshot(postSnapShot);
+                    Match match = utils.getMatchFromSnapshot(postSnapShot);
                     matches.add(match);
                 }
                 adapter.setListener(new ScoreCardAdapter.Listener() {
@@ -297,30 +318,9 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.e("Firebase error", firebaseError.getMessage());
+                sendFirebaseErrorToAnalytics(firebaseError);
             }
         });
-    }
-
-    /**
-     * Method which extracts the data from the Friebase snapshot and returns it as a Match object
-     * @param dataSnapshot Snapshot containing all the data retrieved
-     * @return The Match object created from the snapshot data
-     */
-    private Match getMatchFromSnapshot(DataSnapshot dataSnapshot) {
-        String homeTeam = dataSnapshot.child("homeTeam").getValue(String.class);
-        String awayTeam = dataSnapshot.child("awayTeam").getValue(String.class);
-        String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
-        String awayScore = dataSnapshot.child("awayScore").getValue(String.class);
-        int matchId = dataSnapshot.child("matchId").getValue(int.class);
-        String matchStatus = dataSnapshot.child("matchStatus").getValue(String.class);
-        String competitionId = dataSnapshot.child("matchCompId").getValue(String.class);
-        String homeTeamId = dataSnapshot.child("homeTeamId").getValue(String.class);
-        String awayTeamId = dataSnapshot.child("awayTeamId").getValue(String.class);
-        String date = dataSnapshot.child("date").getValue(String.class);
-
-        return new Match(homeTeam, awayTeam, homeScore, awayScore,
-                matchId, 0, 0, matchStatus, null, competitionId, homeTeamId, awayTeamId, date);
     }
 
     /**
@@ -340,6 +340,22 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        if (isFirstUse()) {
+            Target showcaseTarget = new Target() {
+                @Override
+                public Point getPoint() {
+                    return new ViewTarget(toolbar.findViewById(R.id.action_date_picker)).getPoint();
+                }
+            };
+
+            ShowcaseView showcaseView = new ShowcaseView.Builder(this)
+                    .setTarget(showcaseTarget)
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .setContentTitle("View fixtures by date")
+                    .setContentText("Select the calendar to navigate to a different date")
+                    .hideOnTouchOutside()
+                    .build();
+        }
         return true;
     }
 
@@ -403,6 +419,12 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
             } else if (id == R.id.nav_my_team) {
+                getUsersFavouriteTeam();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("team", favouriteTeam);
+                Intent intent = new Intent(MainActivity.this, TeamDetailActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
 
             } else if (id == R.id.nav_my_bets) {
                 Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
@@ -486,6 +508,15 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void sendFirebaseErrorToAnalytics(FirebaseError firebaseError) {
+        Tracker mTracker = ((TheCentreCircle) getApplication()).getTracker();
+        mTracker.send(new HitBuilders.EventBuilder()
+                .setCategory("Firebase error")
+                .setAction(firebaseError.getDetails())
+                .setLabel(firebaseError.getMessage())
+                .build());
+    }
+
 
 
     /**
@@ -517,6 +548,11 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * ---This is currently deprecated---
+     * Return the date as a string
+     * @return the string date properly formatted for Firebase
+     */
     private String getStringDate() {
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         String[] dateArray = date.split("-");
@@ -537,6 +573,11 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setVisibility(mRecyclerView.GONE);
     }
 
+
+    /**
+     * Allows the fixtures by date fragment to set the title on the action bar
+     * @param title
+     */
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
@@ -547,6 +588,57 @@ public class MainActivity extends AppCompatActivity
      */
     public void addOneToNum() {
         num++;
+    }
+
+
+    /**
+     * A method to retrieve the users favourite team and set it to a global variable
+     */
+    public void getUsersFavouriteTeam() {
+
+        //TODO: Stop accessing mainRef.getAuth() in multiple places
+        AuthData authData = mainRef.getAuth();
+
+        //firebase reference to find the ID of the user's favourite team
+        final Firebase favouriteTeamRef = mainRef.child("users/" + authData.getUid() + "/favouriteTeam");
+
+        //Add the event listener
+        favouriteTeamRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            String teamId;
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //Store the id of the user's favourite team in teamId
+                teamId = dataSnapshot.getValue(String.class);
+
+                //Create the query so the team returned has the same ID as the user's favourite
+                Firebase usersTeamRef = mainRef.child("teams");
+                Query teamQuery = usersTeamRef.orderByKey().equalTo(teamId);
+
+                teamQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot teamSnapshot) {
+                        //Retrieve the team from the snapshot
+                        //This currently has to be achieved like this because of the way TeamDetail is
+                        //set up
+                        favouriteTeam = new CCUtilities().getTeamFromSnapshot(teamSnapshot.child(teamId));
+
+                        //Remove the event listener
+                        favouriteTeamRef.removeEventListener(this);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
 }

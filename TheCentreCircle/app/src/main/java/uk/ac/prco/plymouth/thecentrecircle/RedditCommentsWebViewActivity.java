@@ -3,7 +3,6 @@ package uk.ac.prco.plymouth.thecentrecircle;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Explode;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 import uk.ac.prco.plymouth.thecentrecircle.keys.RedditEndPoints;
 
 /**

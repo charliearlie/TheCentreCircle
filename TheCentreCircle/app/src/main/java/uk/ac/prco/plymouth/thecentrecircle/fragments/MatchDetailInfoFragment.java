@@ -2,12 +2,15 @@ package uk.ac.prco.plymouth.thecentrecircle.fragments;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,6 +20,10 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.github.amlcurran.showcaseview.OnShowcaseEventListener;
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,6 +32,7 @@ import java.util.Date;
 import uk.ac.prco.plymouth.thecentrecircle.MatchDetailTabbedActivity;
 import uk.ac.prco.plymouth.thecentrecircle.R;
 import uk.ac.prco.plymouth.thecentrecircle.TeamDetailActivity;
+import uk.ac.prco.plymouth.thecentrecircle.TeamDetailTabbedActivity;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Team;
@@ -44,6 +52,11 @@ public class MatchDetailInfoFragment extends Fragment {
 
     private int matchId = 0;
 
+    boolean firstTimeUse = false;
+
+    ImageView im;
+    ImageView im2;
+
     public MatchDetailInfoFragment() {
         // Required empty public constructor
     }
@@ -52,6 +65,14 @@ public class MatchDetailInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        final String PREFS_NAME = "MyPrefsFile";
+
+        SharedPreferences settings = this.getActivity().getSharedPreferences(PREFS_NAME, 0);
+
+        if(settings.getBoolean("my_first_time", true)) {
+            firstTimeUse = true;
+            settings.edit().putBoolean("my_first_time", false).apply();
+        }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_match_detail_info, container, false);
     }
@@ -80,10 +101,6 @@ public class MatchDetailInfoFragment extends Fragment {
         matchRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //System.out.println(dataSnapshot);
-                if (dataSnapshot.hasChild("homeTeam")) {
-                    System.out.println("Home team was in this update " + new Date());
-                }
 
                 //Retrieve match data
                 String homeTeam = dataSnapshot.child("homeTeam").getValue(String.class);
@@ -119,7 +136,7 @@ public class MatchDetailInfoFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-                        ImageView im = (ImageView) view.findViewById(R.id.detail_home_badge);
+                        im = (ImageView) view.findViewById(R.id.detail_home_badge);
                         Picasso.with(getContext()).load(imageUrl).into(im);
 
                         if (im != null) {
@@ -133,7 +150,7 @@ public class MatchDetailInfoFragment extends Fragment {
                                             Team team = getTeamFromSnapshot(dataSnapshot);
                                             Bundle bundle = new Bundle();
                                             bundle.putSerializable("team", team);
-                                            Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
+                                            Intent intent = new Intent(getActivity(), TeamDetailTabbedActivity.class);
                                             intent.putExtras(bundle);
                                             startActivity(intent);
                                         }
@@ -158,7 +175,7 @@ public class MatchDetailInfoFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String imageUrl = dataSnapshot.child("badgeUrl").getValue(String.class);
-                        ImageView im2 = (ImageView) view.findViewById(R.id.detail_away_badge);
+                        im2 = (ImageView) view.findViewById(R.id.detail_away_badge);
                         Picasso.with(getContext()).load(imageUrl).into(im2);
 
                         if (im2 != null) {
@@ -248,7 +265,16 @@ public class MatchDetailInfoFragment extends Fragment {
             mRecyclerView.setAdapter(matchEventAdapter);
         }
 
+    }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        if (firstTimeUse) {
+            showTutorial(getView());
+        }
     }
 
     /**
@@ -276,6 +302,46 @@ public class MatchDetailInfoFragment extends Fragment {
                 venue_id, venue_name, venue_surface);
 
         return team;
+    }
+
+    private void showTutorial(final View view) {
+
+        Target showcaseTarget = new Target() {
+            @Override
+            public Point getPoint() {
+                return new ViewTarget(view.findViewById(R.id.detail_home_badge)).getPoint();
+            }
+        };
+
+        ShowcaseView showcaseView = new ShowcaseView.Builder(getActivity())
+                .setTarget(showcaseTarget)
+                .setStyle(R.style.CustomShowcaseTheme)
+                .setContentTitle("View team information")
+                .setContentText("Press team badges to view")
+                .hideOnTouchOutside()
+                .build();
+
+        showcaseView.setOnShowcaseEventListener(new OnShowcaseEventListener() {
+            @Override
+            public void onShowcaseViewHide(ShowcaseView showcaseView) {
+
+            }
+
+            @Override
+            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+                ((MatchDetailTabbedActivity)getActivity()).showFavouriteTutorial();
+            }
+
+            @Override
+            public void onShowcaseViewShow(ShowcaseView showcaseView) {
+
+            }
+
+            @Override
+            public void onShowcaseViewTouchBlocked(MotionEvent motionEvent) {
+
+            }
+        });
     }
 
 }

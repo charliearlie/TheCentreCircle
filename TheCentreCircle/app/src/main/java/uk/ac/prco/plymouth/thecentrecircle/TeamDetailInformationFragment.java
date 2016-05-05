@@ -1,6 +1,7 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,6 +41,7 @@ public class TeamDetailInformationFragment extends Fragment {
     private Team team;
     private String teamBadgeUrl;
     Constants cons = new Constants();
+    private ProgressDialog progressDialog;
 
     public TeamDetailInformationFragment() {
         // Required empty public constructor
@@ -119,6 +121,13 @@ public class TeamDetailInformationFragment extends Fragment {
 
     public class retrieveClubInformation extends AsyncTask<String, Void, JSONObject> {
 
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(getContext(), "The Centre Circle", "Loading...", true);
+        }
+
         @Override
         protected JSONObject doInBackground(String... params) {
             JSONObject jsonObject = new JSONObject();
@@ -158,7 +167,7 @@ public class TeamDetailInformationFragment extends Fragment {
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
             View view = getView();
-
+            progressDialog.dismiss();
 
             try {
                 TextView teamInfoTextView = (TextView) view.findViewById(R.id.team_information_wiki);

@@ -6,14 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,20 +76,22 @@ public class MatchDetailStatisticFragment extends Fragment {
         TextView awayTeamNameTextView = (TextView) view.findViewById(R.id.away_name_statistic_header);
         awayTeamNameTextView.setText(awayTeamName);
 
-        if (!matchStatus.contains(":") && !matchStatus.equals("postp.")) {
-            new RetrieveStatistics().execute(url);
-            Toast.makeText(getContext(), "This match has been played", Toast.LENGTH_LONG).show();
-        } else {
-            TextView noStatsTextView = (TextView) view.findViewById(R.id.stats_not_available);
-            noStatsTextView.setVisibility(View.VISIBLE);
-            LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.match_statistic_view);
-            for ( int i = 1; i < linearLayout.getChildCount();  i++ ){
-                View childView = linearLayout.getChildAt(i);
-                System.out.println("child: " + childView);
-                childView.setVisibility(View.GONE);
-            }
+        if (matchStatus != null) {
+            if (!matchStatus.contains(":") && !matchStatus.equals("postp.")) {
+                new RetrieveStatistics().execute(url);
+            } else {
+                TextView noStatsTextView = (TextView) view.findViewById(R.id.stats_not_available);
+                noStatsTextView.setVisibility(View.VISIBLE);
+                LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.match_statistic_view);
+                for ( int i = 1; i < linearLayout.getChildCount();  i++ ){
+                    View childView = linearLayout.getChildAt(i);
+                    System.out.println("child: " + childView);
+                    childView.setVisibility(View.GONE);
+                }
 
+            }
         }
+
 
 
 

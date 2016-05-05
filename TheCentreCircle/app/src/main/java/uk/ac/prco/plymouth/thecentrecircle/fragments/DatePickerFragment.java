@@ -2,7 +2,6 @@ package uk.ac.prco.plymouth.thecentrecircle.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
@@ -14,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 import uk.ac.prco.plymouth.thecentrecircle.MainActivity;
-import uk.ac.prco.plymouth.thecentrecircle.TeamDetailActivity;
 
 /**
  * Created by charliewaite on 11/04/2016.
