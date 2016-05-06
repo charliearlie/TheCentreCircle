@@ -7,22 +7,10 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
-    <item android:id="@+id/search_main"
+    <item android:id="@+id/search_search_results"
         android:title="@string/search_title"
         android:orderInCategory="1"
         android:icon="@drawable/ic_search_white_24dp"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
-    <item
-        android:id="@+id/action_date_picker"
-        android:orderInCategory="2"
-        android:title="@string/action_date"
-        android:icon="@drawable/ic_date_range_black_24dp"
-        app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/action_about"
-        android:orderInCategory="1"
-        android:title="@string/nav_about"
-        app:showAsAction="never"/>
 </menu>

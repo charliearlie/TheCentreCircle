@@ -150,7 +150,7 @@ public class MatchDetailInfoFragment extends Fragment {
                                             Team team = getTeamFromSnapshot(dataSnapshot);
                                             Bundle bundle = new Bundle();
                                             bundle.putSerializable("team", team);
-                                            Intent intent = new Intent(getActivity(), TeamDetailTabbedActivity.class);
+                                            Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
                                             intent.putExtras(bundle);
                                             startActivity(intent);
                                         }

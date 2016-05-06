@@ -33,7 +33,6 @@ public class LeagueTableAdapter extends RecyclerView.Adapter<LeagueTableAdapter.
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_competition_table_pos, parent, false);
 
         ViewHolder vh = new ViewHolder(v);
-        System.out.println("LEAGUE STANDINGS: " + leagueStandings);
 
 
         return vh;

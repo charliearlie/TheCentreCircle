@@ -52,6 +52,7 @@
 
     <!-- Menu item strings -->
     <string name="action_date">Date</string>
+    <string name="search_title">Search</string>
 
 
     <string name="title_activity_team_detail">TeamDetailActivity</string>
