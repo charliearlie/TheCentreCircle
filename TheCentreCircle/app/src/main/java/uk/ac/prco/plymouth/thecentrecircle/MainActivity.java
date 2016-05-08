@@ -297,15 +297,11 @@ public class MainActivity extends AppCompatActivity
                     Match match = utils.getMatchFromSnapshot(postSnapShot);
                     matches.add(match);
                 }
-                adapter.setListener(new ScoreCardAdapter.Listener() {
 
-                    /**
-                     * After the user has pressed a match, the information to retrieve
-                     * further match details is passed to MatchDetailActivity
-                     * @param position
-                     */
+                adapter.setOnItemClickListener(new ScoreCardAdapter.ScoreCardClickListener() {
+
                     @Override
-                    public void onClick(int position) {
+                    public void onItemClick(int position, View v) {
                         Match detailedMatch = matches.get(position);
                         Intent intent = new Intent(MainActivity.this, MatchDetailTabbedActivity.class);
                         intent.putExtra("matchId", detailedMatch.getMatchId());
@@ -315,7 +311,31 @@ public class MainActivity extends AppCompatActivity
                         intent.putExtra("matchStatus", detailedMatch.getMatchStatus());
                         startActivity(intent);
                     }
+
+                    @Override
+                    public void onItemLongClick(int position, View v) {
+                        Toast.makeText(getApplicationContext(), "Item was long pressed", Toast.LENGTH_LONG).show();
+                    }
                 });
+//                adapter.setListener(new ScoreCardAdapter.Listener() {
+//
+//                    /**
+//                     * After the user has pressed a match, the information to retrieve
+//                     * further match details is passed to MatchDetailActivity
+//                     * @param position
+//                     */
+//                    @Override
+//                    public void onClick(int position) {
+//                        Match detailedMatch = matches.get(position);
+//                        Intent intent = new Intent(MainActivity.this, MatchDetailTabbedActivity.class);
+//                        intent.putExtra("matchId", detailedMatch.getMatchId());
+//                        intent.putExtra("matchDate", detailedMatch.getDate());
+//                        intent.putExtra("matchHomeName", detailedMatch.getHomeTeam());
+//                        intent.putExtra("matchAwayName", detailedMatch.getAwayTeam());
+//                        intent.putExtra("matchStatus", detailedMatch.getMatchStatus());
+//                        startActivity(intent);
+//                    }
+//                });
 
                 //Alert the alphaAdapter that there is new data to be displayed
                 adapter.notifyDataSetChanged();

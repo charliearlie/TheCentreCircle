@@ -19,6 +19,8 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
 {
     private ArrayList<Match> matches = new ArrayList<>();
 
+    private static ScoreCardClickListener scoreCardClickListener;
+
     private Listener listener;
 
     public void setListener(Listener listener) {
@@ -29,14 +31,27 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
         this.matches = matches;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
         private CardView cardView;
 
         public ViewHolder(CardView v) {
             super(v);
+            v.setOnClickListener(this);
+            v.setOnLongClickListener(this);
             cardView = v;
         }
         //Define the view holder }
+
+        @Override
+        public void onClick(View v) {
+            scoreCardClickListener.onItemClick(getAdapterPosition(), v);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            scoreCardClickListener.onItemLongClick(getAdapterPosition(), v);
+            return false;
+        }
     }
     @Override
     public ScoreCardAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -68,21 +83,30 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
 
 
 
-        cardView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (listener != null) {
-                    listener.onClick(position);
-                }
-            }
-        });
+//        cardView.setOnClickListener(new View.OnClickListener() {
+//
+//            @Override
+//            public void onClick(View v) {
+//                if (listener != null) {
+//                    listener.onClick(position);
+//                }
+//            }
+//        });
 
     }
 
     @Override
     public int getItemCount() {
         return matches.size();
+    }
+
+    public void setOnItemClickListener(ScoreCardClickListener clickListener) {
+        ScoreCardAdapter.scoreCardClickListener = clickListener;
+    }
+
+    public interface ScoreCardClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
     }
 
     public static interface Listener {
