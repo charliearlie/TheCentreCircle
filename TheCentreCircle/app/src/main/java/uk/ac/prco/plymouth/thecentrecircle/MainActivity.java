@@ -1,5 +1,6 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -86,6 +87,8 @@ public class MainActivity extends AppCompatActivity
 
     CCUtilities utils = new CCUtilities();
 
+    private ProgressDialog progressDialog;
+
     //Firebase reference to main application URL and 'today's' matches
     final Firebase mainRef = new Firebase(cons.getFirebaseUrl());
 
@@ -95,7 +98,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = ProgressDialog.show(this, "The Centre Circle", "Loading...", true);
         setContentView(R.layout.activity_main);
+
         ((TheCentreCircle)getApplication()).startTracking();
 
 
@@ -125,7 +130,7 @@ public class MainActivity extends AppCompatActivity
         View header = navigationView.getHeaderView(0);
 
         setUpRecyclerView();
-        Query queryRef = todaysMatchesRef.orderByChild("matchTime");
+        final Query queryRef = todaysMatchesRef.orderByChild("matchTime");
         fillRecyclerWithTodaysMatches(queryRef);
 
         /*
@@ -152,69 +157,69 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        /*
-            Child Event listener to detect changes to data stored in the Firebase DB
-            Not used to initially fill recycler view because that would mean
-            creating the recycler 'number of matches' times
-         */
-        queryRef.addChildEventListener(new ChildEventListener() {
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-            }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                queryRef.addChildEventListener(new ChildEventListener() {
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    }
 
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+                    }
 
 
-            /**
-             * Detect changes in matches, such as scores and major events
-             * and as of now we refresh the adapter, I hope to just refresh the individual item
-             * @param dataSnapshot new data given to us from Firebase
-             * @param s String of the item changed
-             */
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                final DataSnapshot ds = dataSnapshot;
-                int matchId = dataSnapshot.child("matchId").getValue(int.class);
-                int index = findMatchById(matchId);
-                String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
-                String awayScore = dataSnapshot.child("awayScore").getValue(String.class);
-                if (!matches.get(index).getHomeScore().equals(homeScore)
-                        || !matches.get(index).getAwayScore().equals(awayScore)) {
+                    /**
+                     * Detect changes in matches, such as scores and major events
+                     * and as of now we refresh the adapter, I hope to just refresh the individual item
+                     * @param dataSnapshot new data given to us from Firebase
+                     * @param s String of the item changed
+                     */
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        final DataSnapshot ds = dataSnapshot;
+                        int matchId = dataSnapshot.child("matchId").getValue(int.class);
+                        int index = findMatchById(matchId);
+                        String homeScore = dataSnapshot.child("homeScore").getValue(String.class);
+                        String awayScore = dataSnapshot.child("awayScore").getValue(String.class);
+                        if (!matches.get(index).getHomeScore().equals(homeScore)
+                                || !matches.get(index).getAwayScore().equals(awayScore)) {
 
-                    matches.get(index).setHomeScore(dataSnapshot.child("homeScore").getValue(String.class));
-                    matches.get(index).setAwayScore(dataSnapshot.child("awayScore").getValue(String.class));
-                    matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
+                            matches.get(index).setHomeScore(dataSnapshot.child("homeScore").getValue(String.class));
+                            matches.get(index).setAwayScore(dataSnapshot.child("awayScore").getValue(String.class));
+                            matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
 
-                    adapter.notifyItemChanged(index);
+                            adapter.notifyItemChanged(index);
 
-                    if (!homeScore.equals("0") || !awayScore.equals("0")) {
-                        if (!homeScore.equals("?") || !awayScore.equals("?")) {
-                            for (String favouriteMatchId : favouriteMatches) {
-                                if (favouriteMatchId.equals(String.valueOf(matches.get(index).getMatchId()))) {
-                                    addOneToNum();
-                                    Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
-                                    intent.putExtra("match", matches.get(index));
-                                    startService(intent);
+                            if (!homeScore.equals("0") || !awayScore.equals("0")) {
+                                if (!homeScore.equals("?") || !awayScore.equals("?")) {
+                                    for (String favouriteMatchId : favouriteMatches) {
+                                        if (favouriteMatchId.equals(String.valueOf(matches.get(index).getMatchId()))) {
+                                            addOneToNum();
+                                            Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
+                                            intent.putExtra("match", matches.get(index));
+                                            startService(intent);
+                                        }
+                                    }
+
                                 }
-                            }
 
+                            }
+                        } else {
+                            matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
+                            adapter.notifyItemChanged(index);
                         }
 
                     }
-                } else {
-                    matches.get(index).setMatchStatus(dataSnapshot.child("matchStatus").getValue(String.class));
-                    adapter.notifyItemChanged(index);
-                }
 
-            }
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    }
 
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    public void onCancelled(FirebaseError firebaseError) {
+                        sendFirebaseErrorToAnalytics(firebaseError);
+                    }
+                });
             }
-
-            public void onCancelled(FirebaseError firebaseError) {
-                sendFirebaseErrorToAnalytics(firebaseError);
-            }
-        });
+        }).start();
     }
 
     @Override
@@ -315,11 +320,14 @@ public class MainActivity extends AppCompatActivity
                 //Alert the alphaAdapter that there is new data to be displayed
                 adapter.notifyDataSetChanged();
 
+
+                progressDialog.dismiss();
                 //Hide the loading icon and display the list of matches
                 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
                 if (progressBar != null) {
                     progressBar.setVisibility(View.GONE);
                 }
+
                 mRecyclerView.setVisibility(View.VISIBLE);
             }
 
@@ -349,8 +357,8 @@ public class MainActivity extends AppCompatActivity
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.main, menu);
 
-        //if (isFirstUse()) {
-        if (true) {
+        if (isFirstUse()) {
+        //if (true) {
             Target showcaseTarget = new Target() {
                 @Override
                 public Point getPoint() {

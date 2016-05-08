@@ -37,6 +37,7 @@ import uk.ac.prco.plymouth.thecentrecircle.adapters.MatchEventAdapter;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Event;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Team;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
+import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,6 +87,7 @@ public class MatchDetailInfoFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         final Constants consts = new Constants();
+        final CCUtilities utils = new CCUtilities();
 
         //Retrieve the arguments from the activity
         final Bundle args = getArguments();
@@ -147,7 +149,7 @@ public class MatchDetailInfoFragment extends Fragment {
                                     teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Team team = getTeamFromSnapshot(dataSnapshot);
+                                            Team team = utils.getTeamFromSnapshot(dataSnapshot);
                                             Bundle bundle = new Bundle();
                                             bundle.putSerializable("team", team);
                                             Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
@@ -186,7 +188,7 @@ public class MatchDetailInfoFragment extends Fragment {
                                     teamRef.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
-                                            Team team = getTeamFromSnapshot(dataSnapshot);
+                                            Team team = utils.getTeamFromSnapshot(dataSnapshot);
                                             Bundle bundle = new Bundle();
                                             bundle.putSerializable("team", team);
                                             Intent intent = new Intent(getActivity(), TeamDetailActivity.class);
@@ -272,36 +274,10 @@ public class MatchDetailInfoFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        //if (true) {
         if (firstTimeUse) {
             showTutorial(getView());
         }
-    }
-
-    /**
-     * Method to retrieve a teams information from a data snapshot
-     * @param dataSnapshot
-     * @return
-     */
-    private Team getTeamFromSnapshot(DataSnapshot dataSnapshot) {
-        String coach_id = dataSnapshot.child("coach_id").getValue(String.class);
-        String coach_name = dataSnapshot.child("coach_name").getValue(String.class);
-        String country = dataSnapshot.child("country").getValue(String.class);
-        String founded = dataSnapshot.child("founded").getValue(String.class);
-        String is_national = dataSnapshot.child("is_national").getValue(String.class);
-        String leagues = dataSnapshot.child("leagues").getValue(String.class);
-        String name = dataSnapshot.child("name").getValue(String.class);
-        String team_id = dataSnapshot.child("team_id").getValue(String.class);
-        String venue_address = dataSnapshot.child("venue_address").getValue(String.class);
-        String venue_capacity = dataSnapshot.child("venue_capacity").getValue(String.class);
-        String venue_city = dataSnapshot.child("venue_city").getValue(String.class);
-        String venue_id = dataSnapshot.child("venue_id").getValue(String.class);
-        String venue_name = dataSnapshot.child("venue_name").getValue(String.class);
-        String venue_surface = dataSnapshot.child("venue_surface").getValue(String.class);
-        Team team = new Team(coach_id, coach_name, country, founded, is_national,
-                leagues, name, team_id, venue_address, venue_capacity, venue_city,
-                venue_id, venue_name, venue_surface);
-
-        return team;
     }
 
     private void showTutorial(final View view) {

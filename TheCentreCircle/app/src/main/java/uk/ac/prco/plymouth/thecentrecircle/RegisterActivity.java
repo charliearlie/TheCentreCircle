@@ -123,9 +123,9 @@ public class RegisterActivity extends AppCompatActivity {
         //Retrieve the input from the user
         mDisplayName = mDisplayNameView.getText().toString();
         mEmail = mEmailView.getText().toString().trim();
-        if (validateEmail(mEmail)) {
-            mPassword = mPasswordView.getText().toString();
-            mPasswordConfirm = mPasswordConfirmView.getText().toString();
+        mPassword = mPasswordView.getText().toString().trim();
+        if (validateEmail(mEmail) && validatePassword(mPassword)) {
+            mPasswordConfirm = mPasswordConfirmView.getText().toString().trim();
 
             //Ensure the passwords match
             if (mPassword.equals(mPasswordConfirm)) {
@@ -142,7 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             @Override
                             public void onAuthenticated(AuthData authData) {
-                                Map<String, String> map = new HashMap<String, String>();
+                                Map<String, String> map = new HashMap<>();
                                 map.put("provider", authData.getProvider());
                                 map.put("displayName", mDisplayName);
                                 map.put("favTeam", mFavTeam);
@@ -169,7 +169,18 @@ public class RegisterActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(FirebaseError firebaseError) {
-                        System.out.println(firebaseError);
+                        switch (firebaseError.getCode()) {
+                            case FirebaseError.EMAIL_TAKEN:
+                                firebaseErrorDialog("The email provided is already attached to " +
+                                        "an existing account");
+                                break;
+                            case FirebaseError.NETWORK_ERROR:
+                                firebaseErrorDialog("There was an error connecting to the database");
+                                break;
+                            default:
+                                firebaseErrorDialog("Something went wrong");
+
+                        }
                     }
                 });
             } else {
@@ -186,7 +197,17 @@ public class RegisterActivity extends AppCompatActivity {
 
             return true;
         } else {
-            mEmailView.setError("This email address is invalid");
+            if(!validateEmail(mEmail) && (!validatePassword(mPassword))) {
+                mEmailView.setError("This email address is invalid");
+                mPasswordView.setError("Passwords must have one uppercase letter and one numerical character");
+                return false;
+            } else if (!validateEmail(mEmail)) {
+                mEmailView.setError("This email address is invalid");
+                return false;
+            } else if (!validatePassword(mPassword)) {
+                mPasswordView.setError("Passwords must have one uppercase letter and one numerical character");
+                return false;
+            }
             return false;
         }
 
@@ -204,5 +225,23 @@ public class RegisterActivity extends AppCompatActivity {
         pattern = Pattern.compile(EMAIL_PATTERN);
         matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    public boolean validatePassword(String password) {
+        Pattern pattern;
+        Matcher matcher;
+        final String PASSWORD_PATTERN = "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{6,20})";
+        pattern = Pattern.compile(PASSWORD_PATTERN);
+        matcher = pattern.matcher(password);
+        return matcher.matches();
+    }
+
+    public void firebaseErrorDialog(String message) {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+        dlgAlert.setTitle("Registration error")
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .setIcon(R.mipmap.ic_centrecircle)
+                .create().show();
     }
 }

@@ -19,6 +19,7 @@ public class TheCentreCircle extends android.app.Application {
             mTracker = ga.newTracker(R.xml.track_app);
 
             ga.enableAutoActivityReports(this);
+            mTracker.enableAdvertisingIdCollection(true);
 
 
         }

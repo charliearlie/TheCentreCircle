@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.app.LoaderManager.LoaderCallbacks;
 
@@ -102,11 +103,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setupActionBar();
         // Set up the login form.
 
-        Intent intent = getIntent();
+        if (getIntent().hasExtra("errorMessage")) {
+            firebaseErrorDialog(getIntent().getStringExtra("errorMessage"));
+        }
 
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-        if (intent.hasExtra("userEmail")) {
+        if (getIntent().hasExtra("userEmail")) {
             mEmailView.setText((String) getIntent().getExtras().get("userEmail"));
         }
 
@@ -411,7 +414,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 @Override
                 public void onAuthenticated(AuthData authData) {
-                    System.out.println("User ID: " + authData.getUid() + ", Provider: " + authData.getProvider());
                     Tracker mTracker = ((TheCentreCircle) getApplication()).getTracker();
                     mTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Authentication")
@@ -423,8 +425,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {
+                    String errorMessage = "";
+                    switch (firebaseError.getCode()) {
+                        case FirebaseError.USER_DOES_NOT_EXIST:
+                            errorMessage = "A user with this email address does not exist";
+                            break;
+                        case FirebaseError.INVALID_EMAIL:
+                            errorMessage = "The email entered is invalid";
+                            break;
+                        case FirebaseError.INVALID_PASSWORD:
+                            errorMessage = "The specified email and password comination does not match";
+                            break;
+                        case FirebaseError.NETWORK_ERROR:
+                            errorMessage = "There was an error connecting to the database";
+                            break;
+                        default:
+                            errorMessage = "Something went wrong";
+
+                    }
                     Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-                    Toast.makeText(getApplicationContext(), "Login failed", Toast.LENGTH_SHORT).show();
+                    intent.putExtra("userEmail", mEmail);
+                    if (!errorMessage.equals("")) {
+                        intent.putExtra("errorMessage", errorMessage);
+                    }
                     startActivity(intent);
                     finish();
                 }
@@ -445,18 +468,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     return pieces[1].equals(mPassword);
                 }
             }
-
-            ref.createUser(mEmail, mPassword, new Firebase.ValueResultHandler<Map<String, Object>>() {
-                @Override
-                public void onSuccess(Map<String, Object> result) {
-                    System.out.println("Successfully created user account with uid: " + result.get("uid"));
-                }
-
-                @Override
-                public void onError(FirebaseError firebaseError) {
-                    // there was an error
-                }
-            });
             return true;
         }
 
@@ -496,7 +507,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     mTracker.send(new HitBuilders.EventBuilder()
                             .setCategory("Authentication")
                             .setAction("User logged in with Facebook")
-                            .setLabel("What is the label for?")
+                            .setLabel("Facebook login")
                             .build());
                     /**
                      * Query to see if the user already exists in the database
@@ -539,7 +550,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 @Override
                 public void onAuthenticationError(FirebaseError firebaseError) {
-                    //TODO: Handle authentication error, although this method will never be reached...
+
                 }
             });
         } else {
@@ -552,6 +563,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void firebaseErrorDialog(String message) {
+        AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
+        dlgAlert.setTitle("Authentication error")
+                .setMessage(message)
+                .setPositiveButton("OK", null)
+                .setIcon(R.mipmap.ic_centrecircle)
+                .create().show();
     }
 }
 

@@ -67,6 +67,23 @@ public class SearchResultsActivity extends AppCompatActivity {
                     newIntent = false;
                 }
 
+                adapter.setOnItemClickListener(new TeamSearchAdapter.ClickListener() {
+
+                    @Override
+                    public void onItemClick(int position, View v) {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("team", searchResults.get(position));
+                        Intent intent = new Intent(SearchResultsActivity.this, TeamDetailActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onItemLongClick(int position, View v) {
+
+                    }
+                });
+
             }
 
             @Override

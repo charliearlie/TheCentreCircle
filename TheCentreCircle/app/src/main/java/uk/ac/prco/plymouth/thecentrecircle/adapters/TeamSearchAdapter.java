@@ -19,13 +19,33 @@ public class TeamSearchAdapter extends RecyclerView.Adapter<TeamSearchAdapter.Vi
 
     ArrayList<Team> teams;
 
+    private static ClickListener clickListener;
+
+    private Listener listener;
+
+    public void setListener(Listener listener) {
+        this.listener = listener;
+    }
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         public CardView view;
         public ViewHolder(CardView v) {
             super(v);
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             view = v;
+        }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            clickListener.onItemLongClick(getAdapterPosition(), v);
+            return false;
         }
     }
 
@@ -51,7 +71,18 @@ public class TeamSearchAdapter extends RecyclerView.Adapter<TeamSearchAdapter.Vi
     }
 
 
+    public static interface Listener {
+        public void onClick(int position);
+    }
 
+    public void setOnItemClickListener(ClickListener clickListener) {
+        TeamSearchAdapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
+    }
 
 
 }
