@@ -39,8 +39,6 @@ public class CompetitionTeamListFragment extends ListFragment {
         void itemClicked(long id);
     }
 
-    ;
-
     private CompetitionTeamListListener listener;
 
     public CompetitionTeamListFragment() {

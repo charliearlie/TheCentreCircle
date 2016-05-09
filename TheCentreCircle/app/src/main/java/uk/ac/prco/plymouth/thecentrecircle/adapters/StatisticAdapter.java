@@ -39,7 +39,7 @@ public class StatisticAdapter extends RecyclerView.Adapter<StatisticAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = (View) LayoutInflater.from(parent.getContext()).inflate(R.layout.statistic_recycler_pos,
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.statistic_recycler_pos,
                 parent, false);
         return new ViewHolder(v);
     }
@@ -60,7 +60,7 @@ public class StatisticAdapter extends RecyclerView.Adapter<StatisticAdapter.View
 
 
 
-    public static interface Listener {
-        public void onClick(int position);
+    public interface Listener {
+        void onClick(int position);
     }
 }

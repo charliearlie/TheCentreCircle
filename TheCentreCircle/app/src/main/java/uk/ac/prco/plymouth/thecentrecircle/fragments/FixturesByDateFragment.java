@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -43,8 +44,6 @@ public class FixturesByDateFragment extends Fragment {
     public FixturesByDateFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,10 +99,10 @@ public class FixturesByDateFragment extends Fragment {
                 mRecyclerView.setAdapter(adapter);
                 ProgressBar progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_fixtures_by_date);
                 progressBar.setVisibility(View.GONE);
-                adapter.setListener(new ScoreCardAdapter.Listener() {
+                adapter.setOnItemClickListener(new ScoreCardAdapter.ScoreCardClickListener() {
 
                     @Override
-                    public void onClick(int position) {
+                    public void onItemClick(int position, View v) {
                         Match detailedMatch = matches.get(position);
                         Intent intent = new Intent(getActivity(), MatchDetailTabbedActivity.class);
                         intent.putExtra("matchId", detailedMatch.getMatchId());
@@ -112,6 +111,11 @@ public class FixturesByDateFragment extends Fragment {
                         intent.putExtra("matchAwayName", detailedMatch.getAwayTeam());
                         intent.putExtra("matchStatus", detailedMatch.getMatchStatus());
                         startActivity(intent);
+                    }
+
+                    @Override
+                    public void onItemLongClick(int position, View v) {
+                        Toast.makeText(getContext(), "Item was long pressed", Toast.LENGTH_LONG).show();
                     }
                 });
             }

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,10 +12,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -52,7 +55,11 @@ import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -61,6 +68,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Match;
 import uk.ac.prco.plymouth.thecentrecircle.classes.Team;
 import uk.ac.prco.plymouth.thecentrecircle.fragments.DatePickerFragment;
+import uk.ac.prco.plymouth.thecentrecircle.fragments.TrackMatchDialogFragment;
 import uk.ac.prco.plymouth.thecentrecircle.keys.Constants;
 import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
 import uk.ac.prco.plymouth.thecentrecircle.adapters.ScoreCardAdapter;
@@ -101,7 +109,7 @@ public class MainActivity extends AppCompatActivity
         progressDialog = ProgressDialog.show(this, "The Centre Circle", "Loading...", true);
         setContentView(R.layout.activity_main);
 
-        ((TheCentreCircle)getApplication()).startTracking();
+        ((TheCentreCircle) getApplication()).startTracking();
 
 
         setTitle("The Centre Circle"); //Set action bar title
@@ -253,6 +261,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Method which detects if this is the first time the user has loaded the application
+     *
      * @return boolean determining whether it is their first time
      */
     private boolean isFirstUse() {
@@ -260,7 +269,7 @@ public class MainActivity extends AppCompatActivity
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 
-        if(settings.getBoolean("my_first_time_using_app", true)) {
+        if (settings.getBoolean("my_first_time_using_app", true)) {
             settings.edit().putBoolean("my_first_time_using_app", false).apply();
             return true;
         } else {
@@ -283,6 +292,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Add a single value event listener to retrieve all matches being played today
+     *
      * @param queryRef Firebase query of todays matches ordered by their kick-off time
      */
     private void fillRecyclerWithTodaysMatches(Query queryRef) {
@@ -314,28 +324,46 @@ public class MainActivity extends AppCompatActivity
 
                     @Override
                     public void onItemLongClick(int position, View v) {
-                        Toast.makeText(getApplicationContext(), "Item was long pressed", Toast.LENGTH_LONG).show();
+                        boolean isTracked = false;
+                        final Bundle fragmentArguments = new Bundle();
+                        final Match trackedMatch = matches.get(position);
+                        fragmentArguments.putSerializable("trackedMatch", trackedMatch);
+                        final TrackMatchDialogFragment dialog = new TrackMatchDialogFragment();
+                        if (aData != null) {
+                            Firebase menuRef = mainRef.child("/users/" + aData.getUid() + "/trackedMatches");
+
+                            //Add listener to detect if user has 'favourited' this match
+                            menuRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                        //If user has favourited match, fill the star icon in as selected
+                                        if (String.valueOf(trackedMatch.getMatchId()).equals(postSnapshot.getKey())) {
+                                            fragmentArguments.putBoolean("isTracked", true);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+
+                                }
+                            });
+                        }
+
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialog.setArguments(fragmentArguments);
+                                dialog.show(getSupportFragmentManager(), "dialog");
+                            }
+                        }, 500);
+
+
+
                     }
                 });
-//                adapter.setListener(new ScoreCardAdapter.Listener() {
-//
-//                    /**
-//                     * After the user has pressed a match, the information to retrieve
-//                     * further match details is passed to MatchDetailActivity
-//                     * @param position
-//                     */
-//                    @Override
-//                    public void onClick(int position) {
-//                        Match detailedMatch = matches.get(position);
-//                        Intent intent = new Intent(MainActivity.this, MatchDetailTabbedActivity.class);
-//                        intent.putExtra("matchId", detailedMatch.getMatchId());
-//                        intent.putExtra("matchDate", detailedMatch.getDate());
-//                        intent.putExtra("matchHomeName", detailedMatch.getHomeTeam());
-//                        intent.putExtra("matchAwayName", detailedMatch.getAwayTeam());
-//                        intent.putExtra("matchStatus", detailedMatch.getMatchStatus());
-//                        startActivity(intent);
-//                    }
-//                });
 
                 //Alert the alphaAdapter that there is new data to be displayed
                 adapter.notifyDataSetChanged();
@@ -358,6 +386,9 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public boolean isMatchTracked(boolean t) {
+        return t;
+    }
     /**
      * If the nav drawer is open, the back button will make it slide in
      */
@@ -367,7 +398,19 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            new AlertDialog.Builder(this)
+                    .setIcon(R.drawable.centrecirclelogosmall)
+                    .setTitle("Exit")
+                    .setMessage("Are you sure you want to close The Centre Circle?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         }
     }
 
@@ -378,7 +421,7 @@ public class MainActivity extends AppCompatActivity
         menuInflater.inflate(R.menu.main, menu);
 
         if (isFirstUse()) {
-        //if (true) {
+            //if (true) {
             Target showcaseTarget = new Target() {
                 @Override
                 public Point getPoint() {
@@ -561,7 +604,6 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
     /**
      * An asynchronous task class to download the user's Facebook profile image in the background
      */
@@ -594,6 +636,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * ---This is currently deprecated---
      * Return the date as a string
+     *
      * @return the string date properly formatted for Firebase
      */
     private String getStringDate() {
@@ -613,12 +656,13 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_main, targetFragment);
         ft.commit();
-        mRecyclerView.setVisibility(mRecyclerView.GONE);
+        mRecyclerView.setVisibility(View.GONE);
     }
 
 
     /**
      * Allows the fixtures by date fragment to set the title on the action bar
+     *
      * @param title
      */
     public void setActionBarTitle(String title) {
@@ -648,6 +692,7 @@ public class MainActivity extends AppCompatActivity
         //Add the event listener
         favouriteTeamRef.addListenerForSingleValueEvent(new ValueEventListener() {
             String teamId;
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 

@@ -109,7 +109,7 @@ public class ScoreCardAdapter extends RecyclerView.Adapter<ScoreCardAdapter.View
         void onItemLongClick(int position, View v);
     }
 
-    public static interface Listener {
-        public void onClick(int position);
+    public interface Listener {
+        void onClick(int position);
     }
 }

@@ -60,7 +60,7 @@ public class TeamDetailPlayersFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
-        team = (Team) bundle.getSerializable("team");;
+        team = (Team) bundle.getSerializable("team");
 
         //Get the reference for the team in Firebase
         ref = new Firebase(cons.getFirebaseUrl() + "/teams/" + team.getTeam_id());

@@ -103,7 +103,7 @@ public class PlayerCardAdapter extends RecyclerView.Adapter<PlayerCardAdapter.Vi
         return players.size();
     }
 
-    public static interface Listener {
-        public void onClick(int position);
+    public interface Listener {
+        void onClick(int position);
     }
 }
