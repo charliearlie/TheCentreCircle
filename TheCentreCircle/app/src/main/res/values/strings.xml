@@ -10,7 +10,7 @@
     <string name="nav_competitions">All competitions</string>
     <string name="nav_fav_competitions">Favourite competitions</string>
     <string name="nav_my_team">My team</string>
-    <string name="nav_my_bets">My bets</string>
+    <string name="nav_my_bets">My matches</string>
     <string name="nav_login">Login</string>
     <string name="nav_settings">Settings</string>
     <string name="nav_about">About</string>

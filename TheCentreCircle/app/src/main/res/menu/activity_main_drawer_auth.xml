@@ -19,8 +19,8 @@
             android:icon="@drawable/soccer"
             android:title="@string/nav_my_team" />
         <item
-            android:id="@+id/nav_my_bets"
-            android:icon="@drawable/ic_account_balance_wallet_black_36dp"
+            android:id="@+id/nav_my_games"
+            android:icon="@drawable/ic_star_black_24dp"
             android:title="@string/nav_my_bets" />
     </group>
 

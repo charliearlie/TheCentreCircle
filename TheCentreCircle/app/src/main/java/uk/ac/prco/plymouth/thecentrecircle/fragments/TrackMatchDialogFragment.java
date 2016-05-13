@@ -89,7 +89,7 @@ public class TrackMatchDialogFragment extends DialogFragment {
                                 mainRef.child("users").child(authData.getUid()).child("trackedMatches")
                                         .child(String.valueOf(match.getMatchId())).removeValue();
 
-                                //Alert the user that the favouriting has been successful
+                                //Alert the user that they stopped tracking the match
                                 Toast.makeText(getContext(), "You have stopped tracking " +
                                         match.getHomeTeam() + " - " + match.getAwayTeam(),Toast.LENGTH_LONG).show();
                             }

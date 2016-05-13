@@ -37,17 +37,19 @@ var serieATeams = ["11922", "11947", "11998", "11917", "11894", "12013",
 "11938", "11925", "11850", "11903", "12046", "11867", "11811", "11822",
 "12005", "12051", "11958", "11837", "11898", "11914"];
 
+var demoTeams = ["14796", "14792"];
+
 var http = require('http');
 var firebase = require('firebase')
 var ref = new Firebase('https://cwprco304.firebaseio.com');
 
-for(var i = 0; i < premTeams.length; i++) {
+for(var i = 0; i < demoTeams.length; i++) {
 
     var options = {
       "method": "GET",
       "hostname": "api.football-api.com",
       "port": null,
-      "path": "/2.0/team/"+ premTeams[i] + "?Authorization=565ec012251f932ea4000001465e5017e24b4c3f49c5f59207d768b3"
+      "path": "/2.0/team/"+ demoTeams[i] + "?Authorization=565ec012251f932ea4000001465e5017e24b4c3f49c5f59207d768b3"
     };
 
     var req = http.request(options, function (res) {
@@ -59,16 +61,20 @@ for(var i = 0; i < premTeams.length; i++) {
 
       res.on("end", function () {
         var data = JSON.parse(content);
-        var teamRef = ref.child("teams/" + data.team_id);
-        var teamObj = {};
-        console.log(data.leagues);
-        var mainLeague = data.leagues.split(',');
-        data.leagues = mainLeague[0];
-        console.log(data.name);
-        teamObj = data;
+        console.log(data);
+        if (data.status != "error") {
+          var teamRef = ref.child("teams/" + data.team_id);
+          var teamObj = {};
+          console.log(data.leagues);
+          var mainLeague = data.leagues.split(',');
+          data.leagues = mainLeague[0];
+          console.log(data.name);
+          teamObj = data;
 
-        teamRef.set(teamObj);
-        console.log(data.name);
+          teamRef.set(teamObj);
+          console.log(data.name);
+        }
+        
 
       });
 

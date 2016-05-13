@@ -37,7 +37,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
@@ -54,12 +53,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.squareup.picasso.Picasso;
 
-
-import java.io.BufferedReader;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -98,7 +92,7 @@ public class MainActivity extends AppCompatActivity
     private ProgressDialog progressDialog;
 
     //Firebase reference to main application URL and 'today's' matches
-    final Firebase mainRef = new Firebase(cons.getFirebaseUrl());
+    final Firebase mainRef = new Firebase(cons.FIREBASE_URL);
 
     String date = utils.getStringDate(); //Get date in string format to get todays matches
 
@@ -202,7 +196,6 @@ public class MainActivity extends AppCompatActivity
                                 if (!homeScore.equals("?") || !awayScore.equals("?")) {
                                     for (String favouriteMatchId : favouriteMatches) {
                                         if (favouriteMatchId.equals(String.valueOf(matches.get(index).getMatchId()))) {
-                                            addOneToNum();
                                             Intent intent = new Intent(MainActivity.this, MatchNotificationService.class);
                                             intent.putExtra("match", matches.get(index));
                                             startService(intent);
@@ -435,6 +428,39 @@ public class MainActivity extends AppCompatActivity
                     .setContentTitle("View fixtures by date or search for your favourite team")
                     .hideOnTouchOutside()
                     .build();
+
+            showcaseView.setOnShowcaseEventListener(new OnShowcaseEventListener() {
+                @Override
+                public void onShowcaseViewHide(ShowcaseView showcaseView) {
+
+                }
+
+                @Override
+                public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
+                    Target showcaseTarget1 = new Target() {
+                        @Override
+                        public Point getPoint() {
+                            return new ViewTarget(findViewById(R.id.score_recycler)).getPoint();
+                        }
+                    };
+                    ShowcaseView showcaseView1 = new ShowcaseView.Builder(MainActivity.this)
+                            .setTarget(showcaseTarget1)
+                            .setStyle(R.style.CustomShowcaseTheme)
+                            .setContentTitle("Long press on matches to track them from the main activity")
+                            .hideOnTouchOutside()
+                            .build();
+                }
+
+                @Override
+                public void onShowcaseViewShow(ShowcaseView showcaseView) {
+
+                }
+
+                @Override
+                public void onShowcaseViewTouchBlocked(MotionEvent motionEvent) {
+
+                }
+            });
         }
 
         // Associate searchable configuration with the SearchView
@@ -487,7 +513,7 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_settings) {
 
             } else if (id == R.id.nav_about) {
-                Toast.makeText(MainActivity.this, "num: " + num, Toast.LENGTH_LONG).show();
+
 
             } else if (id == R.id.nav_login) {
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -505,15 +531,25 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
             } else if (id == R.id.nav_my_team) {
+                final ProgressDialog pd = ProgressDialog.show(this, "The Centre Circle", "Loading...", true);
                 getUsersFavouriteTeam();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("team", favouriteTeam);
-                Intent intent = new Intent(MainActivity.this, TeamDetailActivity.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
 
-            } else if (id == R.id.nav_my_bets) {
-                Intent intent = new Intent(MainActivity.this, VideoListActivity.class);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("team", favouriteTeam);
+                        Intent intent = new Intent(MainActivity.this, TeamDetailActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+                        pd.dismiss();
+                    }
+                }, 2500);
+
+
+            } else if (id == R.id.nav_my_games) {
+                Intent intent = new Intent(MainActivity.this, TrackedMatchesActivity.class);
                 startActivity(intent);
 
             } else if (id == R.id.nav_football_videos) {
@@ -530,11 +566,18 @@ public class MainActivity extends AppCompatActivity
             } else if (id == R.id.nav_logout) {
                 navigationView.getMenu().clear();
                 navigationView.inflateMenu(R.menu.activity_main_drawer);
-                Toast.makeText(MainActivity.this, "Log out button pressed", Toast.LENGTH_LONG).show();
+                final ProgressDialog pd = ProgressDialog.show(this, "The Centre Circle", "Logging out...", true);
                 Firebase logRef = new Firebase(cons.getFirebaseUrl());
                 aData = logRef.getAuth();
                 LoginManager.getInstance().logOut();
                 logRef.unauth();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pd.dismiss();
+                    }
+                }, 1500);
                 aData = logRef.getAuth();
                 updateNavHeader(aData);
             }
@@ -717,14 +760,14 @@ public class MainActivity extends AppCompatActivity
 
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
-
+                        sendFirebaseErrorToAnalytics(firebaseError);
                     }
                 });
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                sendFirebaseErrorToAnalytics(firebaseError);
             }
         });
     }

@@ -180,7 +180,7 @@ public class MatchDetailTabbedActivity extends AppCompatActivity {
                         mainRef.child("users").child(authData.getUid()).child("trackedMatches")
                                 .child(String.valueOf(matchId)).setValue(true);
 
-                        //Alert the user that the favouriting has been successful
+                        //Alert the user that they have stopped tracking this match
                         Snackbar.make(getCurrentFocus(), "You have started tracking this match", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
                     } else {

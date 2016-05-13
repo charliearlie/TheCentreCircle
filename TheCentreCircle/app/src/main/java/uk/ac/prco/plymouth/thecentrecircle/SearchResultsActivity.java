@@ -1,6 +1,7 @@
 package uk.ac.prco.plymouth.thecentrecircle;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -39,16 +40,18 @@ public class SearchResultsActivity extends AppCompatActivity {
     private ArrayList<Team> searchResults = new ArrayList<>();
     private boolean newIntent = true;
     private TeamSearchAdapter adapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-
+        progressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name),
+                "Finding your results..", true);
 
         Firebase mainRef = new Firebase(new Constants().FIREBASE_URL);
         Firebase teamRef = mainRef.child("teams");
-        Query teamQuery = teamRef.orderByChild("name");
+        Query teamQuery = teamRef.orderByPriority();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.search_recycler);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -122,10 +125,12 @@ public class SearchResultsActivity extends AppCompatActivity {
                 else if (searchTeam.getName().toUpperCase().trim().replaceAll("\\s+","").contains(query)
                         || searchTeam.getVenue_city().toUpperCase().trim().replaceAll("\\s+","")
                         .contains(query)) {
+                    System.out.println(searchTeam.getName() + " " + searchTeam.getTeam_id());
                     searchResults.add(searchTeam);
                 }
             }
             adapter.notifyDataSetChanged();
+            progressDialog.dismiss();
         }
     }
 

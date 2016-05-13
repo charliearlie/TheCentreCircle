@@ -159,7 +159,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             @Override
             public void onCancel() {
-                Toast.makeText(LoginActivity.this, "Supposedly cancelled", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "Login cancelled", Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -523,9 +523,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 userSnapshot = postSnapshot;
                             }
                             if (userSnapshot == null) {
-                                System.out.println(userSnapshot); //TODO: Remove this testing line
-                                Toast.makeText(getApplicationContext(), "You weren't registered before!",
-                                        Toast.LENGTH_LONG).show(); //TODO: Remove this testing line
                                 //Create map to take user's basic Facebook data: Full name and email
                                 Map<String, String> map = new HashMap<String, String>();
                                 map.put("provider", authData.getProvider());
