@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#e40404</color>
     <color name="colorAccent">#00b8d4</color>
     <color name="primary_text_material_light">#ffffff</color>
+    <color name="progress_background">#E0E0E0</color>
 </resources>

@@ -5,6 +5,7 @@
     android:orientation="vertical"
     tools:context="uk.ac.prco.plymouth.thecentrecircle.fragments.MatchDetailStatisticFragment"
     android:id="@+id/match_statistic_view"
+    android:background="#fff"
     >
 
     <TextView
@@ -55,16 +56,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/shots_total_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/statistic_total_shots"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
-
+        <!--<TextView-->
+            <!--android:id="@+id/shots_total_header"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:text="@string/statistic_total_shots"-->
+            <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+            <!--android:textStyle="bold" />-->
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -77,35 +77,108 @@
                 android:id="@+id/shots_total_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.2"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.6"
                 android:fontFamily="sans-serif-condensed"
-                android:textAlignment="textEnd"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="left"/>
+
+            <TextView
+                android:id="@+id/shots_total_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed"
+                android:text="@string/statistic_total_shots"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/shots_total_away"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="0dp"
+                android:layout_weight="0.6"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="right"/>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2.5">
+
+            <!--<TextView-->
+                <!--android:id="@+id/shots_total_home"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="2dp"-->
+                <!--android:layout_marginEnd="0dp"-->
+                <!--android:layout_marginStart="20dp"-->
+                <!--android:layout_weight="1.2"-->
+                <!--android:fontFamily="sans-serif-condensed"-->
+                <!--android:textAlignment="textEnd"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:textSize="12sp" />-->
+
+            <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1.2"
+                android:id="@+id/shots_total_home_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="30"
+                android:progress="5"
+                android:layout_marginStart="2dp"
+                android:progressDrawable="@drawable/progress_red"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="0.1"
-                android:text=" : "
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/shots_total_away"
+            <ProgressBar
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="0dp"
+                android:layout_height="8dp"
                 android:layout_weight="1.2"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:id="@+id/shots_total_away_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="30"
+                android:progress="5"
+                android:layout_marginEnd="2dp"
+                android:progressDrawable="@drawable/progress_blue"/>
+
+            <!--<TextView-->
+                <!--android:id="@+id/shots_total_away"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="2dp"-->
+                <!--android:layout_marginEnd="20dp"-->
+                <!--android:layout_marginStart="0dp"-->
+                <!--android:layout_weight="1.2"-->
+                <!--android:fontFamily="sans-serif-condensed"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:textSize="12sp" />-->
+
+
 
         </LinearLayout>
 
@@ -116,16 +189,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/shots_on_target_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/statistic_total_shots_on_target"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
-
+        <!--<TextView-->
+        <!--android:id="@+id/shots_total_header"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:fontFamily="sans-serif-condensed"-->
+        <!--android:text="@string/statistic_total_shots"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textStyle="bold" />-->
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -138,35 +210,108 @@
                 android:id="@+id/shots_on_target_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.2"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.6"
                 android:fontFamily="sans-serif-condensed"
-                android:textAlignment="textEnd"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="left"/>
+
+            <TextView
+                android:id="@+id/shots_on_target_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:text="@string/statistic_total_shots_on_target"/>
+
+            <TextView
+                android:id="@+id/shots_on_target_away"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="0dp"
+                android:layout_weight="0.6"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="right"/>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2.5">
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_home"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="0dp"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAlignment="textEnd"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+            <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1.2"
+                android:id="@+id/shots_on_target_home_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="30"
+                android:progress="5"
+                android:layout_marginStart="2dp"
+                android:progressDrawable="@drawable/progress_red"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="0.1"
-                android:text=" : "
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/shots_on_target_away"
+            <ProgressBar
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="0dp"
+                android:layout_height="8dp"
                 android:layout_weight="1.2"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:id="@+id/shots_on_target_away_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="30"
+                android:progress="5"
+                android:layout_marginEnd="2dp"
+                android:progressDrawable="@drawable/progress_blue"/>
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_away"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+
 
         </LinearLayout>
 
@@ -177,16 +322,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/possession_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/statistic_possession"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
-
+        <!--<TextView-->
+        <!--android:id="@+id/shots_total_header"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:fontFamily="sans-serif-condensed"-->
+        <!--android:text="@string/statistic_total_shots"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textStyle="bold" />-->
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -199,35 +343,108 @@
                 android:id="@+id/possession_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.2"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.6"
                 android:fontFamily="sans-serif-condensed"
-                android:textAlignment="textEnd"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="left"/>
+
+            <TextView
+                android:id="@+id/possession_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:text="@string/statistic_possession"/>
+
+            <TextView
+                android:id="@+id/possession_away"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="0dp"
+                android:layout_weight="0.6"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="right"/>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2.5">
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_home"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="0dp"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAlignment="textEnd"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+            <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1.2"
+                android:id="@+id/possession_home_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="100"
+                android:progress="50"
+                android:layout_marginStart="2dp"
+                android:progressDrawable="@drawable/progress_red"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="0.1"
-                android:text=" : "
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/possession_away"
+            <ProgressBar
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="0dp"
+                android:layout_height="8dp"
                 android:layout_weight="1.2"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:id="@+id/possession_away_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="100"
+                android:progress="50"
+                android:layout_marginEnd="2dp"
+                android:progressDrawable="@drawable/progress_blue"/>
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_away"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+
 
         </LinearLayout>
 
@@ -238,16 +455,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/corners_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/statistic_corners"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
-
+        <!--<TextView-->
+        <!--android:id="@+id/shots_total_header"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:fontFamily="sans-serif-condensed"-->
+        <!--android:text="@string/statistic_total_shots"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textStyle="bold" />-->
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -260,55 +476,130 @@
                 android:id="@+id/corners_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.2"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.6"
                 android:fontFamily="sans-serif-condensed"
-                android:textAlignment="textEnd"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="left"/>
+
+            <TextView
+                android:id="@+id/corners_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:text="@string/statistic_corners"/>
+
+            <TextView
+                android:id="@+id/corners_away"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="0dp"
+                android:layout_weight="0.6"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="right"/>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2.5">
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_home"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="0dp"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAlignment="textEnd"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+            <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1.2"
+                android:id="@+id/corners_home_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="20"
+                android:progress="13"
+                android:layout_marginStart="2dp"
+                android:progressDrawable="@drawable/progress_red"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="0.1"
-                android:text=" : "
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/corners_away"
+            <ProgressBar
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="0dp"
+                android:layout_height="8dp"
                 android:layout_weight="1.2"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:id="@+id/corners_away_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="20"
+                android:progress="7"
+                android:layout_marginEnd="2dp"
+                android:progressDrawable="@drawable/progress_blue"/>
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_away"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+
 
         </LinearLayout>
 
     </LinearLayout>
+
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/offsides_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/statistic_offsides"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
-
+        <!--<TextView-->
+        <!--android:id="@+id/shots_total_header"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:fontFamily="sans-serif-condensed"-->
+        <!--android:text="@string/statistic_total_shots"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textStyle="bold" />-->
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -321,35 +612,108 @@
                 android:id="@+id/offsides_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.2"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.6"
                 android:fontFamily="sans-serif-condensed"
-                android:textAlignment="textEnd"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="left"/>
+
+            <TextView
+                android:id="@+id/offsides_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:text="@string/statistic_offsides"/>
+
+            <TextView
+                android:id="@+id/offsides_away"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="0dp"
+                android:layout_weight="0.6"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="right"/>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2.5">
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_home"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="0dp"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAlignment="textEnd"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+            <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1.2"
+                android:id="@+id/offsides_home_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="20"
+                android:progress="8"
+                android:layout_marginStart="2dp"
+                android:progressDrawable="@drawable/progress_red"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="0.1"
-                android:text=" : "
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/offsides_away"
+            <ProgressBar
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="0dp"
+                android:layout_height="8dp"
                 android:layout_weight="1.2"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:id="@+id/offsides_away_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="20"
+                android:progress="12"
+                android:layout_marginEnd="2dp"
+                android:progressDrawable="@drawable/progress_blue"/>
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_away"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+
 
         </LinearLayout>
 
@@ -360,16 +724,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/fouls_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/statistic_fouls"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
-
+        <!--<TextView-->
+        <!--android:id="@+id/shots_total_header"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:fontFamily="sans-serif-condensed"-->
+        <!--android:text="@string/statistic_total_shots"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textStyle="bold" />-->
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -382,35 +745,108 @@
                 android:id="@+id/fouls_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.2"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.6"
                 android:fontFamily="sans-serif-condensed"
-                android:textAlignment="textEnd"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="left"/>
+
+            <TextView
+                android:id="@+id/fouls_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:text="@string/statistic_fouls"/>
+
+            <TextView
+                android:id="@+id/fouls_away"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="0dp"
+                android:layout_weight="0.6"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="right"/>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2.5">
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_home"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="0dp"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAlignment="textEnd"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+            <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1.2"
+                android:id="@+id/fouls_home_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="20"
+                android:progress="13"
+                android:layout_marginStart="2dp"
+                android:progressDrawable="@drawable/progress_red"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="0.1"
-                android:text=" : "
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/fouls_away"
+            <ProgressBar
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="0dp"
+                android:layout_height="8dp"
                 android:layout_weight="1.2"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:id="@+id/fouls_away_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="20"
+                android:progress="7"
+                android:layout_marginEnd="2dp"
+                android:progressDrawable="@drawable/progress_blue"/>
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_away"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+
 
         </LinearLayout>
 
@@ -421,16 +857,15 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/yellow_cards_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="sans-serif-condensed"
-            android:text="@string/statistic_yellow_cards"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textStyle="bold" />
-
+        <!--<TextView-->
+        <!--android:id="@+id/shots_total_header"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:fontFamily="sans-serif-condensed"-->
+        <!--android:text="@string/statistic_total_shots"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textStyle="bold" />-->
 
         <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
@@ -443,39 +878,115 @@
                 android:id="@+id/yellow_cards_home"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
                 android:layout_marginEnd="0dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1.2"
+                android:layout_marginStart="4dp"
+                android:layout_weight="0.6"
                 android:fontFamily="sans-serif-condensed"
-                android:textAlignment="textEnd"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="left"/>
+
+            <TextView
+                android:id="@+id/yellow_cards_header"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center_horizontal"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold"
+                android:text="@string/statistic_yellow_cards"/>
+
+            <TextView
+                android:id="@+id/yellow_cards_away"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="0dp"
+                android:layout_weight="0.6"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="12sp"
+                android:text="0"
+                android:gravity="right"/>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="2.5">
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_home"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="0dp"-->
+            <!--android:layout_marginStart="20dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAlignment="textEnd"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+            <ProgressBar
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1.2"
+                android:id="@+id/yellow_cards_home_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="20"
+                android:progress="13"
+                android:layout_marginStart="2dp"
+                android:progressDrawable="@drawable/progress_red"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_weight="0.1"
-                android:text=" : "
+                android:text=""
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/yellow_cards_away"
+            <ProgressBar
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="0dp"
+                android:layout_height="8dp"
                 android:layout_weight="1.2"
-                android:fontFamily="sans-serif-condensed"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+                android:id="@+id/yellow_cards_away_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="20"
+                android:progress="7"
+                android:layout_marginEnd="2dp"
+                android:progressDrawable="@drawable/progress_blue"/>
+
+            <!--<TextView-->
+            <!--android:id="@+id/shots_total_away"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="2dp"-->
+            <!--android:layout_marginEnd="20dp"-->
+            <!--android:layout_marginStart="0dp"-->
+            <!--android:layout_weight="1.2"-->
+            <!--android:fontFamily="sans-serif-condensed"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textSize="12sp" />-->
+
+
 
         </LinearLayout>
 
     </LinearLayout>
+
+
+
 
     <LinearLayout
         android:layout_width="match_parent"

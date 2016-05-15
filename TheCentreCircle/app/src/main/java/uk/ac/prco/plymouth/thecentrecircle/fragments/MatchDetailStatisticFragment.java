@@ -1,6 +1,10 @@
 package uk.ac.prco.plymouth.thecentrecircle.fragments;
 
 
+import android.app.ProgressDialog;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -34,6 +39,8 @@ import uk.ac.prco.plymouth.thecentrecircle.utilities.CCUtilities;
  */
 public class MatchDetailStatisticFragment extends Fragment {
     private Constants consts = new Constants();
+    ProgressDialog progressDialog;
+
 
 
     public MatchDetailStatisticFragment() {
@@ -54,6 +61,7 @@ public class MatchDetailStatisticFragment extends Fragment {
         String homeTeamName;
         String awayTeamName;
         String matchStatus;
+
 
         final Bundle args = getArguments();
         matchId = args.getInt("matchId");
@@ -144,6 +152,7 @@ public class MatchDetailStatisticFragment extends Fragment {
         protected void onPostExecute(ArrayList<JSONArray> jsonArrays) {
 
             super.onPostExecute(jsonArrays);
+            progressDialog = ProgressDialog.show(getContext(), "The Centre Circle", "Loading...", true);
 
             if (jsonArrays != null) {
                 try {
@@ -153,38 +162,107 @@ public class MatchDetailStatisticFragment extends Fragment {
                     JSONObject awayStats = awayArray.getJSONObject(0);
 
                     if (getView() != null) {
+
                         View view = getView();
+
+                        //Shots
+                        int totalShots = Integer.valueOf(homeStats.getString("shots_total")) +
+                                Integer.valueOf(awayStats.getString("shots_total"));
+                        ProgressBar homeShots = (ProgressBar) view.findViewById(R.id.shots_total_home_bar);
+                        ProgressBar awayShots = (ProgressBar) view.findViewById(R.id.shots_total_away_bar);
+                        homeShots.setRotation(180);
+                        homeShots.setMax(totalShots);
+                        awayShots.setMax(totalShots);
+                        homeShots.setProgress(Integer.valueOf(homeStats.getString("shots_total")));
+                        awayShots.setProgress(Integer.valueOf(awayStats.getString("shots_total")));
 
                         TextView homeShotsTextView = (TextView) view.findViewById(R.id.shots_total_home);
                         TextView awayShotsTextView = (TextView) view.findViewById(R.id.shots_total_away);
                         homeShotsTextView.setText(homeStats.getString("shots_total"));
                         awayShotsTextView.setText(awayStats.getString("shots_total"));
 
+                        //Shots on target
+                        int totalShotsOnTarget = Integer.valueOf(homeStats.getString("shots_ongoal")) +
+                                Integer.valueOf(awayStats.getString("shots_ongoal"));
+                        ProgressBar homeShotsOnTarget = (ProgressBar) view.findViewById(R.id.shots_on_target_home_bar);
+                        ProgressBar awayShotsOnTarget = (ProgressBar) view.findViewById(R.id.shots_on_target_away_bar);
+                        homeShotsOnTarget.setRotation(180);
+                        homeShotsOnTarget.setMax(totalShotsOnTarget);
+                        awayShotsOnTarget.setMax(totalShotsOnTarget);
+                        homeShotsOnTarget.setProgress(Integer.valueOf(homeStats.getString("shots_ongoal")));
+                        awayShotsOnTarget.setProgress(Integer.valueOf(awayStats.getString("shots_ongoal")));
                         TextView homeShotsOnTargetTextView = (TextView) view.findViewById(R.id.shots_on_target_home);
                         TextView awayShotsOnTargetTextView = (TextView) view.findViewById(R.id.shots_on_target_away);
                         homeShotsOnTargetTextView.setText(homeStats.getString("shots_ongoal"));
                         awayShotsOnTargetTextView.setText(awayStats.getString("shots_ongoal"));
 
+                        //Possession
+                        ProgressBar homePossession = (ProgressBar) view.findViewById(R.id.possession_home_bar);
+                        ProgressBar awayPossession = (ProgressBar) view.findViewById(R.id.possession_away_bar);
+                        homePossession.setRotation(180);
+                        homePossession.setProgress(Integer.valueOf(homeStats.getString("possesiontime")
+                                .replaceAll("[\\D]", "")));
+                        awayPossession.setProgress(Integer.valueOf(awayStats.getString("possesiontime")
+                                .replaceAll("[\\D]", "")));
                         TextView homePossessionTextView = (TextView) view.findViewById(R.id.possession_home);
                         TextView awayPossessionTextView = (TextView) view.findViewById(R.id.possession_away);
                         homePossessionTextView.setText(homeStats.getString("possesiontime"));
                         awayPossessionTextView.setText(awayStats.getString("possesiontime"));
 
+                        //Corners
+                        int totalCorners = Integer.valueOf(homeStats.getString("corners")) +
+                                Integer.valueOf(awayStats.getString("corners"));
+                        ProgressBar homeCorners = (ProgressBar) view.findViewById(R.id.corners_home_bar);
+                        ProgressBar awayCorners = (ProgressBar) view.findViewById(R.id.corners_away_bar);
+                        homeCorners.setRotation(180);
+                        homeCorners.setMax(totalCorners);
+                        awayCorners.setMax(totalCorners);
+                        homeCorners.setProgress(Integer.valueOf(homeStats.getString("corners")));
+                        awayCorners.setProgress(Integer.valueOf(awayStats.getString("corners")));
                         TextView homeCornersTextView = (TextView) view.findViewById(R.id.corners_home);
                         TextView awayCornersTextView = (TextView) view.findViewById(R.id.corners_away);
                         homeCornersTextView.setText(homeStats.getString("corners"));
                         awayCornersTextView.setText(awayStats.getString("corners"));
 
+                        //Offsides
+                        int totalOffsides = Integer.valueOf(homeStats.getString("offsides")) +
+                                Integer.valueOf(awayStats.getString("offsides"));
+                        ProgressBar homeOffsides = (ProgressBar) view.findViewById(R.id.offsides_home_bar);
+                        ProgressBar awayOffsides = (ProgressBar) view.findViewById(R.id.offsides_away_bar);
+                        homeOffsides.setRotation(180);
+                        homeOffsides.setMax(totalOffsides);
+                        awayOffsides.setMax(totalOffsides);
+                        homeOffsides.setProgress(Integer.valueOf(homeStats.getString("offsides")));
+                        awayOffsides.setProgress(Integer.valueOf(awayStats.getString("offsides")));
                         TextView homeOffsidesTextView = (TextView) view.findViewById(R.id.offsides_home);
                         TextView awayOffsidesTextView = (TextView) view.findViewById(R.id.offsides_away);
                         homeOffsidesTextView.setText(homeStats.getString("offsides"));
                         awayOffsidesTextView.setText(awayStats.getString("offsides"));
 
+                        //Fouls
+                        int totalFouls = Integer.valueOf(homeStats.getString("fouls")) +
+                                Integer.valueOf(awayStats.getString("fouls"));
+                        ProgressBar homeFouls = (ProgressBar) view.findViewById(R.id.fouls_home_bar);
+                        ProgressBar awayFouls = (ProgressBar) view.findViewById(R.id.fouls_away_bar);
+                        homeFouls.setRotation(180);
+                        homeFouls.setMax(totalFouls);
+                        awayFouls.setMax(totalFouls);
+                        homeFouls.setProgress(Integer.valueOf(homeStats.getString("fouls")));
+                        awayFouls.setProgress(Integer.valueOf(awayStats.getString("fouls")));
                         TextView homeFoulsTextView = (TextView) view.findViewById(R.id.fouls_home);
                         TextView awayFoulsTextView = (TextView) view.findViewById(R.id.fouls_away);
                         homeFoulsTextView.setText(homeStats.getString("fouls"));
                         awayFoulsTextView.setText(awayStats.getString("fouls"));
 
+                        int totalYellows = Integer.valueOf(homeStats.getString("yellowcards")) +
+                                Integer.valueOf(awayStats.getString("yellowcards"));
+                        ProgressBar homeYellows = (ProgressBar) view.findViewById(R.id.yellow_cards_home_bar);
+                        ProgressBar awayYellows = (ProgressBar) view.findViewById(R.id.yellow_cards_away_bar);
+                        homeYellows.setRotation(180);
+                        homeYellows.setMax(totalYellows);
+                        awayYellows.setMax(totalYellows);
+                        homeYellows.setProgress(Integer.valueOf(homeStats.getString("yellowcards")));
+                        awayYellows.setProgress(Integer.valueOf(awayStats.getString("yellowcards")));
                         TextView homeYellowsTextView = (TextView) view.findViewById(R.id.yellow_cards_home);
                         TextView awayYellowsTextView = (TextView) view.findViewById(R.id.yellow_cards_away);
                         homeYellowsTextView.setText(homeStats.getString("yellowcards"));
@@ -193,7 +271,10 @@ public class MatchDetailStatisticFragment extends Fragment {
                         TextView homeRedsTextView = (TextView) view.findViewById(R.id.red_cards_home);
                         TextView awayRedsTextView = (TextView) view.findViewById(R.id.red_cards_away);
                         homeRedsTextView.setText(homeStats.getString("redcards"));
+                        progressDialog.dismiss();
                         awayRedsTextView.setText(awayStats.getString("redcards "));
+
+
 
                     }
 
